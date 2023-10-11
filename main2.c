@@ -30,7 +30,10 @@ const char *fragmentShaderSource = "#version 330 core\n"
     "uniform sampler2D texture1;\n"
     "void main()\n"
     "{\n"
-    "FragColor = texture(texture1, TexCoord);\n"
+    "vec4 texColor = texture(texture1, TexCoord);\n"
+    "if(texColor.a < 0.1)\n"
+        "discard;\n"
+        "FragColor = texColor;\n"
     "}\n\0";
 
 int main()
@@ -48,7 +51,7 @@ int main()
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "bun2d", NULL, NULL);
     if (window == NULL)
     {
         printf("Failed to create glfwwindow");
@@ -57,7 +60,6 @@ int main()
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
     // glad: load all OpenGL function pointers
     // ---------------------------------------
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -166,10 +168,10 @@ int main()
     // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
     stbi_set_flip_vertically_on_load(true);  
     
-    unsigned char *data = stbi_load("dragonite.png", &width, &height, &nrChannels, 0);
+    unsigned char *data = stbi_load("bun.png", &width, &height, &nrChannels, 0);
     if (data)
     {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     }
     else
