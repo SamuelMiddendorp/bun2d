@@ -43,6 +43,8 @@ typedef struct Pixel {
     unsigned char r,g,b,a
 } Pixel;
 
+Pixel* buff;
+
 int main()
 {
     // glfw: initialize and configure
@@ -168,13 +170,13 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     // set texture filtering parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     // load image, create texture and generate mipmaps
     //int width, height, nrChannels;
     // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
     stbi_set_flip_vertically_on_load(true);  
-    Pixel* buff = calloc(TEXT_SIZE, sizeof(Pixel*));
+    buff = calloc(TEXT_SIZE, sizeof(Pixel*));
 
     for(int i = 0; i < TEXT_SIZE; i++){
         buff[i].r = rand() % 255;
@@ -212,6 +214,7 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 10, 10, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
 
         // draw our first triangle
@@ -246,6 +249,16 @@ void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
+
+    if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS){
+    for(int i = 0; i < TEXT_SIZE; i++){
+        buff[i].r = rand() % 255;
+        buff[i].g = rand() % 255;
+        buff[i].b = rand() % 222;
+        buff[i].a = 255;
+    }
+    }
+
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
