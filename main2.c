@@ -9,8 +9,9 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
-
-#define TEXT_SIZE 100
+#define TEXT_X 500
+#define TEXT_Y 500
+#define TEXT_SIZE TEXT_X * TEXT_Y 
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
@@ -44,6 +45,45 @@ typedef struct Pixel {
 } Pixel;
 
 Pixel* buff;
+
+void putPixel(int x, int y){
+    buff[TEXT_X * y + x].r = 255;
+    buff[TEXT_X * y + x].g = 255;
+    buff[TEXT_X * y + x].b = 255;
+    buff[TEXT_X * y + x].a = 255;
+}
+
+void drawCircle(int xc, int yc, int x, int y) 
+{ 
+    putPixel(xc+x, yc+y); 
+    putPixel(xc-x, yc+y); 
+    putPixel(xc+x, yc-y); 
+    putPixel(xc-x, yc-y); 
+    putPixel(xc+y, yc+x); 
+    putPixel(xc-y, yc+x); 
+    putPixel(xc+y, yc-x); 
+    putPixel(xc-y, yc-x); 
+} 
+
+void circleBres(int xc, int yc, int r) 
+{ 
+
+    int x = 0, y = r; 
+    int d = 3 - 2 * r; 
+    drawCircle(xc, yc, x, y); 
+    while (y >= x) 
+    { 
+        x++; 
+        if (d > 0) 
+        { 
+            y--;  
+            d = d + 4 * (x - y) + 10; 
+        } 
+        else
+            d = d + 4 * x + 6; 
+        drawCircle(xc, yc, x, y); 
+    } 
+}
 
 int main()
 {
@@ -177,14 +217,7 @@ int main()
     // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
     stbi_set_flip_vertically_on_load(true);  
     buff = calloc(TEXT_SIZE, sizeof(Pixel*));
-
-    for(int i = 0; i < TEXT_SIZE; i++){
-        buff[i].r = rand() % 255;
-        buff[i].g = rand() % 255;
-        buff[i].b = rand() % 222;
-        buff[i].a = 255;
-    }
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 10, 10, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
     glGenerateMipmap(GL_TEXTURE_2D);
     // unsigned char *data = stbi_load("bun.png", &width, &height, &nrChannels, 0);
     // if (data)
@@ -213,8 +246,15 @@ int main()
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 10, 10, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+        circleBres(100,100,100);
+        circleBres(100,150,100);
+        circleBres(100,200,100);
+        circleBres(100,250,100);
+        circleBres(150,100,100);
+        circleBres(150,150,100);
+        circleBres(150,200,100);
+        circleBres(150,250,100);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
 
         // draw our first triangle
@@ -269,3 +309,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
+
+
+  
