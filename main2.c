@@ -9,12 +9,12 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
-#define TEXT_X 500
-#define TEXT_Y 500
+#define TEXT_X 100
+#define TEXT_Y 100
 #define TEXT_SIZE TEXT_X * TEXT_Y 
 
 const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_HEIGHT = 800;
 
 
 const char *vertexShaderSource = "#version 330 core\n"
@@ -246,14 +246,7 @@ int main()
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        circleBres(100,100,100);
-        circleBres(100,150,100);
-        circleBres(100,200,100);
-        circleBres(100,250,100);
-        circleBres(150,100,100);
-        circleBres(150,150,100);
-        circleBres(150,200,100);
-        circleBres(150,250,100);
+        circleBres(50,50,40);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
 
