@@ -10,8 +10,11 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow *window);
 
+#define TEXT_SIZE 100
+
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
+
 
 const char *vertexShaderSource = "#version 330 core\n"
     "layout (location = 0) in vec3 aPos;\n"
@@ -35,6 +38,10 @@ const char *fragmentShaderSource = "#version 330 core\n"
         "discard;\n"
         "FragColor = texColor;\n"
     "}\n\0";
+
+typedef struct Pixel {
+    unsigned char r,g,b,a
+} Pixel;
 
 int main()
 {
@@ -164,21 +171,31 @@ int main()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     // load image, create texture and generate mipmaps
-    int width, height, nrChannels;
+    //int width, height, nrChannels;
     // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
     stbi_set_flip_vertically_on_load(true);  
-    
-    unsigned char *data = stbi_load("bun.png", &width, &height, &nrChannels, 0);
-    if (data)
-    {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
+    Pixel* buff = calloc(TEXT_SIZE, sizeof(Pixel*));
+
+    for(int i = 0; i < TEXT_SIZE; i++){
+        buff[i].r = rand() % 255;
+        buff[i].g = rand() % 255;
+        buff[i].b = rand() % 222;
+        buff[i].a = 255;
     }
-    else
-    {
-        printf("Failed to load texture");
-    }
-    stbi_image_free(data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 10, 10, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    // unsigned char *data = stbi_load("bun.png", &width, &height, &nrChannels, 0);
+    // if (data)
+    // {
+    //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    //     glGenerateMipmap(GL_TEXTURE_2D);
+    // }
+    // else
+    // {
+    //     printf("Failed to load texture");
+    // }
+    // stbi_image_free(data);
+
     // uncomment this call to draw in wireframe polygons.
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
