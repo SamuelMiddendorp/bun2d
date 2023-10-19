@@ -7,82 +7,100 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
-#define TEXT_X 100
-#define TEXT_Y 100
-#define TEXT_SIZE TEXT_X * TEXT_Y 
+#define TEXT_X 800
+#define TEXT_Y 800
+#define TEXT_SIZE TEXT_X * TEXT_Y
+#define MAX_ITER 5
+#define CIRCLE_RAD 20
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
 
-
 const char *vertexShaderSource = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "layout (location = 1) in vec2 aTexCoord;\n"
-    "out vec2 TexCoord;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "TexCoord = vec2(aTexCoord.x, aTexCoord.y);\n"
-    "}\0";
-
+                                 "layout (location = 0) in vec3 aPos;\n"
+                                 "layout (location = 1) in vec2 aTexCoord;\n"
+                                 "out vec2 TexCoord;\n"
+                                 "void main()\n"
+                                 "{\n"
+                                 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+                                 "TexCoord = vec2(aTexCoord.x, aTexCoord.y);\n"
+                                 "}\0";
 
 const char *fragmentShaderSource = "#version 330 core\n"
-    "out vec4 FragColor;\n"
-    "in vec2 TexCoord;\n"
-    "uniform sampler2D texture1;\n"
-    "void main()\n"
-    "{\n"
-    "vec4 texColor = texture(texture1, TexCoord);\n"
-    "if(texColor.a < 0.1)\n"
-        "discard;\n"
-        "FragColor = texColor;\n"
-    "}\n\0";
+                                   "out vec4 FragColor;\n"
+                                   "in vec2 TexCoord;\n"
+                                   "uniform sampler2D texture1;\n"
+                                   "void main()\n"
+                                   "{\n"
+                                   "vec4 texColor = texture(texture1, TexCoord);\n"
+                                   "if(texColor.a < 0.1)\n"
+                                   "discard;\n"
+                                   "FragColor = texColor;\n"
+                                   "}\n\0";
 
-typedef struct Pixel {
-    unsigned char r,g,b,a
+typedef struct Pixel
+{
+    unsigned char r, g, b, a
 } Pixel;
 
-Pixel* buff;
+Pixel *buff;
 
-void putPixel(int x, int y){
+void putPixel(int x, int y)
+{
     buff[TEXT_X * y + x].r = 255;
     buff[TEXT_X * y + x].g = 255;
     buff[TEXT_X * y + x].b = 255;
     buff[TEXT_X * y + x].a = 255;
 }
 
-void drawCircle(int xc, int yc, int x, int y) 
-{ 
-    putPixel(xc+x, yc+y); 
-    putPixel(xc-x, yc+y); 
-    putPixel(xc+x, yc-y); 
-    putPixel(xc-x, yc-y); 
-    putPixel(xc+y, yc+x); 
-    putPixel(xc-y, yc+x); 
-    putPixel(xc+y, yc-x); 
-    putPixel(xc-y, yc-x); 
-} 
+void drawCircle(int xc, int yc, int x, int y)
+{
+    putPixel(xc + x, yc + y);
+    putPixel(xc - x, yc + y);
+    putPixel(xc + x, yc - y);
+    putPixel(xc - x, yc - y);
+    putPixel(xc + y, yc + x);
+    putPixel(xc - y, yc + x);
+    putPixel(xc + y, yc - x);
+    putPixel(xc - y, yc - x);
+}
 
-void circleBres(int xc, int yc, int r) 
-{ 
+void circleBres(int xc, int yc, int r)
+{
 
-    int x = 0, y = r; 
-    int d = 3 - 2 * r; 
-    drawCircle(xc, yc, x, y); 
-    while (y >= x) 
-    { 
-        x++; 
-        if (d > 0) 
-        { 
-            y--;  
-            d = d + 4 * (x - y) + 10; 
-        } 
+    int x = 0, y = r;
+    int d = 3 - 2 * r;
+    drawCircle(xc, yc, x, y);
+    while (y >= x)
+    {
+        x++;
+        if (d > 0)
+        {
+            y--;
+            d = d + 4 * (x - y) + 10;
+        }
         else
-            d = d + 4 * x + 6; 
-        drawCircle(xc, yc, x, y); 
-    } 
+            d = d + 4 * x + 6;
+        drawCircle(xc, yc, x, y);
+    }
+}
+
+void drawNode(int x, int y, int iteration)
+{
+    circleBres(x, y, CIRCLE_RAD);
+    if (iteration > MAX_ITER)
+    {
+        return;
+    }
+    drawNode(x + (50 - iteration * 10), y + 30, iteration + 1);
+    drawNode(x - (50 - iteration * 10), y + 30, iteration + 1);
+}
+
+void fractal(int x, int y)
+{
+    drawNode(x,y,0);
 }
 
 int main()
@@ -100,7 +118,7 @@ int main()
 
     // glfw window creation
     // --------------------
-    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "bun2d", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "bun2d", NULL, NULL);
     if (window == NULL)
     {
         printf("Failed to create glfwwindow");
@@ -116,7 +134,6 @@ int main()
         printf("Failed to load glad");
         return -1;
     }
-
 
     // build and compile our shader program
     // ------------------------------------
@@ -151,7 +168,8 @@ int main()
     glLinkProgram(shaderProgram);
     // check for linking errors
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if (!success) {
+    if (!success)
+    {
         glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
         printf("Shader linking failed");
     }
@@ -161,12 +179,12 @@ int main()
     // set up vertex data (and buffer(s)) and configure vertex attributes
     // ------------------------------------------------------------------
     float vertices[] = {
-         1.0f,  1.0f, 0.0f,  1.0f, 1.0f, // top right
-         1.0f, -1.0f, 0.0f,  1.0f, 0.0f, // bottom right
-        -1.0f, -1.0f, 0.0f,  0.0f, 0.0f, // bottom left
-        -1.0f,  1.0f, 0.0f,  0.0f, 1.0f  // top left 
+        1.0f, 1.0f, 0.0f, 1.0f, 1.0f,   // top right
+        1.0f, -1.0f, 0.0f, 1.0f, 0.0f,  // bottom right
+        -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, // bottom left
+        -1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // top left
     };
-     unsigned int indices[] = {  
+    unsigned int indices[] = {
         0, 1, 3, // first triangle
         1, 2, 3  // second triangle
     };
@@ -184,39 +202,39 @@ int main()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(0);
     // color attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
     // texture coord attribute
 
     // note that this is allowed, the call to glVertexAttribPointer registered VBO as the vertex attribute's bound vertex buffer object so afterwards we can safely unbind
-    glBindBuffer(GL_ARRAY_BUFFER, 0); 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     // remember: do NOT unbind the EBO while a VAO is active as the bound element buffer object IS stored in the VAO; keep the EBO bound.
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     // You can unbind the VAO afterwards so other VAO calls won't accidentally modify this VAO, but this rarely happens. Modifying other
     // VAOs requires a call to glBindVertexArray anyways so we generally don't unbind VAOs (nor VBOs) when it's not directly necessary.
-    glBindVertexArray(0); 
+    glBindVertexArray(0);
 
-    // load and create a texture 
+    // load and create a texture
     // -------------------------
     unsigned int texture;
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
     // set the texture wrapping parameters
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// set texture wrapping to GL_REPEAT (default wrapping method)
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     // set texture filtering parameters
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     // load image, create texture and generate mipmaps
-    //int width, height, nrChannels;
+    // int width, height, nrChannels;
     // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-    stbi_set_flip_vertically_on_load(true);  
-    buff = calloc(TEXT_SIZE, sizeof(Pixel*));
+    stbi_set_flip_vertically_on_load(true);
+    buff = calloc(TEXT_SIZE, sizeof(Pixel *));
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
     glGenerateMipmap(GL_TEXTURE_2D);
     // unsigned char *data = stbi_load("bun.png", &width, &height, &nrChannels, 0);
@@ -232,7 +250,7 @@ int main()
     // stbi_image_free(data);
 
     // uncomment this call to draw in wireframe polygons.
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
     // render loop
     // -----------
@@ -246,17 +264,17 @@ int main()
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        circleBres(50,50,40);
+        fractal(400,100);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
 
         // draw our first triangle
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
-        //glDrawArrays(GL_TRIANGLES, 0, 6);
+        // glDrawArrays(GL_TRIANGLES, 0, 6);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-        // glBindVertexArray(0); // no need to unbind it every time 
- 
+        // glBindVertexArray(0); // no need to unbind it every time
+
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -283,25 +301,23 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-    if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS){
-    for(int i = 0; i < TEXT_SIZE; i++){
-        buff[i].r = rand() % 255;
-        buff[i].g = rand() % 255;
-        buff[i].b = rand() % 222;
-        buff[i].a = 255;
+    if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
+    {
+        for (int i = 0; i < TEXT_SIZE; i++)
+        {
+            buff[i].r = rand() % 255;
+            buff[i].g = rand() % 255;
+            buff[i].b = rand() % 222;
+            buff[i].a = 255;
+        }
     }
-    }
-
 }
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
-    // make sure the viewport matches the new window dimensions; note that width and 
+    // make sure the viewport matches the new window dimensions; note that width and
     // height will be significantly larger than specified on retina displays.
     glViewport(0, 0, width, height);
 }
-
-
-  
