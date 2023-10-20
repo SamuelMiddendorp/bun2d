@@ -12,11 +12,13 @@ void processInput(GLFWwindow *window);
 #define TEXT_X 800
 #define TEXT_Y 800
 #define TEXT_SIZE TEXT_X * TEXT_Y
-#define MAX_ITER 5
-#define CIRCLE_RAD 20
+#define CIRCLE_RAD 5
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
+
+int angle = 20;
+int max_iterations = 10;
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -54,6 +56,10 @@ void putPixel(int x, int y)
     buff[TEXT_X * y + x].b = 255;
     buff[TEXT_X * y + x].a = 255;
 }
+void clearPixels()
+{
+    memset(buff, 0, TEXT_X * TEXT_Y * sizeof(Pixel));
+}
 
 void drawCircle(int xc, int yc, int x, int y)
 {
@@ -90,12 +96,12 @@ void circleBres(int xc, int yc, int r)
 void drawNode(int x, int y, int iteration)
 {
     circleBres(x, y, CIRCLE_RAD);
-    if (iteration > MAX_ITER)
+    if (iteration > max_iterations)
     {
         return;
     }
-    drawNode(x + (50 - iteration * 10), y + 30, iteration + 1);
-    drawNode(x - (50 - iteration * 10), y + 30, iteration + 1);
+    drawNode(x + angle, y + 50 - (iteration * 2), iteration + 1);
+    drawNode(x - angle, y + 50 - (iteration * 2), iteration + 1);
 }
 
 void fractal(int x, int y)
@@ -264,6 +270,7 @@ int main()
         // ------
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+        clearPixels();
         fractal(400,100);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -310,6 +317,16 @@ void processInput(GLFWwindow *window)
             buff[i].b = rand() % 222;
             buff[i].a = 255;
         }
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+    {
+        angle = angle - 1;
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        angle = angle + 1;
     }
 }
 
