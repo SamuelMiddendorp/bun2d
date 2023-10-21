@@ -12,7 +12,7 @@ void processInput(GLFWwindow *window);
 #define TEXT_X 800
 #define TEXT_Y 800
 #define TEXT_SIZE TEXT_X * TEXT_Y
-#define CIRCLE_RAD 5
+#define CIRCLE_RAD 25
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
