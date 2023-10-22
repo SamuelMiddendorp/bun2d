@@ -61,6 +61,21 @@ void clearPixels()
     memset(buff, 0, TEXT_X * TEXT_Y * sizeof(Pixel));
 }
 
+drawLine(int x0, int y0, int x1, int y1)
+{
+  int dx =  abs (x1 - x0), sx = x0 < x1 ? 1 : -1;
+  int dy = -abs (y1 - y0), sy = y0 < y1 ? 1 : -1; 
+  int err = dx + dy, e2; /* error value e_xy */
+ 
+  for (;;){  /* loop */
+    putPixel (x0,y0);
+    if (x0 == x1 && y0 == y1) break;
+    e2 = 2 * err;
+    if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
+    if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
+  }
+
+}
 void drawCircle(int xc, int yc, int x, int y)
 {
     putPixel(xc + x, yc + y);
@@ -272,6 +287,7 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
         clearPixels();
         fractal(400,100);
+        drawLine(0,0,300,300);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
 
