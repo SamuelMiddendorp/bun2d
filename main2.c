@@ -76,6 +76,7 @@ drawLine(int x0, int y0, int x1, int y1)
   }
 
 }
+
 void drawCircle(int xc, int yc, int x, int y)
 {
     putPixel(xc + x, yc + y);
@@ -110,13 +111,17 @@ void circleBres(int xc, int yc, int r)
 
 void drawNode(int x, int y, int iteration)
 {
-    circleBres(x, y, CIRCLE_RAD);
+    int newX = x + angle;
+    int newX2 = x - angle;
+    int newY = y + 50  - (iteration * 2);
+    drawLine(x, y, newX, newY);
+    drawLine(x, y, newX2, newY);
     if (iteration > max_iterations)
     {
         return;
     }
-    drawNode(x + angle, y + 50 - (iteration * 2), iteration + 1);
-    drawNode(x - angle, y + 50 - (iteration * 2), iteration + 1);
+    drawNode(newX, newY, iteration + 1);
+    drawNode(newX2, newY, iteration + 1);
 }
 
 void fractal(int x, int y)
