@@ -17,7 +17,7 @@ void processInput(GLFWwindow *window);
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
 
-int angle = 20;
+int angle = 40;
 int max_iterations = 10;
 
 const char *vertexShaderSource = "#version 330 core\n"
@@ -113,9 +113,11 @@ void drawNode(int x, int y, int iteration)
 {
     int newX = x + angle;
     int newX2 = x - angle;
-    int newY = y + 50  - (iteration * 2);
+    int newY = y + 70  - (iteration * 5);
+
     drawLine(x, y, newX, newY);
     drawLine(x, y, newX2, newY);
+    
     if (iteration > max_iterations)
     {
         return;
@@ -292,7 +294,6 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
         clearPixels();
         fractal(400,100);
-        drawLine(0,0,300,300);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
 
