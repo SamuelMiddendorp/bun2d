@@ -52,8 +52,8 @@ Pixel *buff;
 void putPixel(int x, int y)
 {
     buff[TEXT_X * y + x].r = 255;
-    buff[TEXT_X * y + x].g = 255;
-    buff[TEXT_X * y + x].b = 255;
+    buff[TEXT_X * y + x].g = 0;
+    buff[TEXT_X * y + x].b = 0;
     buff[TEXT_X * y + x].a = 255;
 }
 void clearPixels()
