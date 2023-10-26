@@ -111,7 +111,7 @@ void drawLine(int x0, int y0, int x1, int y1)
 
 }
 
-void drawRectangle(int x, int y, int width, int height, int rotation)
+void drawRectangle(int x, int y, int width, int height, int rotation, Pixel color)
 {
     Point origin = {x,y};
 
@@ -120,17 +120,17 @@ void drawRectangle(int x, int y, int width, int height, int rotation)
             for(int j = 0; j < width; j++){
                 Point p = {j + x, i + y};
                 Point rotatedPoint = rotatePoint(p, origin, rotation);
-                putPixel(rotatedPoint.x, rotatedPoint.y);
+                putColorPixel(rotatedPoint.x, rotatedPoint.y, color);
             }
         }
         else{
             Point pA = {x, i + y};
             Point rotatedPoint = rotatePoint(pA, origin, rotation);
-            putPixel(rotatedPoint.x, rotatedPoint.y);
+            putColorPixel(rotatedPoint.x, rotatedPoint.y, color);
 
             Point pB = {x + width, i + y};
             rotatedPoint = rotatePoint(pB, origin, rotation);
-            putPixel(rotatedPoint.x, rotatedPoint.y);
+            putColorPixel(rotatedPoint.x, rotatedPoint.y, color);
         }
     }
 
@@ -355,7 +355,8 @@ int main()
         int angle = sin(glfwGetTime()) * 200;
 
         for(int i = 0; i < 1000; i += 10){
-            drawRectangle(x + i,100 + i,100,200, angle - i);
+            Pixel p = {255,i / 8,i / 2,255};
+            drawRectangle(x + i,100 + i,100,200, angle - i, p);
         }
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
