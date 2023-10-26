@@ -47,7 +47,22 @@ typedef struct Pixel
     unsigned char r, g, b, a
 } Pixel;
 
+typedef struct Point{
+    int x,y
+} Point;
+
 Pixel *buff;
+
+Point rotatePoint(Point point, Point origin, int rot){
+
+    float angle = rot * (3.14159265358979323846/180); 
+    Point p;
+
+    p.x = cos(angle) * (point.x - origin.x) - sin(angle) * (point.y - origin.y) + origin.x;
+    p.y = sin(angle) * (point.x - origin.x) + cos(angle) * (point.y - origin.y) + origin.y;
+
+    return p;
+}
 
 void putColorPixel(int x, int y, Pixel color)
 {
@@ -77,7 +92,7 @@ void clearPixels()
     memset(buff, 0, TEXT_X * TEXT_Y * sizeof(Pixel));
 }
 
-drawLine(int x0, int y0, int x1, int y1)
+void drawLine(int x0, int y0, int x1, int y1)
 {
   int dx =  abs (x1 - x0), sx = x0 < x1 ? 1 : -1;
   int dy = -abs (y1 - y0), sy = y0 < y1 ? 1 : -1; 
@@ -93,17 +108,26 @@ drawLine(int x0, int y0, int x1, int y1)
 
 }
 
-drawRectangle(int x, int y, int width, int height)
+void drawRectangle(int x, int y, int width, int height, int rotation)
 {
+    Point origin = {x,y};
+
     for(int i = 0; i < height; i++){
         if(i == 0 || i == height - 1){
             for(int j = 0; j < width; j++){
-                putPixel(j + x,i + y);
+                Point p = {j + x, i + y};
+                Point rotatedPoint = rotatePoint(p, origin, rotation);
+                putPixel(rotatedPoint.x, rotatedPoint.y);
             }
         }
         else{
-            putPixel(x,y + i);
-            putPixel(x + width, y+ i);
+            Point pA = {x, i + y};
+            Point rotatedPoint = rotatePoint(pA, origin, rotation);
+            putPixel(rotatedPoint.x, rotatedPoint.y);
+
+            Point pB = {x + width, i + y};
+            rotatedPoint = rotatePoint(pB, origin, rotation);
+            putPixel(rotatedPoint.x, rotatedPoint.y);
         }
     }
 
@@ -326,8 +350,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
         clearPixels();
         //fractal(400,100);
-        int x = sin(glfwGetTime()) * 100;
-        drawRectangle(x,x,200,200);
+        int x = sin(glfwGetTime()) * 1000;
+        drawRectangle(100,100,200,200, x);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
 
