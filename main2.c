@@ -75,12 +75,28 @@ drawLine(int x0, int y0, int x1, int y1)
   int err = dx + dy, e2; /* error value e_xy */
  
   for (;;){  /* loop */
-    putPixel (x0,y0);
+    putPixel(x0,y0);
     if (x0 == x1 && y0 == y1) break;
     e2 = 2 * err;
     if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
     if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
   }
+
+}
+
+drawRectangle(int x, int y, int width, int height)
+{
+    for(int i = 0; i < height; i++){
+        if(i == 0 || i == height - 1){
+            for(int j = 0; j < width; j++){
+                putPixel(j + x,i + y);
+            }
+        }
+        else{
+            putPixel(x,y + i);
+            putPixel(x + width, y+ i);
+        }
+    }
 
 }
 
@@ -300,7 +316,8 @@ int main()
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         clearPixels();
-        fractal(400,100);
+        //fractal(400,100);
+        drawRectangle(20,20,200,200);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
 
