@@ -20,6 +20,9 @@ const unsigned int SCR_HEIGHT = 800;
 int angle = 40;
 int max_iterations = 10;
 
+int x = 0;
+int y = 0;
+
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
                                  "layout (location = 1) in vec2 aTexCoord;\n"
@@ -82,10 +85,10 @@ void putPixel(int x, int y)
         return;
     }
 
-    buff[TEXT_X * y + x].r = 255;
+    buff[TEXT_X * y + x].r = 144;
     buff[TEXT_X * y + x].g = 255;
     buff[TEXT_X * y + x].b = 255;
-    buff[TEXT_X * y + x].a = 255;
+    buff[TEXT_X * y + x].a = 200;
 }
 void clearPixels()
 {
@@ -350,8 +353,11 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
         clearPixels();
         //fractal(400,100);
-        int x = sin(glfwGetTime()) * 1000;
-        drawRectangle(100,100,200,200, x);
+        int angle = sin(glfwGetTime()) * 200;
+
+        for(int i = 0; i < 1000; i += 10){
+            drawRectangle(x + i,100 + i,100,200, angle - i);
+        }
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
 
@@ -401,12 +407,12 @@ void processInput(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
-        angle = angle - 1;
+        x = x - 1;
     }
 
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
-        angle = angle + 1;
+        x = x + 1;
     }
 }
 
