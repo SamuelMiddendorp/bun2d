@@ -49,7 +49,12 @@ typedef struct Pixel
 
 Pixel *buff;
 
-void putColorPixel(int x, int y, Pixel color){
+void putColorPixel(int x, int y, Pixel color)
+{
+    if(x > TEXT_X || x < 0 ||  y > TEXT_Y || y < 0){
+        return;
+    }
+
     buff[TEXT_X * y + x].r = color.r;
     buff[TEXT_X * y + x].g = color.g;
     buff[TEXT_X * y + x].b = color.b;
@@ -58,6 +63,10 @@ void putColorPixel(int x, int y, Pixel color){
 
 void putPixel(int x, int y)
 {
+    if(x > TEXT_X || x < 0 ||  y > TEXT_Y || y < 0){
+        return;
+    }
+
     buff[TEXT_X * y + x].r = 255;
     buff[TEXT_X * y + x].g = 255;
     buff[TEXT_X * y + x].b = 255;
@@ -318,7 +327,7 @@ int main()
         clearPixels();
         //fractal(400,100);
         int x = sin(glfwGetTime()) * 100;
-        drawRectangle(x,20,200,200);
+        drawRectangle(x,x,200,200);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
 
