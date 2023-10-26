@@ -317,7 +317,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT);
         clearPixels();
         //fractal(400,100);
-        drawRectangle(20,20,200,200);
+        int x = sin(glfwGetTime()) * 100;
+        drawRectangle(x,20,200,200);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
 
