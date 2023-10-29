@@ -23,6 +23,9 @@ int max_iterations = 10;
 int x = 0;
 int y = 0;
 
+int rectangleWidth = 100;
+int rectangleHeight = 100;
+
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
                                  "layout (location = 1) in vec2 aTexCoord;\n"
@@ -291,12 +294,15 @@ int main()
 
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture); 
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
+    // Allocate pixel buffer here
     buff = calloc(TEXT_SIZE, sizeof(Pixel *));
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
     glGenerateMipmap(GL_TEXTURE_2D);
 
@@ -307,11 +313,12 @@ int main()
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
         int angle = sin(glfwGetTime()) * 200;
 
         for(int i = 0; i < 1000; i += 10){
             Pixel p = {255,i / 8,i / 2,255};
-            drawRectangle(x + i,100 + i,100,200, angle - i, p);
+            drawRectangle(x + i,100 + i,rectangleWidth,rectangleHeight, angle - i, p);
         }
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -351,12 +358,12 @@ void processInput(GLFWwindow *window)
 
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
-        x = x - 1;
+        rectangleWidth++;
     }
 
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
-        x = x + 1;
+        rectangleWidth--;
     }
 }
 
