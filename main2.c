@@ -9,6 +9,7 @@
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
+void render();
 #define TEXT_X 800
 #define TEXT_Y 800
 #define TEXT_SIZE TEXT_X * TEXT_Y
@@ -306,6 +307,9 @@ int main()
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
     glGenerateMipmap(GL_TEXTURE_2D);
 
+        glUseProgram(shaderProgram);
+        glBindVertexArray(VAO); 
+
     while (!glfwWindowShouldClose(window))
     {
         clearPixels();
@@ -323,10 +327,7 @@ int main()
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
         glBindTexture(GL_TEXTURE_2D, texture);
 
-        glUseProgram(shaderProgram);
-        glBindVertexArray(VAO); 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
+        render();
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
@@ -338,6 +339,10 @@ int main()
 
     glfwTerminate();
     return 0;
+}
+
+void render(){
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void processInput(GLFWwindow *window)
