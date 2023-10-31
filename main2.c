@@ -10,6 +10,7 @@
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 void render();
+void tick();
 #define TEXT_X 800
 #define TEXT_Y 800
 #define TEXT_SIZE TEXT_X * TEXT_Y
@@ -26,6 +27,9 @@ int y = 0;
 
 int rectangleWidth = 100;
 int rectangleHeight = 100;
+
+
+GLFWwindow* window;
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -204,7 +208,7 @@ int main()
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-    GLFWwindow *window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "bun2d", NULL, NULL);
+    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "bun2d", NULL, NULL);
     if (window == NULL)
     {
         printf("Failed to create glfwwindow");
@@ -312,6 +316,23 @@ int main()
 
     while (!glfwWindowShouldClose(window))
     {
+        tick();
+    }
+
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
+    glDeleteProgram(shaderProgram);
+
+    glfwTerminate();
+    return 0;
+}
+
+int loop(){
+    
+}
+
+void tick(){
         clearPixels();
         processInput(window);
 
@@ -325,20 +346,11 @@ int main()
             drawRectangle(x + i,100 + i,rectangleWidth,rectangleHeight, angle - i, p);
         }
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
-        glBindTexture(GL_TEXTURE_2D, texture);
 
         render();
         glfwSwapBuffers(window);
         glfwPollEvents();
-    }
 
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
-    glDeleteProgram(shaderProgram);
-
-    glfwTerminate();
-    return 0;
 }
 
 void render(){
