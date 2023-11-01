@@ -10,7 +10,8 @@
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 void render();
-void tick();
+int bun2dTick();
+
 #define TEXT_X 800
 #define TEXT_Y 800
 #define TEXT_SIZE TEXT_X * TEXT_Y
@@ -198,7 +199,14 @@ void fractal(int x, int y)
     drawNode(x,y,0);
 }
 
-int main()
+int main(){
+    bun2dSetup();
+    while(bun2dTick()){
+        clearPixels();
+        circleBres(20,20,50);
+    }
+}
+int bun2dSetup()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -310,47 +318,22 @@ int main()
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
     glGenerateMipmap(GL_TEXTURE_2D);
+    glUseProgram(shaderProgram);
+    glBindVertexArray(VAO); 
 
-        glUseProgram(shaderProgram);
-        glBindVertexArray(VAO); 
-
-    while (!glfwWindowShouldClose(window))
-    {
-        tick();
-    }
-
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
-    glDeleteProgram(shaderProgram);
-
-    glfwTerminate();
-    return 0;
 }
 
-int loop(){
-    
-}
-
-void tick(){
-        clearPixels();
+int bun2dTick(){
         processInput(window);
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        int angle = sin(glfwGetTime()) * 200;
-
-        for(int i = 0; i < 1000; i += 10){
-            Pixel p = {255,i / 8,i / 2,255};
-            drawRectangle(x + i,100 + i,rectangleWidth,rectangleHeight, angle - i, p);
-        }
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
-
         render();
         glfwSwapBuffers(window);
         glfwPollEvents();
-
+        return !glfwWindowShouldClose(window);
 }
 
 void render(){
