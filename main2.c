@@ -9,12 +9,11 @@
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
-void render();
 int bun2dTick();
 
 #define TEXT_X 800
 #define TEXT_Y 800
-#define TEXT_SIZE TEXT_X * TEXT_Y
+#define TEXT_SIZE TEXT_X *TEXT_Y
 #define CIRCLE_RAD 25
 
 const unsigned int SCR_WIDTH = 800;
@@ -29,8 +28,7 @@ int y = 0;
 int rectangleWidth = 100;
 int rectangleHeight = 100;
 
-
-GLFWwindow* window;
+GLFWwindow *window;
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -59,15 +57,17 @@ typedef struct Pixel
     unsigned char r, g, b, a
 } Pixel;
 
-typedef struct Point{
-    int x,y
+typedef struct Point
+{
+    int x, y
 } Point;
 
 Pixel *buff;
 
-Point rotatePoint(Point point, Point origin, int rot){
+Point rotatePoint(Point point, Point origin, int rot)
+{
 
-    float angle = rot * (3.14159265358979323846/180); 
+    float angle = rot * (3.14159265358979323846 / 180);
     Point p;
 
     p.x = cos(angle) * (point.x - origin.x) - sin(angle) * (point.y - origin.y) + origin.x;
@@ -78,19 +78,21 @@ Point rotatePoint(Point point, Point origin, int rot){
 
 void putColorPixel(int x, int y, Pixel color)
 {
-    if(x > TEXT_X || x < 0 ||  y > TEXT_Y || y < 0){
+    if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
+    {
         return;
     }
 
     buff[TEXT_X * y + x].r = color.r;
     buff[TEXT_X * y + x].g = color.g;
     buff[TEXT_X * y + x].b = color.b;
-    buff[TEXT_X * y + x].a = color.a; 
+    buff[TEXT_X * y + x].a = color.a;
 }
 
 void putPixel(int x, int y)
 {
-    if(x > TEXT_X || x < 0 ||  y > TEXT_Y || y < 0){
+    if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
+    {
         return;
     }
 
@@ -106,33 +108,46 @@ void clearPixels()
 
 void drawLine(int x0, int y0, int x1, int y1)
 {
-  int dx =  abs (x1 - x0), sx = x0 < x1 ? 1 : -1;
-  int dy = -abs (y1 - y0), sy = y0 < y1 ? 1 : -1; 
-  int err = dx + dy, e2; /* error value e_xy */
- 
-  for (;;){  /* loop */
-    putPixel(x0,y0);
-    if (x0 == x1 && y0 == y1) break;
-    e2 = 2 * err;
-    if (e2 >= dy) { err += dy; x0 += sx; } /* e_xy+e_x > 0 */
-    if (e2 <= dx) { err += dx; y0 += sy; } /* e_xy+e_y < 0 */
-  }
+    int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
+    int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
+    int err = dx + dy, e2; /* error value e_xy */
 
+    for (;;)
+    { /* loop */
+        putPixel(x0, y0);
+        if (x0 == x1 && y0 == y1)
+            break;
+        e2 = 2 * err;
+        if (e2 >= dy)
+        {
+            err += dy;
+            x0 += sx;
+        } /* e_xy+e_x > 0 */
+        if (e2 <= dx)
+        {
+            err += dx;
+            y0 += sy;
+        } /* e_xy+e_y < 0 */
+    }
 }
 
 void drawRectangle(int x, int y, int width, int height, int rotation, Pixel color)
 {
-    Point origin = {x,y};
+    Point origin = {x, y};
 
-    for(int i = 0; i < height; i++){
-        if(i == 0 || i == height - 1){
-            for(int j = 0; j < width; j++){
+    for (int i = 0; i < height; i++)
+    {
+        if (i == 0 || i == height - 1)
+        {
+            for (int j = 0; j < width; j++)
+            {
                 Point p = {j + x, i + y};
                 Point rotatedPoint = rotatePoint(p, origin, rotation);
                 putColorPixel(rotatedPoint.x, rotatedPoint.y, color);
             }
         }
-        else{
+        else
+        {
             Point pA = {x, i + y};
             Point rotatedPoint = rotatePoint(pA, origin, rotation);
             putColorPixel(rotatedPoint.x, rotatedPoint.y, color);
@@ -142,7 +157,6 @@ void drawRectangle(int x, int y, int width, int height, int rotation, Pixel colo
             putColorPixel(rotatedPoint.x, rotatedPoint.y, color);
         }
     }
-
 }
 
 void drawCircle(int xc, int yc, int x, int y)
@@ -181,11 +195,11 @@ void drawNode(int x, int y, int iteration)
 {
     int newX = x + angle;
     int newX2 = x - angle;
-    int newY = y + 70  - (iteration * 5);
+    int newY = y + 70 - (iteration * 5);
 
     drawLine(x, y, newX, newY);
     drawLine(x, y, newX2, newY);
-    
+
     if (iteration > max_iterations)
     {
         return;
@@ -196,14 +210,16 @@ void drawNode(int x, int y, int iteration)
 
 void fractal(int x, int y)
 {
-    drawNode(x,y,0);
+    drawNode(x, y, 0);
 }
 
-int main(){
+int main()
+{
     bun2dSetup();
-    while(bun2dTick()){
-        clearPixels();
-        circleBres(20,20,50);
+    while (bun2dTick())
+    {
+        // clearpixels needs to happen in order to no redraw something when "moving"
+        circleBres(20, 20, 50);
     }
 }
 int bun2dSetup()
@@ -306,9 +322,9 @@ int bun2dSetup()
     unsigned int texture;
 
     glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture); 
+    glBindTexture(GL_TEXTURE_2D, texture);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -319,25 +335,21 @@ int bun2dSetup()
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
     glGenerateMipmap(GL_TEXTURE_2D);
     glUseProgram(shaderProgram);
-    glBindVertexArray(VAO); 
-
+    glBindVertexArray(VAO);
 }
 
-int bun2dTick(){
-        processInput(window);
+int bun2dTick()
+{
+    processInput(window);
 
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
 
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
-        render();
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-        return !glfwWindowShouldClose(window);
-}
-
-void render(){
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+    glfwSwapBuffers(window);
+    glfwPollEvents();
+    return !glfwWindowShouldClose(window);
 }
 
 void processInput(GLFWwindow *window)
@@ -364,6 +376,12 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
         rectangleWidth--;
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS){
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        circleBres(xpos, 800-ypos, 20);
     }
 }
 
