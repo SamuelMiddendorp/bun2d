@@ -10,6 +10,7 @@
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 int bun2dTick();
+void bun2dClear();
 
 #define TEXT_X 800
 #define TEXT_Y 800
@@ -101,7 +102,7 @@ void putPixel(int x, int y)
     buff[TEXT_X * y + x].b = 255;
     buff[TEXT_X * y + x].a = 200;
 }
-void clearPixels()
+void bun2dClear()
 {
     memset(buff, 0, TEXT_X * TEXT_Y * sizeof(Pixel));
 }
@@ -218,7 +219,7 @@ int main()
     bun2dSetup();
     while (bun2dTick())
     {
-        // clearpixels needs to happen in order to no redraw something when "moving"
+        bun2dClear();
         circleBres(20, 20, 50);
     }
 }
