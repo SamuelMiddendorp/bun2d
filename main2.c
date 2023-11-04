@@ -172,7 +172,7 @@ void drawCircle(int xc, int yc, int x, int y)
     putPixel(xc - y, yc - x);
 }
 
-void circleBres(int xc, int yc, int r)
+void bun2dCircle(int xc, int yc, int r)
 {
 
     int x = 0, y = r;
@@ -219,10 +219,10 @@ int main()
     bun2dSetup();
     while (bun2dTick())
     {
-        bun2dClear();
-        circleBres(20, 20, 50);
+        bun2dCircle(20,20,20);
     }
 }
+
 int bun2dSetup()
 {
     glfwInit();
@@ -382,7 +382,7 @@ void processInput(GLFWwindow *window)
     if(glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS){
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
-        circleBres(xpos, 800-ypos, 20);
+        bun2dCircle(xpos, 800-ypos, 20);
     }
 }
 
