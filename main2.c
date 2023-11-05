@@ -11,6 +11,7 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 int bun2dTick();
 void bun2dClear();
+void bun2dClearPixel();
 
 #define TEXT_X 800
 #define TEXT_Y 800
@@ -105,6 +106,19 @@ void putPixel(int x, int y)
 void bun2dClear()
 {
     memset(buff, 0, TEXT_X * TEXT_Y * sizeof(Pixel));
+}
+
+void bun2dClearPixel(int x, int y){
+    if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
+    {
+        return;
+    }
+
+    buff[TEXT_X * y + x].r = 0;
+    buff[TEXT_X * y + x].g = 0;
+    buff[TEXT_X * y + x].b = 0;
+    buff[TEXT_X * y + x].a = 0;
+
 }
 
 void drawLine(int x0, int y0, int x1, int y1)
@@ -362,6 +376,7 @@ void processInput(GLFWwindow *window)
     {
         bun2dClear();
     }
+
     if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
     {
         for (int i = 0; i < TEXT_SIZE; i++)
@@ -373,12 +388,18 @@ void processInput(GLFWwindow *window)
         }
     }
 
-
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS){
         double xpos, ypos;
         glfwGetCursorPos(window, &xpos, &ypos);
         bun2dCircle(xpos, 800-ypos, 20);
     }
+
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS){
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        bun2dClearPixel(xpos, 800-ypos);
+    }
+    
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
         rectangleWidth++;
