@@ -369,6 +369,11 @@ void processInput(GLFWwindow *window)
         }
     }
 
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS){
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos);
+        bun2dCircle(xpos, 800-ypos, 20);
+    }
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
         rectangleWidth++;
@@ -377,12 +382,6 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
     {
         rectangleWidth--;
-    }
-
-    if(glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS){
-        double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos);
-        bun2dCircle(xpos, 800-ypos, 20);
     }
 }
 
