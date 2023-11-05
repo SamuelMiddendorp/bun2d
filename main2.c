@@ -358,6 +358,10 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    {
+        bun2dClear();
+    }
     if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
     {
         for (int i = 0; i < TEXT_SIZE; i++)
@@ -368,6 +372,7 @@ void processInput(GLFWwindow *window)
             buff[i].a = 255;
         }
     }
+
 
     if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS){
         double xpos, ypos;
