@@ -24,8 +24,8 @@ const unsigned int SCR_HEIGHT = 800;
 int angle = 40;
 int max_iterations = 10;
 
-int x = 0;
-int y = 0;
+int playerX = 0;
+int playerY = 0;
 
 int rectangleWidth = 100;
 int rectangleHeight = 100;
@@ -233,7 +233,8 @@ int main()
     bun2dSetup();
     while (bun2dTick())
     {
-        bun2dCircle(20,20,20);
+        bun2dClear();
+        bun2dCircle(playerX     ,20,20);
     }
 }
 
@@ -376,7 +377,9 @@ void processInput(GLFWwindow *window)
     {
         bun2dClear();
     }
-
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
+        playerX++;
+    }
     if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
     {
         for (int i = 0; i < TEXT_SIZE; i++)
