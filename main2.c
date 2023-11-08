@@ -234,7 +234,8 @@ int main()
     while (bun2dTick())
     {
         bun2dClear();
-        bun2dCircle(playerX     ,20,20);
+        fractal(20,20);
+        bun2dCircle(playerX,20,20);
     }
 }
 
