@@ -12,11 +12,14 @@ void processInput(GLFWwindow *window);
 int bun2dTick();
 void bun2dClear();
 void bun2dClearPixel();
+void bun2dInput(GLFWwindow* win, int key, int code, int action, int mod);
 
 #define TEXT_X 800
 #define TEXT_Y 800
 #define TEXT_SIZE TEXT_X *TEXT_Y
 #define CIRCLE_RAD 25
+
+unsigned char keys[400];
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
@@ -230,12 +233,14 @@ void fractal(int x, int y)
 
 int main()
 {
+    int x = 0;
     bun2dSetup();
     while (bun2dTick())
     {
-        bun2dClear();
-        fractal(20,20);
-        bun2dCircle(playerX,20,20);
+        if(keys[87] > 0){
+            x++;
+        }
+        bun2dCircle(x,20,20);
     }
 }
 
@@ -258,6 +263,7 @@ int bun2dSetup()
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetKeyCallback(window, bun2dInput);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
@@ -357,7 +363,6 @@ int bun2dSetup()
 
 int bun2dTick()
 {
-    processInput(window);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -369,6 +374,11 @@ int bun2dTick()
     return !glfwWindowShouldClose(window);
 }
 
+void bun2dInput(GLFWwindow* win, int key, int code, int action, int mod)
+{
+    keys[key] = action;
+    printf("%i", action);
+}
 void processInput(GLFWwindow *window)
 {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
