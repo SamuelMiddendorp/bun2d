@@ -376,7 +376,11 @@ int bun2dTick()
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
+
     glfwGetCursorPos(window, &mouseX, &mouseY);
+    // Have to adjust for mismatch in coordinates
+    mouseY = SCR_HEIGHT - mouseY;
+
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glfwSwapBuffers(window);
