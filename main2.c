@@ -27,6 +27,9 @@ const unsigned int SCR_HEIGHT = 800;
 int angle = 40;
 int max_iterations = 10;
 
+double mouseX;
+double mouseY;
+
 int playerX = 0;
 int playerY = 0;
 
@@ -237,9 +240,16 @@ int main()
     bun2dSetup();
     while (bun2dTick())
     {
-        if(keys[87] > 0){
+        bun2dClear();
+
+        if(keys[87] == 2){
             x++;
         }
+
+        if(keys[86] == 1){
+            bun2dCircle(mouseX, mouseY, 20);
+        }
+
         bun2dCircle(x,20,20);
     }
 }
@@ -366,7 +376,7 @@ int bun2dTick()
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-
+    glfwGetCursorPos(window, &mouseX, &mouseY);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glfwSwapBuffers(window);
