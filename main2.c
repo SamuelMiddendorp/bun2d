@@ -11,6 +11,7 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 void processInput(GLFWwindow *window);
 int bun2dTick();
 void bun2dClear();
+void bun2dLine(int x0, int y0, int x1, int y1);
 void bun2dClearPixel();
 void bun2dInput(GLFWwindow* win, int key, int code, int action, int mod);
 
@@ -124,10 +125,9 @@ void bun2dClearPixel(int x, int y){
     buff[TEXT_X * y + x].g = 0;
     buff[TEXT_X * y + x].b = 0;
     buff[TEXT_X * y + x].a = 0;
-
 }
 
-void drawLine(int x0, int y0, int x1, int y1)
+void bun2dLine(int x0, int y0, int x1, int y1)
 {
     int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
     int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
@@ -236,21 +236,28 @@ void fractal(int x, int y)
 
 int main()
 {
-    int x = 0;
     bun2dSetup();
+
+    int x = 0;
+
+    int lineStartX = 0;
+    int lineStartY = 0;
+
+    int lineEndY;
+    int lineEndX;
+
     while (bun2dTick())
     {
-        bun2dClear();
-
-        if(keys[87] == 2){
-            x++;
+        if(keys[83] == 1){
+            lineStartX = mouseX;
+            lineStartY = mouseY;
         }
 
-        if(keys[86] == 1){
-            bun2dCircle(mouseX, mouseY, 20);
+        if(keys[68] == 1){
+            lineEndX = mouseX;
+            lineEndY = mouseY;
+            bun2dLine(lineStartX, lineStartY, lineEndX, lineEndY);
         }
-
-        bun2dCircle(x,20,20);
     }
 }
 
