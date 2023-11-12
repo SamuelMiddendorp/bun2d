@@ -8,34 +8,28 @@
 #include <stdbool.h>
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
-void processInput(GLFWwindow *window);
+
 int bun2dTick();
+int bun2dInit();
 void bun2dClear();
+
 void bun2dLine(int x0, int y0, int x1, int y1);
+void bun2dRect(int x, int y, int width, int height, int rotation, Pixel color);
+
 void bun2dClearPixel();
 void bun2dInput(GLFWwindow* win, int key, int code, int action, int mod);
 
 #define TEXT_X 800
 #define TEXT_Y 800
 #define TEXT_SIZE TEXT_X *TEXT_Y
-#define CIRCLE_RAD 25
 
 unsigned char keys[400];
 
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
 
-int angle = 40;
-int max_iterations = 10;
-
 double mouseX;
 double mouseY;
-
-int playerX = 0;
-int playerY = 0;
-
-int rectangleWidth = 100;
-int rectangleHeight = 100;
 
 GLFWwindow *window;
 
@@ -131,10 +125,10 @@ void bun2dLine(int x0, int y0, int x1, int y1)
 {
     int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
     int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
-    int err = dx + dy, e2; /* error value e_xy */
+    int err = dx + dy, e2; 
 
     for (;;)
-    { /* loop */
+    { 
         putPixel(x0, y0);
         if (x0 == x1 && y0 == y1)
             break;
@@ -143,16 +137,16 @@ void bun2dLine(int x0, int y0, int x1, int y1)
         {
             err += dy;
             x0 += sx;
-        } /* e_xy+e_x > 0 */
+        }
         if (e2 <= dx)
         {
             err += dx;
             y0 += sy;
-        } /* e_xy+e_y < 0 */
+        }
     }
 }
 
-void drawRectangle(int x, int y, int width, int height, int rotation, Pixel color)
+void bun2dRect(int x, int y, int width, int height, int rotation, Pixel color)
 {
     Point origin = {x, y};
 
@@ -194,7 +188,6 @@ void drawCircle(int xc, int yc, int x, int y)
 
 void bun2dCircle(int xc, int yc, int r)
 {
-
     int x = 0, y = r;
     int d = 3 - 2 * r;
     drawCircle(xc, yc, x, y);
@@ -212,31 +205,9 @@ void bun2dCircle(int xc, int yc, int r)
     }
 }
 
-void drawNode(int x, int y, int iteration)
-{
-    int newX = x + angle;
-    int newX2 = x - angle;
-    int newY = y + 70 - (iteration * 5);
-
-    drawLine(x, y, newX, newY);
-    drawLine(x, y, newX2, newY);
-
-    if (iteration > max_iterations)
-    {
-        return;
-    }
-    drawNode(newX, newY, iteration + 1);
-    drawNode(newX2, newY, iteration + 1);
-}
-
-void fractal(int x, int y)
-{
-    drawNode(x, y, 0);
-}
-
 int main()
 {
-    bun2dSetup();
+    bun2dInit();
 
     int x = 0;
 
@@ -261,7 +232,7 @@ int main()
     }
 }
 
-int bun2dSetup()
+int bun2dInit()
 {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -369,7 +340,6 @@ int bun2dSetup()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    // Allocate pixel buffer here
     buff = calloc(TEXT_SIZE, sizeof(Pixel *));
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
@@ -399,51 +369,6 @@ void bun2dInput(GLFWwindow* win, int key, int code, int action, int mod)
 {
     keys[key] = action;
     printf("%i", action);
-}
-void processInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        bun2dClear();
-    }
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
-        playerX++;
-    }
-    if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS)
-    {
-        for (int i = 0; i < TEXT_SIZE; i++)
-        {
-            buff[i].r = rand() % 255;
-            buff[i].g = rand() % 255;
-            buff[i].b = rand() % 222;
-            buff[i].a = 255;
-        }
-    }
-
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS){
-        double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos);
-        bun2dCircle(xpos, 800-ypos, 20);
-    }
-
-    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS){
-        double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos);
-        bun2dClearPixel(xpos, 800-ypos);
-    }
-    
-    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-    {
-        rectangleWidth++;
-    }
-
-    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-    {
-        rectangleWidth--;
-    }
 }
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
