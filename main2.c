@@ -139,6 +139,10 @@ typedef struct Pixel
     unsigned char r, g, b, a
 } Pixel;
 
+typedef struct Vec2{
+    float x,y
+} Vec2;
+
 typedef struct Point
 {
     int x, y
@@ -333,26 +337,27 @@ int main()
 {
     bun2dInit();
 
-    int x = 0;
-
-    int lineStartX = 0;
-    int lineStartY = 0;
-
-    int lineEndY;
-    int lineEndX;
+    int x = 50;
+    int y = 100;
+    int speedX = 1;
+    int speedY = 1;
+    int cirlceRad = 20; 
 
     while (bun2dTick())
     {
-        if(keys[KEY_W] == 1){
-            lineStartX = mouseX;
-            lineStartY = mouseY;
+        bun2dClear();
+
+        if(x >= TEXT_X - 20 || x <= 0 + 20){
+            speedX = -speedX;
         }
 
-        if(keys[KEY_E] == 1){
-            lineEndX = mouseX;
-            lineEndY = mouseY;
-            bun2dLine(lineStartX, lineStartY, lineEndX, lineEndY);
+        if(y >= TEXT_Y - 20 || y <= 0 + 20){
+            speedY = -speedY;
         }
+
+        x += speedX;
+        y += speedY;
+        bun2dCircle(x,y,20);
     }
 }
 
