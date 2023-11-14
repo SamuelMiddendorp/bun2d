@@ -7,6 +7,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#define BUN2_PRESS 1
+#define BUN2_HOLD 2
+#define BUN2_RELEASE 2
 
 #define 	KEY_SPACE   32
 #define 	KEY_APOSTROPHE   39 /* ' */
