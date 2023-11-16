@@ -9,14 +9,14 @@
 
 #define BUN2_PRESS 1
 #define BUN2_HOLD 2
-#define BUN2_RELEASE 2
+#define BUN2_RELEASE 0
 
 #define 	KEY_SPACE   32
-#define 	KEY_APOSTROPHE   39 /* ' */
-#define 	KEY_COMMA   44 /* , */
-#define 	KEY_MINUS   45 /* - */
-#define 	KEY_PERIOD   46 /* . */
-#define 	KEY_SLASH   47 /* / */
+#define 	KEY_APOSTROPHE   39 
+#define 	KEY_COMMA   44 
+#define 	KEY_MINUS   45 
+#define 	KEY_PERIOD   46
+#define 	KEY_SLASH   47
 #define 	KEY_0   48
 #define 	KEY_1   49
 #define 	KEY_2   50
@@ -27,8 +27,8 @@
 #define 	KEY_7   55
 #define 	KEY_8   56
 #define 	KEY_9   57
-#define 	KEY_SEMICOLON   59 /* ; */
-#define 	KEY_EQUAL   61 /* = */
+#define 	KEY_SEMICOLON   59 
+#define 	KEY_EQUAL   61 
 #define 	KEY_A   65
 #define 	KEY_B   66
 #define 	KEY_C   67
@@ -55,12 +55,12 @@
 #define 	KEY_X   88
 #define 	KEY_Y   89
 #define 	KEY_Z   90
-#define 	KEY_LEFT_BRACKET   91 /* [ */
-#define 	KEY_BACKSLASH   92 /* \ */
-#define 	KEY_RIGHT_BRACKET   93 /* ] */
-#define 	KEY_GRAVE_ACCENT   96 /* ` */
-#define 	KEY_WORLD_1   161 /* non-US #1 */
-#define 	KEY_WORLD_2   162 /* non-US #2 */
+#define 	KEY_LEFT_BRACKET   91 
+#define 	KEY_BACKSLASH   92 
+#define 	KEY_RIGHT_BRACKET   93
+#define 	KEY_GRAVE_ACCENT   96 
+#define 	KEY_WORLD_1   161 
+#define 	KEY_WORLD_2   162 
 #define 	KEY_ESCAPE   256
 #define 	KEY_ENTER   257
 #define 	KEY_TAB   258
@@ -344,7 +344,6 @@ int main()
     int y = 100;
     int speedX = 1;
     int speedY = 1;
-    int cirlceRad = 20; 
 
     while (bun2dTick())
     {
@@ -431,14 +430,14 @@ int bun2dInit()
     glDeleteShader(fragmentShader);
 
     float vertices[] = {
-        1.0f, 1.0f, 0.0f, 1.0f, 1.0f,   // top right
-        1.0f, -1.0f, 0.0f, 1.0f, 0.0f,  // bottom right
-        -1.0f, -1.0f, 0.0f, 0.0f, 0.0f, // bottom left
-        -1.0f, 1.0f, 0.0f, 0.0f, 1.0f   // top left
+        1.0f, 1.0f, 0.0f, 1.0f, 1.0f,   
+        1.0f, -1.0f, 0.0f, 1.0f, 0.0f,  
+        -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+        -1.0f, 1.0f, 0.0f, 0.0f, 1.0f 
     };
     unsigned int indices[] = {
-        0, 1, 3, // first triangle
-        1, 2, 3  // second triangle
+        0, 1, 3, 
+        1, 2, 3 
     };
     unsigned int VBO, VAO, EBO;
     glGenVertexArrays(1, &VAO);
@@ -500,7 +499,6 @@ int bun2dTick()
 void bun2dInput(GLFWwindow* win, int key, int code, int action, int mod)
 {
     keys[key] = action;
-    printf("%i", action);
 }
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
