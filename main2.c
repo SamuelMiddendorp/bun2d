@@ -132,10 +132,11 @@
 #define 	KEY_RIGHT_SUPER   347
 #define 	KEY_MENU   348
 
-
 #define TEXT_X 800
 #define TEXT_Y 800
 #define TEXT_SIZE TEXT_X *TEXT_Y
+
+
 
 typedef struct Pixel
 {
@@ -198,6 +199,8 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 Pixel *buff;
 
+int q[10] = {0,1,0,2,0,3,0,4,0,5};
+
 Point rotatePoint(Point point, Point origin, int rot)
 {
 
@@ -235,6 +238,14 @@ void putPixel(int x, int y)
     buff[TEXT_X * y + x].b = 255;
     buff[TEXT_X * y + x].a = 200;
 }
+
+void writeChar(int x, int y){
+    int arraySize = sizeof(q) / sizeof(int);
+    for(int i = 0; i < 10; i+=2){
+        putPixel(x + q[i], y + q[i+1]);
+    }
+}
+
 void bun2dClear()
 {
     memset(buff, 0, TEXT_X * TEXT_Y * sizeof(Pixel));
@@ -348,6 +359,7 @@ int main()
     while (bun2dTick())
     {
         bun2dClear();
+        writeChar(20,20);
 
         if(x >= TEXT_X - 20 || x <= 0 + 20){
             speedX = -speedX;
