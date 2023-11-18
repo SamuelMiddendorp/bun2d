@@ -242,10 +242,11 @@ void putPixel(int x, int y)
     buff[TEXT_X * y + x].a = 200;
 }
 
-void writeChar(char *l, int x, int y)
+// Returns the maximum "Length" of the character
+int writeChar(char *l, int x, int y)
 {
     int index = *l;
-    
+    int maxXOffset = 0;
     for (int i = 0; i < 30; i += 2)
     {
         // need to check for termination of relevant data
@@ -253,8 +254,15 @@ void writeChar(char *l, int x, int y)
         {
             break;
         }
-        putPixel(x + chars[index].offsets[i], y + chars[index].offsets[i + 1]);
+        int xOff = chars[index].offsets[i];
+
+        putPixel(x + xOff, y + chars[index].offsets[i + 1]);
+
+        if(xOff > maxXOffset){
+            maxXOffset = xOff;
+        }
     }
+    return maxXOffset;
 }
 
 void bun2dClear()
@@ -363,9 +371,9 @@ void bun2dText(char* text, int x, int y)
     int xOffset = 0;
     while (*text != '\0')
     {
-        writeChar(text, x + xOffset, y);
+        int charOffset = writeChar(text, x + xOffset, y);
         ++text;
-        xOffset += 7;
+        xOffset += charOffset + 2;
     }
 }
 
@@ -381,7 +389,7 @@ int main()
     while (bun2dTick())
     {
         bun2dClear();
-        bun2dText("lilil", 20,20);
+        bun2dText("iiiiil", 20,20);
 
         if (x >= TEXT_X - 20 || x <= 0 + 20)
         {
@@ -509,7 +517,7 @@ int bun2dInit()
     buff = calloc(TEXT_SIZE, sizeof(Pixel *));
     chars = calloc(200, sizeof(Char *));
 
-    Char i = {{3, 0, 3, 1, 3, 2, 3, 3, 3, 4, -1}};
+    Char i = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, -1}};
     Char l = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 2, 0, -1}};
 
     chars[105] = i;
