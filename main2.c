@@ -133,8 +133,8 @@
 #define KEY_RIGHT_SUPER 347
 #define KEY_MENU 348
 
-#define TEXT_X 80
-#define TEXT_Y 80
+#define TEXT_X 160 
+#define TEXT_Y 160 
 #define TEXT_SIZE TEXT_X *TEXT_Y
 
 typedef struct Char
@@ -232,7 +232,7 @@ void putColorPixel(int x, int y, Pixel color)
 
 void putPixel(int x, int y)
 {
-    if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
+    if (x >= TEXT_X || x <= 0 || y >= TEXT_Y || y <= 0)
     {
         return;
     }
@@ -388,29 +388,28 @@ int main()
 {
     bun2dInit();
 
-    int x = 20;
-    int y = 20;
-    int speedX = 1;
-    int speedY = 1;
+    float x = 20;
+    float y = 20;
+    float speedX = 0.4;
+    float speedY = 0.4;
 
     while (bun2dTick())
     {
         bun2dClear();
-        bun2dText("iiiiil l", 20,20);
 
-        if (x >= TEXT_X - 20 || x <= 0 + 20)
+        if (x >= TEXT_X - 20 || x <= 0)
         {
             speedX = -speedX;
         }
 
-        if (y >= TEXT_Y - 20 || y <= 0 + 20)
+        if (y >= TEXT_Y - 5 || y <= 0 + 5)
         {
             speedY = -speedY;
         }
 
         x += speedX;
         y += speedY;
-        // bun2dCircle(x,y,20);
+        bun2dText("iiiiil l", x,y);
     }
 }
 
