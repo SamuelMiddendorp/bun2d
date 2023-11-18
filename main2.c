@@ -132,11 +132,14 @@
 #define 	KEY_RIGHT_SUPER   347
 #define 	KEY_MENU   348
 
-#define TEXT_X 800
-#define TEXT_Y 800
+#define TEXT_X 80 
+#define TEXT_Y 80
 #define TEXT_SIZE TEXT_X *TEXT_Y
 
 
+typedef struct Char{
+    unsigned int offsets[30]
+} Char;
 
 typedef struct Pixel
 {
@@ -198,8 +201,8 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 
 Pixel *buff;
+Char *chars;
 
-int q[10] = {0,1,0,2,0,3,0,4,0,5};
 
 Point rotatePoint(Point point, Point origin, int rot)
 {
@@ -239,11 +242,16 @@ void putPixel(int x, int y)
     buff[TEXT_X * y + x].a = 200;
 }
 
-void writeChar(int x, int y){
-    int arraySize = sizeof(q) / sizeof(int);
-    for(int i = 0; i < 10; i+=2){
-        putPixel(x + q[i], y + q[i+1]);
+void writeChar(char* l, int x, int y){
+    int index = *l;
+    for(int i = 0; i < 30; i+=2){
+        // need to check for termination of relevant data
+        if(chars[index].offsets[i] == -1){
+            break;
+        }
+        putPixel(x + chars[index].offsets[i], y + chars[index].offsets[i + 1]);
     }
+
 }
 
 void bun2dClear()
@@ -351,15 +359,15 @@ int main()
 {
     bun2dInit();
 
-    int x = 50;
-    int y = 100;
+    int x = 20;
+    int y = 20;
     int speedX = 1;
     int speedY = 1;
 
     while (bun2dTick())
     {
         bun2dClear();
-        writeChar(20,20);
+        writeChar("l", 20,20);
 
         if(x >= TEXT_X - 20 || x <= 0 + 20){
             speedX = -speedX;
@@ -371,12 +379,14 @@ int main()
 
         x += speedX;
         y += speedY;
-        bun2dCircle(x,y,20);
+        //bun2dCircle(x,y,20);
     }
 }
 
 int bun2dInit()
 {
+
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -484,6 +494,13 @@ int bun2dInit()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     buff = calloc(TEXT_SIZE, sizeof(Pixel *));
+    chars = calloc(200, sizeof(Char *));
+
+    Char i = {{3,0,3,1,3,2,3,3,3,4,-1}};
+    Char l = {{0,0,0,1,0,2,0,3,0,4,1,0,2,0,-1}};
+
+    chars[105] = i;
+    chars[108] = l;
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
     glGenerateMipmap(GL_TEXTURE_2D);
