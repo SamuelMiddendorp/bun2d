@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 
 #include <stdio.h>
+#include <ctype.h>
 #include <stdbool.h>
 
 #define BUN2_PRESS 1
@@ -371,6 +372,12 @@ void bun2dText(char* text, int x, int y)
     int xOffset = 0;
     while (*text != '\0')
     {
+        if(isspace(*text)){
+            xOffset += 1;
+            ++text;
+            continue;
+        }
+
         int charOffset = writeChar(text, x + xOffset, y);
         ++text;
         xOffset += charOffset + 2;
@@ -389,7 +396,7 @@ int main()
     while (bun2dTick())
     {
         bun2dClear();
-        bun2dText("iiiiil", 20,20);
+        bun2dText("iiiiil l", 20,20);
 
         if (x >= TEXT_X - 20 || x <= 0 + 20)
         {
