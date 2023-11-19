@@ -370,6 +370,7 @@ void bun2dCircle(int xc, int yc, int r)
 void bun2dText(char* text, int x, int y)
 {
     int xOffset = 0;
+    int yOffset = 8;
     while (*text != '\0')
     {
         if(isspace(*text)){
@@ -377,8 +378,16 @@ void bun2dText(char* text, int x, int y)
             ++text;
             continue;
         }
+        // \\ is meant to introduce a nextline
+        // Working on getting this to be \n
+        if(*text == '\\'){
+            xOffset = 0;
+            yOffset += 6;
+            ++text;
+            continue;
+        }
 
-        int charOffset = writeChar(text, x + xOffset, y);
+        int charOffset = writeChar(text, x + xOffset, y - yOffset);
         ++text;
         xOffset += charOffset + 2;
     }
@@ -388,28 +397,10 @@ int main()
 {
     bun2dInit();
 
-    float x = 20;
-    float y = 20;
-    float speedX = 0.4;
-    float speedY = 0.4;
-
     while (bun2dTick())
     {
         bun2dClear();
-
-        if (x >= TEXT_X - 20 || x <= 0)
-        {
-            speedX = -speedX;
-        }
-
-        if (y >= TEXT_Y - 5 || y <= 0 + 5)
-        {
-            speedY = -speedY;
-        }
-
-        x += speedX;
-        y += speedY;
-        bun2dText("iiiiil l", x,y);
+        bun2dText("iiiiil l \\l", 20,20);
     }
 }
 
