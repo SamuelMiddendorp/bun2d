@@ -350,24 +350,32 @@ void drawCircle(int xc, int yc, int x, int y)
     putPixel(xc - y, yc - x);
 }
 
-void bun2dCircle(int xc, int yc, int r)
+/// @brief Renders a circle to the screen
+/// @param x The x coordinate on the screen where the text should be written
+/// @param y The y coordinate on the screen where the text should be written
+/// @param r The radius of the circle 
+void bun2dCircle(int x, int y, int r)
 {
-    int x = 0, y = r;
+    int _x = 0, _y = r;
     int d = 3 - 2 * r;
-    drawCircle(xc, yc, x, y);
-    while (y >= x)
+    drawCircle(x, y, _x, _y);
+    while (_y >= _x)
     {
-        x++;
+        _x++;
         if (d > 0)
         {
-            y--;
-            d = d + 4 * (x - y) + 10;
+            _y--;
+            d = d + 4 * (_x - _y) + 10;
         }
         else
-            d = d + 4 * x + 6;
-        drawCircle(xc, yc, x, y);
+            d = d + 4 * _x + 6;
+        drawCircle(x, y, _x, _y);
     }
 }
+/// @brief Writes a pixel font text to the screen   
+/// @param text The text to be written use double \\ for a newline
+/// @param x The x coordinate on the screen where the text should be written
+/// @param y The y coordinate on the screen where the text should be written
 void bun2dText(char* text, int x, int y)
 {
     int xOffset = 0;
@@ -393,7 +401,8 @@ void bun2dText(char* text, int x, int y)
         xOffset += charOffset + 2;
     }
 }
-
+/// @brief Initializes the engine and sets up opengl and the pixelbuffer
+/// @return Wether initialization was succesfull 
 int bun2dInit()
 {
 

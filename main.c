@@ -8,6 +8,6 @@ int main()
     while (bun2dTick())
     {
         bun2dClear();
-        bun2dText("iiiiil l \\l", 20,20);
+        bun2dText("iiiiil l \\l        l \\ l iiii", 20,20);
     }
 }
