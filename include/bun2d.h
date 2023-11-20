@@ -233,7 +233,7 @@ void putColorPixel(int x, int y, Pixel color)
 
 void putPixel(int x, int y)
 {
-    if (x >= TEXT_X || x <= 0 || y >= TEXT_Y || y <= 0)
+    if (x >= TEXT_X || x < 0 || y >= TEXT_Y || y < 0)
     {
         return;
     }
@@ -521,7 +521,7 @@ int bun2dInit()
 }
 
 void fillPixelFont(){
-    
+
     chars = calloc(200, sizeof(Char *));
 
     Char i = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, -1}};
