@@ -511,6 +511,17 @@ int bun2dInit()
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     buff = calloc(TEXT_SIZE, sizeof(Pixel *));
+
+    fillPixelFont();
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+    glGenerateMipmap(GL_TEXTURE_2D);
+    glUseProgram(shaderProgram);
+    glBindVertexArray(VAO);
+}
+
+void fillPixelFont(){
+    
     chars = calloc(200, sizeof(Char *));
 
     Char i = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, -1}};
@@ -518,11 +529,6 @@ int bun2dInit()
 
     chars[105] = i;
     chars[108] = l;
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    glUseProgram(shaderProgram);
-    glBindVertexArray(VAO);
 }
 
 int bun2dTick()
