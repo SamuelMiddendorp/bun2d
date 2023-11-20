@@ -8,9 +8,9 @@
 #include <ctype.h>
 #include <stdbool.h>
 
-#define BUN2_PRESS 1
-#define BUN2_HOLD 2
-#define BUN2_RELEASE 0
+#define BUN2D_PRESS 1
+#define BUN2D_HOLD 2
+#define BUN2D_RELEASE 0
 
 #define KEY_SPACE 32
 #define KEY_APOSTROPHE 39
