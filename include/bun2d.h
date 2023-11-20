@@ -244,7 +244,7 @@ void putPixel(int x, int y)
     buff[TEXT_X * y + x].a = 200;
 }
 
-// Returns the maximum "Length" of the character
+// Returns the maximum "Length" of the character for use in the parent function to determine where to draw the next one
 int writeChar(char *l, int x, int y)
 {
     int index = *l;

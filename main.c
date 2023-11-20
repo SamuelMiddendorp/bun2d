@@ -4,11 +4,18 @@
 int main()
 {
     bun2dInit();
+
     int x = 0;
     int y = 0;
+
+    int rectangleY = 100;
+
+    Pixel color = {255,255,255,255};
+
     while (bun2dTick())
     {
         bun2dClear();
+        // Input
         if(keys[KEY_D] == BUN2D_PRESS){
             x++;
         }
@@ -24,7 +31,14 @@ int main()
         if(keys[KEY_W] == BUN2D_PRESS){
             y++;
         }
+        // Rest of the game logic
+        rectangleY--;
 
+        if(rectangleY < 0){
+            rectangleY = 1000;
+        }
+        // Rendering
         bun2dText("iiiiil l \\l        l \\ l iiii", x,y);
+        bun2dRect(50, rectangleY,20,10,0,color);
     }
 }
