@@ -9,7 +9,8 @@ int main()
     int y = 0;
 
     int rectangleY = 100;
-
+    int rectangleX = rand() % 120;
+    
     Pixel color = {255,255,255,255};
 
     while (bun2dTick())
@@ -35,10 +36,12 @@ int main()
         rectangleY--;
 
         if(rectangleY < 0){
-            rectangleY = 1000;
+            
+            rectangleY = 300;
+            rectangleX = rand() % 120;
         }
         // Rendering
         bun2dText("iiiiil l \\l        l \\ l iiii", x,y);
-        bun2dRect(50, rectangleY,20,10,0,color);
+        bun2dRect(rectangleX, rectangleY,20,10,0,color);
     }
 }
