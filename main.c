@@ -3,7 +3,7 @@
 
 int main()
 {
-    bun2dInit();
+    bun2dInit(1);
 
     int x = 0;
     int y = 0;

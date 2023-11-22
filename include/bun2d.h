@@ -403,7 +403,7 @@ void bun2dText(char* text, int x, int y)
 }
 /// @brief Initializes the engine and sets up opengl and the pixelbuffer
 /// @return Wether initialization was succesfull 
-int bun2dInit()
+int bun2dInit(int vsync)
 {
 
     glfwInit();
@@ -421,7 +421,12 @@ int bun2dInit()
         glfwTerminate();
         return -1;
     }
+
     glfwMakeContextCurrent(window);
+
+    if(vsync){
+        glfwSwapInterval(0);
+    }
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, bun2dInput);
 
