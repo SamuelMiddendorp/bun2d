@@ -3,7 +3,7 @@
 
 int main()
 {
-    bun2dInit(1);
+    bun2dInit(0);
 
     int x = 0;
     int y = 0;
@@ -41,7 +41,7 @@ int main()
             rectangleX = rand() % 120;
         }
         // Rendering
-        bun2dText("iiiiil l \\l        l \\ l iiii", x,y);
+        bun2dText("lll", 30,30);
         bun2dRect(rectangleX, rectangleY,20,10,0,color);
     }
 }

@@ -137,28 +137,28 @@
 #define TEXT_Y 160 
 #define TEXT_SIZE TEXT_X *TEXT_Y
 
-typedef struct Char
+typedef struct 
 {
-    unsigned int offsets[30];
+    int offsets[30];
 } Char;
 
-typedef struct Pixel
+typedef struct 
 {
     unsigned char r, g, b, a;
 } Pixel;
 
-typedef struct Vec2
+typedef struct 
 {
     float x, y;
 } Vec2;
 
-typedef struct Point
+typedef struct 
 {
     int x, y;
 } Point;
 
 int bun2dTick();
-int bun2dInit();
+int bun2dInit(int vsync);
 void bun2dClear();
 
 void bun2dLine(int x0, int y0, int x1, int y1);
@@ -401,6 +401,18 @@ void bun2dText(char* text, int x, int y)
         xOffset += charOffset + 2;
     }
 }
+
+void fillPixelFont(){
+
+    chars = calloc(200, sizeof(Char *));
+
+    Char i = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, -1}};
+    Char l = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 2, 0, -1}};
+
+    chars[105] = i;
+    chars[108] = l;
+}
+
 /// @brief Initializes the engine and sets up opengl and the pixelbuffer
 /// @return Wether initialization was succesfull 
 int bun2dInit(int vsync)
@@ -523,17 +535,7 @@ int bun2dInit(int vsync)
     glGenerateMipmap(GL_TEXTURE_2D);
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
-}
-
-void fillPixelFont(){
-
-    chars = calloc(200, sizeof(Char *));
-
-    Char i = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, -1}};
-    Char l = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 2, 0, -1}};
-
-    chars[105] = i;
-    chars[108] = l;
+    return 0;
 }
 
 int bun2dTick()
