@@ -164,6 +164,7 @@ void bun2dClear();
 void bun2dLine(int x0, int y0, int x1, int y1);
 void bun2dRect(int x, int y, int width, int height, int rotation, Pixel color);
 void bun2dText(char* text, int x, int y);
+int bun2dKey(int key);
 
 void bun2dClearPixel(int x, int y);
 void bun2dInput(GLFWwindow *win, int key, int code, int action, int mod);
@@ -400,6 +401,13 @@ void bun2dText(char* text, int x, int y)
         ++text;
         xOffset += charOffset + 2;
     }
+}
+
+int bun2dKey(int key){
+    if(key > 399){
+        return 0;
+    }
+    return keys[key]; 
 }
 
 void fillPixelFont(){

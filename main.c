@@ -17,19 +17,19 @@ int main()
     {
         bun2dClear();
         // Input
-        if(keys[KEY_D] == BUN2D_PRESS){
+        if(bun2dKey(KEY_D) == BUN2D_PRESS){
             x++;
         }
 
-        if(keys[KEY_A] == BUN2D_PRESS){
+        if(bun2dKey(KEY_A) == BUN2D_PRESS){
             x--;
         }
 
-        if(keys[KEY_S] == BUN2D_PRESS){
+        if(bun2dKey(KEY_S) == BUN2D_PRESS){
             y--;
         }
 
-        if(keys[KEY_W] == BUN2D_PRESS){
+        if(bun2dKey(KEY_W) == BUN2D_PRESS){
             y++;
         }
         // Rest of the game logic
@@ -41,7 +41,7 @@ int main()
             rectangleX = rand() % 120;
         }
         // Rendering
-        bun2dText("lll", 30,30);
+        bun2dText("lll", x,y);
         bun2dRect(rectangleX, rectangleY,20,10,0,color);
     }
 }
