@@ -245,7 +245,6 @@ void putPixel(int x, int y)
     buff[TEXT_X * y + x].a = 200;
 }
 
-// Returns the maximum "Length" of the character for use in the parent function to determine where to draw the next one
 int writeChar(char *l, int x, int y)
 {
     int index = *l;
@@ -267,7 +266,7 @@ int writeChar(char *l, int x, int y)
     }
     return maxXOffset;
 }
-
+/// @brief Clears the pixelbuffer
 void bun2dClear()
 {
     memset(buff, 0, TEXT_X * TEXT_Y * sizeof(Pixel));
@@ -286,6 +285,11 @@ void bun2dClearPixel(int x, int y)
     buff[TEXT_X * y + x].a = 0;
 }
 
+/// @brief Renders a line to the screen 
+/// @param x0 The x coordinate of the origin 
+/// @param y0 The y coordinate of the origin 
+/// @param x1 The x coordinate of the target 
+/// @param y1 The y coordinate of the target 
 void bun2dLine(int x0, int y0, int x1, int y1)
 {
     int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
@@ -311,7 +315,7 @@ void bun2dLine(int x0, int y0, int x1, int y1)
     }
 }
 
-void bun2dRect(int x, int y, int width, int height, int rotation, Pixel color)
+void bun2dRect(int x, int y, int width, int height,int rotation, Pixel color)
 {
     Point origin = {x, y};
 
