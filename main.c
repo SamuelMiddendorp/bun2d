@@ -12,6 +12,7 @@ int main()
     int rectangleX = rand() % 120;
     
     Pixel color = {140,255,255,255};
+    Pixel color2 = {255,0,0,255};
 
     while (bun2dTick())
     {
@@ -43,6 +44,8 @@ int main()
         }
         // Rendering
         bun2dText("lll", x,y);
-        bun2dRect(rectangleX, rectangleY,20,10,0,color);
+        bun2dColor(color2);
+        bun2dRect(rectangleX, rectangleY,20,10,0);
+
     }
 }
