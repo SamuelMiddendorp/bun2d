@@ -11,10 +11,11 @@ int main()
     int rectangleY = 100;
     int rectangleX = rand() % 120;
     
-    Pixel color = {255,255,255,255};
+    Pixel color = {140,255,255,255};
 
     while (bun2dTick())
     {
+        bun2dColor(color);
         bun2dClear();
         // Input
         if(bun2dKey(KEY_D) == BUN2D_PRESS){

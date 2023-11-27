@@ -206,7 +206,7 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 Pixel *buff;
 Char *chars;
-Pixel color = {
+Pixel _color = {
     255,
     255,
     255,
@@ -245,10 +245,10 @@ void putPixel(int x, int y)
         return;
     }
 
-    buff[TEXT_X * y + x].r = color.r;
-    buff[TEXT_X * y + x].g = color.g;
-    buff[TEXT_X * y + x].b = color.b;
-    buff[TEXT_X * y + x].a = color.a;
+    buff[TEXT_X * y + x].r = _color.r;
+    buff[TEXT_X * y + x].g = _color.g;
+    buff[TEXT_X * y + x].b = _color.b;
+    buff[TEXT_X * y + x].a = _color.a;
 }
 
 int writeChar(char *l, int x, int y)
@@ -350,8 +350,9 @@ void bun2dRect(int x, int y, int width, int height,int rotation, Pixel color)
 }
 
 void bun2dColor(Pixel color){
-
+    _color = color;
 }
+
 void drawCircle(int xc, int yc, int x, int y)
 {
     putPixel(xc + x, yc + y);
