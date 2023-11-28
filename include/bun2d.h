@@ -161,6 +161,7 @@ int bun2dTick();
 int bun2dInit(int vsync);
 void bun2dClear();
 
+void bun2dPixel(int x, int y, Pixel color);
 void bun2dLine(int x0, int y0, int x1, int y1);
 void bun2dRect(int x, int y, int width, int height, int rotation);
 void bun2dText(char* text, int x, int y);
@@ -206,6 +207,7 @@ const char *fragmentShaderSource = "#version 330 core\n"
 
 Pixel *buff;
 Char *chars;
+// Init to white
 Pixel _color = {
     255,
     255,
@@ -225,7 +227,7 @@ Point rotatePoint(Point point, Point origin, int rot)
     return p;
 }
 
-void putColorPixel(int x, int y, Pixel color)
+void bun2dPixel(int x, int y, Pixel color)
 {
     if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
     {

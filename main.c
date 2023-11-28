@@ -43,6 +43,7 @@ int main()
             rectangleX = rand() % 120;
         }
         // Rendering
+        bun2dPixel(20,30, color);
         bun2dText("lll", x,y);
         bun2dColor(color2);
         bun2dRect(rectangleX, rectangleY,20,10,0);
