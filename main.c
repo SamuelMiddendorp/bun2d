@@ -46,7 +46,7 @@ int main()
         bun2dPixel(20,30, color);
         bun2dText("lll", x,y);
         bun2dColor(color2);
-        bun2dRect(rectangleX, rectangleY,20,10,0);
+        bun2dRect(rectangleX, rectangleY,20,10);
 
     }
 }

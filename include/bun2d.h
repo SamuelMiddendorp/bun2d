@@ -163,7 +163,7 @@ void bun2dClear();
 
 void bun2dPixel(int x, int y, Pixel color);
 void bun2dLine(int x0, int y0, int x1, int y1);
-void bun2dRect(int x, int y, int width, int height, int rotation);
+void bun2dRect(int x, int y, int width, int height);
 void bun2dText(char* text, int x, int y);
 int bun2dKey(int key);
 
@@ -323,7 +323,7 @@ void bun2dLine(int x0, int y0, int x1, int y1)
     }
 }
 
-void bun2dRect(int x, int y, int width, int height,int rotation)
+void bun2dRect(int x, int y, int width, int height)
 {
     Point origin = {x, y};
 
@@ -334,19 +334,16 @@ void bun2dRect(int x, int y, int width, int height,int rotation)
             for (int j = 0; j < width; j++)
             {
                 Point p = {j + x, i + y};
-                Point rotatedPoint = rotatePoint(p, origin, rotation);
-                putPixel(rotatedPoint.x, rotatedPoint.y);
+                putPixel(p.x, p.y);
             }
         }
         else
         {
             Point pA = {x, i + y};
-            Point rotatedPoint = rotatePoint(pA, origin, rotation);
-            putPixel(rotatedPoint.x, rotatedPoint.y);
+            putPixel(pA.x, pA.y);
 
             Point pB = {x + width, i + y};
-            rotatedPoint = rotatePoint(pB, origin, rotation);
-            putPixel(rotatedPoint.x, rotatedPoint.y);
+            putPixel(pB.x, pB.y);
         }
     }
 }
