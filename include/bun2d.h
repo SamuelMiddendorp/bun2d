@@ -274,7 +274,7 @@ int writeChar(char *l, int x, int y)
     }
     return maxXOffset;
 }
-/// @brief Clears the pixelbuffer
+/// @brief Clears the whole pixelbuffer
 void bun2dClear()
 {
     memset(buff, 0, TEXT_X * TEXT_Y * sizeof(Pixel));
@@ -352,6 +352,16 @@ void bun2dColor(Pixel color){
     _color = color;
 }
 
+Pixel bun2dGetPixel(int x, int y){
+    Pixel p;
+    
+    p.r = buff[TEXT_X * y + x].r;
+    p.g = buff[TEXT_X * y + x].g;
+    p.b = buff[TEXT_X * y + x].b;
+    p.a = buff[TEXT_X * y + x].a;
+
+    return p;
+}
 void drawCircle(int xc, int yc, int x, int y)
 {
     putPixel(xc + x, yc + y);

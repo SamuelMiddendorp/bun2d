@@ -42,6 +42,8 @@ int main()
             rectangleY = 300;
             rectangleX = rand() % 120;
         }
+        Pixel p = bun2dGetPixel(20,30);
+        printf("%u pixel", p.g);
         // Rendering
         bun2dPixel(20,30, color);
         bun2dText("lll", x,y);
