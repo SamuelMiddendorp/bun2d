@@ -353,13 +353,13 @@ void bun2dColor(Pixel color){
 }
 
 Pixel bun2dGetPixel(int x, int y){
-    Pixel p;
+    Pixel p = {
+    buff[TEXT_X * y + x].r,
+    buff[TEXT_X * y + x].g,
+    buff[TEXT_X * y + x].b,
+    buff[TEXT_X * y + x].a
+    };
     
-    p.r = buff[TEXT_X * y + x].r;
-    p.g = buff[TEXT_X * y + x].g;
-    p.b = buff[TEXT_X * y + x].b;
-    p.a = buff[TEXT_X * y + x].a;
-
     return p;
 }
 void drawCircle(int xc, int yc, int x, int y)
