@@ -9,7 +9,7 @@ int main()
     int y = 0;
 
     int rectangleY = 100;
-    int rectangleX = rand() % 120;
+    int rectangleX = rand() % 50;
     
     Pixel color = {140,255,255,255};
     Pixel color2 = {255,0,0,255};
@@ -40,12 +40,12 @@ int main()
         if(rectangleY < 0){
             
             rectangleY = 300;
-            rectangleX = rand() % 120;
+            rectangleX = rand() % 50;
         }
         // Rendering
         bun2dPixel(20,30, color);
 
-        Pixel p = bun2dGetPixel(20,30);
+        Pixel p = bun2dGetPixel(20,31);
         printf("%u pixel", p.a);
         
         bun2dText("lll", x,y);

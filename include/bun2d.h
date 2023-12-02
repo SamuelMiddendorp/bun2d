@@ -274,6 +274,7 @@ int writeChar(char *l, int x, int y)
     }
     return maxXOffset;
 }
+
 /// @brief Clears the whole pixelbuffer
 void bun2dClear()
 {
@@ -281,7 +282,7 @@ void bun2dClear()
 }
 
 void bun2dClearPixel(int x, int y)
-{
+{   
     if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
     {
         return;
@@ -353,6 +354,12 @@ void bun2dColor(Pixel color){
 }
 
 Pixel bun2dGetPixel(int x, int y){
+
+    if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
+    {
+        return;
+    }
+    
     Pixel p = {
     buff[TEXT_X * y + x].r,
     buff[TEXT_X * y + x].g,
