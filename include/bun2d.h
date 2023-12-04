@@ -301,6 +301,8 @@ void bun2dClearPixel(int x, int y)
 /// @param y1 The y coordinate of the target 
 void bun2dLine(int x0, int y0, int x1, int y1)
 {
+    // We allow to draw lines to or from out of bounds
+
     int dx = abs(x1 - x0), sx = x0 < x1 ? 1 : -1;
     int dy = -abs(y1 - y0), sy = y0 < y1 ? 1 : -1;
     int err = dx + dy, e2;
@@ -326,6 +328,11 @@ void bun2dLine(int x0, int y0, int x1, int y1)
 
 void bun2dRect(int x, int y, int width, int height)
 {
+    if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
+    {
+        return;
+    }
+
     Point origin = {x, y};
 
     for (int i = 0; i < height; i++)
@@ -369,6 +376,7 @@ Pixel bun2dGetPixel(int x, int y){
     
     return p;
 }
+
 void drawCircle(int xc, int yc, int x, int y)
 {
     putPixel(xc + x, yc + y);
@@ -387,6 +395,11 @@ void drawCircle(int xc, int yc, int x, int y)
 /// @param r The radius of the circle 
 void bun2dCircle(int x, int y, int r)
 {
+    if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
+    {
+        return;
+    }
+
     int _x = 0, _y = r;
     int d = 3 - 2 * r;
     drawCircle(x, y, _x, _y);
@@ -403,6 +416,7 @@ void bun2dCircle(int x, int y, int r)
         drawCircle(x, y, _x, _y);
     }
 }
+
 /// @brief Writes a pixel font text to the screen   
 /// @param text The text to be written use double \\ for a newline
 /// @param x The x coordinate on the screen where the text should be written
