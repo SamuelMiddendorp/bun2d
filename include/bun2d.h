@@ -339,7 +339,7 @@ void bun2dRect(int x, int y, int width, int height)
     {
         if (i == 0 || i == height - 1)
         {
-            for (int j = 0; j < width; j++)
+            for (int j = 0; j < width + 1; j++)
             {
                 Point p = {j + x, i + y};
                 putPixel(p.x, p.y);
