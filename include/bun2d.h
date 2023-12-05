@@ -162,6 +162,7 @@ int bun2dInit(int vsync);
 void bun2dClear();
 
 void bun2dPixel(int x, int y, Pixel color);
+Pixel bun2dGetPixel(int x, int y);
 void bun2dLine(int x0, int y0, int x1, int y1);
 void bun2dRect(int x, int y, int width, int height);
 void bun2dText(char* text, int x, int y);
@@ -364,7 +365,13 @@ Pixel bun2dGetPixel(int x, int y){
 
     if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
     {
-        return;
+        Pixel empty = {
+            0,
+            0,
+            0,
+            0
+        };
+        return empty;
     }
     
     Pixel p = {
