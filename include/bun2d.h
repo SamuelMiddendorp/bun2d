@@ -216,6 +216,13 @@ Pixel _color = {
     255
 };
 
+const Pixel empty = {
+    0,
+    0,
+    0,
+    0
+};
+
 Point rotatePoint(Point point, Point origin, int rot)
 {
 
@@ -365,12 +372,6 @@ Pixel bun2dGetPixel(int x, int y){
 
     if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
     {
-        Pixel empty = {
-            0,
-            0,
-            0,
-            0
-        };
         return empty;
     }
     
