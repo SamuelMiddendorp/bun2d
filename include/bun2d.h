@@ -223,6 +223,13 @@ const Pixel empty = {
     0
 };
 
+const Pixel red = {
+    255,
+    0,
+    0,
+    0
+};
+
 Point rotatePoint(Point point, Point origin, int rot)
 {
 
