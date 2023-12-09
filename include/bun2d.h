@@ -216,17 +216,38 @@ Pixel _color = {
     255
 };
 
-const Pixel empty = {
+const Pixel EMPTY = {
     0,
     0,
     0,
     0
 };
 
-const Pixel red = {
+const Pixel RED = {
     255,
     0,
     0,
+    255
+};
+
+const Pixel GREEN = {
+    0,
+    255,
+    0,
+    255
+};
+
+const Pixel BLUE = {
+    0,
+    0,
+    255,
+    255
+};
+
+const Pixel WHITE = {
+    255,
+    255,
+    255,
     255
 };
 
