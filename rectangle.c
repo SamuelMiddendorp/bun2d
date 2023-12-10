@@ -11,7 +11,7 @@ int main()
     
     while (bun2dTick())
     {
-        bun2dColor(red);
+        bun2dColor(RED);
         bun2dClear();
         bun2dRect(rectangleX, rectangleY,20,10);
     }
