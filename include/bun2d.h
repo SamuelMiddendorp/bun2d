@@ -497,10 +497,13 @@ void fillPixelFont(){
     Char i = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, -1}};
     Char l = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 2, 0, -1}};
     Char o = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 1, 4, 2, 0, 2, 1, 2, 2, 2, 3, 2, 4, -1}};
+    Char t = {{1, 0, 1, 1, 1, 2, 1, 3, 1, 4, 2, 4, 0, 4, -1}};
 
     chars[105] = i;
     chars[108] = l;
     chars[111] = o;
+    chars[116] = t;
+
 }
 
 /// @brief Initializes the engine and sets up opengl and the pixelbuffer
