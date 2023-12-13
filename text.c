@@ -8,6 +8,6 @@ int main()
 
     while (bun2dTick())
     {
-        bun2dText("ollt", 20,20);
+        bun2dText("ollttttlllooo", 20,20);
     }
 }
