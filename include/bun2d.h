@@ -530,7 +530,7 @@ int bun2dInit(int vsync)
     glfwMakeContextCurrent(window);
 
     if(vsync){
-        glfwSwapInterval(0);
+        glfwSwapInterval(1);
     }
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, bun2dInput);

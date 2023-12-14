@@ -1,4 +1,3 @@
-
 #define BUN2D_IMPLEMENTATION 
 #include <bun2d.h>
 
@@ -8,6 +7,7 @@ int main()
 
     while (bun2dTick())
     {
+        bun2dClear();
         bun2dText("ollttttlllooo", 20,20);
     }
 }
