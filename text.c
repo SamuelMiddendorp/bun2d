@@ -3,7 +3,7 @@
 
 int main()
 {
-    bun2dInit(0);
+    bun2dInit(1);
 
     while (bun2dTick())
     {

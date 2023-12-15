@@ -506,8 +506,9 @@ void fillPixelFont(){
 
 }
 
-/// @brief Initializes the engine and sets up opengl and the pixelbuffer
-/// @return Wether initialization was succesfull 
+/// @brief Initializes the game engine
+/// @param vsync 1 for on 0 for off
+/// @return Wether or not the init method was succesfull
 int bun2dInit(int vsync)
 {
 
