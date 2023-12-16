@@ -507,7 +507,7 @@ void fillPixelFont(){
 }
 
 /// @brief Initializes the game engine
-/// @param vsync 1 for on 0 for off
+/// @param vsync 0 for off 1 for on
 /// @return Wether or not the init method was succesfull
 int bun2dInit(int vsync)
 {
@@ -530,8 +530,8 @@ int bun2dInit(int vsync)
 
     glfwMakeContextCurrent(window);
 
-    if(vsync){
-        glfwSwapInterval(1);
+    if(!vsync){
+        glfwSwapInterval(0);
     }
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetKeyCallback(window, bun2dInput);
