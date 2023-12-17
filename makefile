@@ -7,3 +7,6 @@ rectangle:
 text:
 	gcc -Wall -Wextra -g -Iinclude text.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
 	./run
+font-creator:
+	gcc -Wall -Wextra -g -Iinclude font-creator.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
+	./run

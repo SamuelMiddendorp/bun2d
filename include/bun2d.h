@@ -180,8 +180,8 @@ unsigned char keys[400];
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
 
-double mouseX;
-double mouseY;
+double mouseX = 0;
+double mouseY = 0;
 
 GLFWwindow *window;
 
