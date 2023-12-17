@@ -167,6 +167,7 @@ void bun2dLine(int x0, int y0, int x1, int y1);
 void bun2dRect(int x, int y, int width, int height);
 void bun2dText(char* text, int x, int y);
 int bun2dKey(int key);
+Point bun2dGetMouse();
 
 void bun2dClearPixel(int x, int y);
 void bun2dInput(GLFWwindow *win, int key, int code, int action, int mod);
@@ -488,6 +489,11 @@ int bun2dKey(int key){
         return 0;
     }
     return keys[key]; 
+}
+
+Point bun2dGetMouse(){
+    Point p = {mouseX, mouseY};
+    return p;
 }
 
 void fillPixelFont(){

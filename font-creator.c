@@ -1,5 +1,7 @@
 #define BUN2D_IMPLEMENTATION 
+
 #include <bun2d.h>
+
 
 int main()
 {
@@ -8,6 +10,6 @@ int main()
     while (bun2dTick())
     {
         bun2dClear();
-        
+        Point foo = bun2dGetMouse();
     }
 }
