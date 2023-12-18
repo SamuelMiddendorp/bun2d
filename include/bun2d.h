@@ -133,8 +133,8 @@
 #define KEY_RIGHT_SUPER 347
 #define KEY_MENU 348
 
-#define TEXT_X 160 
-#define TEXT_Y 160 
+#define TEXT_X 5 
+#define TEXT_Y 5 
 #define TEXT_SIZE TEXT_X *TEXT_Y
 
 typedef struct 
@@ -498,7 +498,7 @@ Point bun2dGetMouse(){
     float ratioY = SCR_HEIGHT / TEXT_Y;
 
     glfwGetCursorPos(window, &xpos, &ypos);
-    Point p = {xpos / ratioX, TEXT_Y -  ypos / ratioY};
+    Point p = {xpos / ratioX, TEXT_Y - ypos / ratioY};
     return p;
 }
 

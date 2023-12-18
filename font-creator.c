@@ -1,7 +1,5 @@
 #define BUN2D_IMPLEMENTATION 
-
 #include <bun2d.h>
-
 
 int main()
 {
@@ -10,11 +8,22 @@ int main()
     Pixel color = {255,0,0,255};
     while (bun2dTick())
     {
-        bun2dClear();
-
-        if(bun2dKey(KEY_W) == 1){
+        if(bun2dKey(KEY_W) == 1 || bun2dKey(KEY_W) == 2){
             Point foo = bun2dGetMouse();
-            bun2dRect(foo.x, foo.y, 20,20);
+            bun2dPixel(foo.x, foo.y, color);
+        }
+        if(bun2dKey(KEY_S) == 1){
+            char res[100];
+            for(int x = 0; x<5 ; x++){
+            for(int y = 0; y<5 ; y++){
+                if(bun2dGetPixel(x,y).a == 255){
+                    sprintf(res, "%i,%i,", x,y);
+                }
+                printf(res);
+            }
+            }
+            printf("\n");
         }
     }
 }
+
