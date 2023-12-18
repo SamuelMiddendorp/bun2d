@@ -10,11 +10,11 @@ int main()
     Pixel color = {255,0,0,255};
     while (bun2dTick())
     {
-
-        Point foo = bun2dGetMouse();
-        if(bun2dKey(KEY_W) == 1){
-            bun2dPixel(foo.x, foo.y, color);
-        }
         bun2dClear();
+
+        if(bun2dKey(KEY_W) == 1){
+            Point foo = bun2dGetMouse();
+            bun2dRect(foo.x, foo.y, 20,20);
+        }
     }
 }

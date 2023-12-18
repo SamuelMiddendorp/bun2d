@@ -492,7 +492,13 @@ int bun2dKey(int key){
 }
 
 Point bun2dGetMouse(){
-    Point p = {mouseX, mouseY};
+    double xpos, ypos;
+
+    float ratioX = SCR_WIDTH / TEXT_X;
+    float ratioY = SCR_HEIGHT / TEXT_Y;
+
+    glfwGetCursorPos(window, &xpos, &ypos);
+    Point p = {xpos / ratioX, TEXT_Y -  ypos / ratioY};
     return p;
 }
 
