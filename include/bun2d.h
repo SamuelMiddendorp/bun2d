@@ -133,13 +133,13 @@
 #define KEY_RIGHT_SUPER 347
 #define KEY_MENU 348
 
-#define TEXT_X 5 
-#define TEXT_Y 5 
+#define TEXT_X 160 
+#define TEXT_Y 160
 #define TEXT_SIZE TEXT_X *TEXT_Y
 
 typedef struct 
 {
-    int offsets[30];
+    int offsets[100];
 } Char;
 
 typedef struct 
@@ -251,6 +251,13 @@ const Pixel WHITE = {
     255,
     255
 };
+
+
+const Char i = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, -1}};
+const Char l = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 2, 0, -1}};
+const Char o = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 1, 4, 2, 0, 2, 1, 2, 2, 2, 3, 2, 4, -1}};
+const Char t = {{1, 0, 1, 1, 1, 2, 1, 3, 1, 4, 2, 4, 0, 4, -1}};
+const Char d = {{0,0,0,1,0,2,0,3,0,4,1,0,1,0,1,0,1,0,1,4,2,0,2,0,2,0,2,0,2,4,3,0,3,0,3,0,3,0,3,4,3,4,4,1,4,2,4,3,4,3,-1}};
 
 Point rotatePoint(Point point, Point origin, int rot)
 {
@@ -505,11 +512,7 @@ Point bun2dGetMouse(){
 void fillPixelFont(){
 
     chars = calloc(200, sizeof(Char *));
-
-    Char i = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, -1}};
-    Char l = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 2, 0, -1}};
-    Char o = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 1, 4, 2, 0, 2, 1, 2, 2, 2, 3, 2, 4, -1}};
-    Char t = {{1, 0, 1, 1, 1, 2, 1, 3, 1, 4, 2, 4, 0, 4, -1}};
+    chars[100] = d;
 
     chars[105] = i;
     chars[108] = l;
