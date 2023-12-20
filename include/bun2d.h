@@ -468,14 +468,15 @@ int bun2dKey(int key){
     return bun2d.keys[key]; 
 }
 
-Point bun2dGetMouse(){
+Point bun2dGetMouse()
+{
     double xpos, ypos;
 
-    float ratioX = bun2d.win_width / bun2d.src_width;
-    float ratioY = bun2d.win_height / bun2d.src_height;
+    float ratioX = (float)bun2d.win_width / (float)bun2d.src_width;
+    float ratioY = (float)bun2d.win_height / (float)bun2d.src_height;
 
     glfwGetCursorPos(bun2d.window, &xpos, &ypos);
-    Point p = {xpos / ratioX, bun2d.win_height - ypos / ratioY};
+    Point p = {xpos / ratioX, (bun2d.win_height - ypos) / ratioY};
     return p;
 }
 
