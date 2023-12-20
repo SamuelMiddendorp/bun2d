@@ -183,7 +183,8 @@ static struct bun2dGlobal{
     unsigned char keys[400] ;
     Char* chars;
     Pixel* buff;
-} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, NULL};
+    Pixel color
+} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, NULL, {0,0,0,0}};
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -206,14 +207,6 @@ const char *fragmentShaderSource = "#version 330 core\n"
                                    "discard;\n"
                                    "FragColor = texColor;\n"
                                    "}\n\0";
-
-// Init to white
-Pixel _color = {
-    255,
-    255,
-    255,
-    255
-};
 
 const Pixel EMPTY = {
     0,
@@ -289,10 +282,7 @@ void putPixel(int x, int y)
         return;
     }
 
-    bun2d.buff[bun2d.src_width * y + x].r = _color.r;
-    bun2d.buff[bun2d.src_width * y + x].g = _color.g;
-    bun2d.buff[bun2d.src_width * y + x].b = _color.b;
-    bun2d.buff[bun2d.src_width * y + x].a = _color.a;
+    bun2d.buff[bun2d.src_width * y + x] = bun2d.color;
 }
 
 int writeChar(char *l, int x, int y)
@@ -330,10 +320,8 @@ void bun2dClearPixel(int x, int y)
         return;
     }
 
-    bun2d.buff[bun2d.src_width * y + x].r = 0;
-    bun2d.buff[bun2d.src_width * y + x].g = 0;
-    bun2d.buff[bun2d.src_width * y + x].b = 0;
-    bun2d.buff[bun2d.src_width * y + x].a = 0;
+    Pixel p = {0,0,0,0};
+    bun2d.buff[bun2d.src_width * y + x] = p;
 }
 
 /// @brief Renders a line to the screen 
@@ -399,7 +387,7 @@ void bun2dRect(int x, int y, int width, int height)
 }
 
 void bun2dColor(Pixel color){
-    _color = color;
+    bun2d.color = color;
 }
 
 Pixel bun2dGetPixel(int x, int y){
@@ -409,14 +397,7 @@ Pixel bun2dGetPixel(int x, int y){
         return EMPTY;
     }
     
-    Pixel p = {
-    bun2d.buff[bun2d.src_width * y + x].r,
-    bun2d.buff[bun2d.src_width * y + x].g,
-    bun2d.buff[bun2d.src_width * y + x].b,
-    bun2d.buff[bun2d.src_width * y + x].a
-    };
-    
-    return p;
+    return bun2d.buff[bun2d.src_width * y + x];
 }
 
 void drawCircle(int xc, int yc, int x, int y)
@@ -511,7 +492,6 @@ void fillPixelFont(){
 
     bun2d.chars = calloc(200, sizeof(Char*));
     bun2d.chars[100] = d;
-
     bun2d.chars[105] = i;
     bun2d.chars[108] = l;
     bun2d.chars[111] = o;
