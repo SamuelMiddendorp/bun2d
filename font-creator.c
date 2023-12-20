@@ -12,7 +12,6 @@ int main()
             bun2dPixel(foo.x, foo.y, color);
         }
         if(bun2dKey(KEY_S) == 1){
-            char res[100];
             for(int x = 0; x<5 ; x++){
             for(int y = 0; y<5 ; y++){
                 if(bun2dGetPixel(x,y).a == 255){

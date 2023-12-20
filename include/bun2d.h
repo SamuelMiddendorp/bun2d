@@ -264,7 +264,7 @@ Point rotatePoint(Point point, Point origin, int rot)
 
 void bun2dPixel(int x, int y, Pixel color)
 {
-    if (x > bun2d.src_width || x < 0 || y > bun2d.src_height || y < 0)
+    if (x >= bun2d.src_width || x < 0 || y >= bun2d.src_height || y < 0)
     {
         return;
     }
@@ -471,17 +471,17 @@ int bun2dKey(int key){
 Point bun2dGetMouse(){
     double xpos, ypos;
 
-    float ratioX = bun2d.src_width / bun2d.src_width;
-    float ratioY = bun2d.src_height / bun2d.src_height;
+    float ratioX = bun2d.win_width / bun2d.src_width;
+    float ratioY = bun2d.win_height / bun2d.src_height;
 
     glfwGetCursorPos(bun2d.window, &xpos, &ypos);
-    Point p = {xpos / ratioX, bun2d.src_height - ypos / ratioY};
+    Point p = {xpos / ratioX, bun2d.win_height - ypos / ratioY};
     return p;
 }
 
 void fillPixelFont(){
 
-    bun2d.chars = calloc(200, sizeof(Char*));
+    bun2d.chars = calloc(150, sizeof(Char*));
     bun2d.chars[100] = d;
     bun2d.chars[105] = i;
     bun2d.chars[108] = l;
@@ -640,6 +640,8 @@ void bun2dInput(GLFWwindow *win, int key, int code, int action, int mod)
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
+    bun2d.win_width = width;
+    bun2d.win_height = height;
     glViewport(0, 0, width, height);
 }
 #endif
