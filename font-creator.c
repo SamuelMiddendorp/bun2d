@@ -3,7 +3,7 @@
 
 int main()
 {
-    bun2dInit(0);
+    bun2dInit(0, 400,400,400,400);
     Pixel color = {255,0,0,255};
     while (bun2dTick())
     {

@@ -156,7 +156,7 @@ typedef struct
 
 
 int bun2dTick();
-int bun2dInit(int vsync);
+int bun2dInit(int vsync, int src_width, int src_height, int win_width, int win_height);
 void bun2dClear();
 
 void bun2dPixel(int x, int y, Pixel color);
@@ -493,9 +493,14 @@ void fillPixelFont(){
 /// @brief Initializes the game engine
 /// @param vsync 0 for off 1 for on
 /// @return Wether or not the init method was succesfull
-int bun2dInit(int vsync)
+int bun2dInit(int vsync, int src_width, int src_height, int win_width, int win_height)
 {
 
+    bun2d.src_width = src_width;
+    bun2d.src_height = src_height;
+    bun2d.win_width = win_width;
+    bun2d.win_height = win_height;
+    
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
