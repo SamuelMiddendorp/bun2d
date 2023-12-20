@@ -133,10 +133,6 @@
 #define KEY_RIGHT_SUPER 347
 #define KEY_MENU 348
 
-#define TEXT_X 160 
-#define TEXT_Y 160
-#define TEXT_SIZE TEXT_X *TEXT_Y
-
 typedef struct 
 {
     int offsets[100];
@@ -157,6 +153,8 @@ typedef struct
     int x, y;
 } Point;
 
+
+
 int bun2dTick();
 int bun2dInit(int vsync);
 void bun2dClear();
@@ -175,15 +173,17 @@ void bun2dInput(GLFWwindow *win, int key, int code, int action, int mod);
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
 #ifdef BUN2D_IMPLEMENTATION 
-unsigned char keys[400];
 
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 800;
-
-double mouseX = 0;
-double mouseY = 0;
-
-GLFWwindow *window;
+static struct bun2dGlobal{
+    GLFWwindow* window;
+    int win_width;
+    int win_height;
+    int src_width;
+    int src_height;
+    unsigned char keys[400] ;
+    Char* chars;
+    Pixel* buff;
+} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, NULL};
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -207,8 +207,6 @@ const char *fragmentShaderSource = "#version 330 core\n"
                                    "FragColor = texColor;\n"
                                    "}\n\0";
 
-Pixel *buff;
-Char *chars;
 // Init to white
 Pixel _color = {
     255,
@@ -257,7 +255,7 @@ const Char i = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, -1}};
 const Char l = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 2, 0, -1}};
 const Char o = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 1, 4, 2, 0, 2, 1, 2, 2, 2, 3, 2, 4, -1}};
 const Char t = {{1, 0, 1, 1, 1, 2, 1, 3, 1, 4, 2, 4, 0, 4, -1}};
-const Char d = {{0,0,0,1,0,2,0,3,0,4,1,0,1,0,1,0,1,0,1,4,2,0,2,0,2,0,2,0,2,4,3,0,3,0,3,0,3,0,3,4,3,4,4,1,4,2,4,3,4,3,-1}};
+const Char d = {{0,0,0,1,0,2,0,3,0,4,1,0,1,4,2,0,2,4,3,1,3,4,4,2,4,3,-1}};
 
 Point rotatePoint(Point point, Point origin, int rot)
 {
@@ -273,28 +271,28 @@ Point rotatePoint(Point point, Point origin, int rot)
 
 void bun2dPixel(int x, int y, Pixel color)
 {
-    if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
+    if (x > bun2d.src_width || x < 0 || y > bun2d.src_height || y < 0)
     {
         return;
     }
 
-    buff[TEXT_X * y + x].r = color.r;
-    buff[TEXT_X * y + x].g = color.g;
-    buff[TEXT_X * y + x].b = color.b;
-    buff[TEXT_X * y + x].a = color.a;
+    bun2d.buff[bun2d.src_width * y + x].r = color.r;
+    bun2d.buff[bun2d.src_width * y + x].g = color.g;
+    bun2d.buff[bun2d.src_width * y + x].b = color.b;
+    bun2d.buff[bun2d.src_width * y + x].a = color.a;
 }
 
 void putPixel(int x, int y)
 {
-    if (x >= TEXT_X || x < 0 || y >= TEXT_Y || y < 0)
+    if (x >= bun2d.src_width || x < 0 || y >= bun2d.src_height || y < 0)
     {
         return;
     }
 
-    buff[TEXT_X * y + x].r = _color.r;
-    buff[TEXT_X * y + x].g = _color.g;
-    buff[TEXT_X * y + x].b = _color.b;
-    buff[TEXT_X * y + x].a = _color.a;
+    bun2d.buff[bun2d.src_width * y + x].r = _color.r;
+    bun2d.buff[bun2d.src_width * y + x].g = _color.g;
+    bun2d.buff[bun2d.src_width * y + x].b = _color.b;
+    bun2d.buff[bun2d.src_width * y + x].a = _color.a;
 }
 
 int writeChar(char *l, int x, int y)
@@ -304,13 +302,13 @@ int writeChar(char *l, int x, int y)
     for (int i = 0; i < 30; i += 2)
     {
         // need to check for termination of relevant data
-        if (chars[index].offsets[i] == -1)
+        if (bun2d.chars[index].offsets[i] == -1)
         {
             break;
         }
-        int xOff = chars[index].offsets[i];
+        int xOff = bun2d.chars[index].offsets[i];
 
-        putPixel(x + xOff, y + chars[index].offsets[i + 1]);
+        putPixel(x + xOff, y + bun2d.chars[index].offsets[i + 1]);
 
         if(xOff > maxXOffset){
             maxXOffset = xOff;
@@ -319,23 +317,23 @@ int writeChar(char *l, int x, int y)
     return maxXOffset;
 }
 
-/// @brief Clears the whole pixelbuffer
+/// @brief Clears the whole pixelbuffer 
 void bun2dClear()
 {
-    memset(buff, 0, TEXT_X * TEXT_Y * sizeof(Pixel));
+    memset(bun2d.buff, 0, bun2d.src_width * bun2d.src_height * sizeof(Pixel));
 }
 
 void bun2dClearPixel(int x, int y)
 {   
-    if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
+    if (x > bun2d.src_width || x < 0 || y > bun2d.src_height || y < 0)
     {
         return;
     }
 
-    buff[TEXT_X * y + x].r = 0;
-    buff[TEXT_X * y + x].g = 0;
-    buff[TEXT_X * y + x].b = 0;
-    buff[TEXT_X * y + x].a = 0;
+    bun2d.buff[bun2d.src_width * y + x].r = 0;
+    bun2d.buff[bun2d.src_width * y + x].g = 0;
+    bun2d.buff[bun2d.src_width * y + x].b = 0;
+    bun2d.buff[bun2d.src_width * y + x].a = 0;
 }
 
 /// @brief Renders a line to the screen 
@@ -372,7 +370,7 @@ void bun2dLine(int x0, int y0, int x1, int y1)
 
 void bun2dRect(int x, int y, int width, int height)
 {
-    if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
+    if (x > bun2d.src_width || x < 0 || y > bun2d.src_height || y < 0)
     {
         return;
     }
@@ -406,16 +404,16 @@ void bun2dColor(Pixel color){
 
 Pixel bun2dGetPixel(int x, int y){
 
-    if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
+    if (x > bun2d.src_width || x < 0 || y > bun2d.src_height || y < 0)
     {
         return EMPTY;
     }
     
     Pixel p = {
-    buff[TEXT_X * y + x].r,
-    buff[TEXT_X * y + x].g,
-    buff[TEXT_X * y + x].b,
-    buff[TEXT_X * y + x].a
+    bun2d.buff[bun2d.src_width * y + x].r,
+    bun2d.buff[bun2d.src_width * y + x].g,
+    bun2d.buff[bun2d.src_width * y + x].b,
+    bun2d.buff[bun2d.src_width * y + x].a
     };
     
     return p;
@@ -439,7 +437,7 @@ void drawCircle(int xc, int yc, int x, int y)
 /// @param r The radius of the circle 
 void bun2dCircle(int x, int y, int r)
 {
-    if (x > TEXT_X || x < 0 || y > TEXT_Y || y < 0)
+    if (x > bun2d.src_width || x < 0 || y > bun2d.src_height || y < 0)
     {
         return;
     }
@@ -495,29 +493,29 @@ int bun2dKey(int key){
     if(key > 399){
         return 0;
     }
-    return keys[key]; 
+    return bun2d.keys[key]; 
 }
 
 Point bun2dGetMouse(){
     double xpos, ypos;
 
-    float ratioX = SCR_WIDTH / TEXT_X;
-    float ratioY = SCR_HEIGHT / TEXT_Y;
+    float ratioX = bun2d.src_width / bun2d.src_width;
+    float ratioY = bun2d.src_height / bun2d.src_height;
 
-    glfwGetCursorPos(window, &xpos, &ypos);
-    Point p = {xpos / ratioX, TEXT_Y - ypos / ratioY};
+    glfwGetCursorPos(bun2d.window, &xpos, &ypos);
+    Point p = {xpos / ratioX, bun2d.src_height - ypos / ratioY};
     return p;
 }
 
 void fillPixelFont(){
 
-    chars = calloc(200, sizeof(Char *));
-    chars[100] = d;
+    bun2d.chars = calloc(200, sizeof(Char*));
+    bun2d.chars[100] = d;
 
-    chars[105] = i;
-    chars[108] = l;
-    chars[111] = o;
-    chars[116] = t;
+    bun2d.chars[105] = i;
+    bun2d.chars[108] = l;
+    bun2d.chars[111] = o;
+    bun2d.chars[116] = t;
 
 }
 
@@ -535,21 +533,21 @@ int bun2dInit(int vsync)
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-    window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "bun2d", NULL, NULL);
-    if (window == NULL)
+    bun2d.window = glfwCreateWindow(bun2d.win_width, bun2d.win_height, "bun2d", NULL, NULL);
+    if (bun2d.window == NULL)
     {
         printf("Failed to create glfwwindow");
         glfwTerminate();
         return -1;
     }
 
-    glfwMakeContextCurrent(window);
+    glfwMakeContextCurrent(bun2d.window);
 
     if(!vsync){
         glfwSwapInterval(0);
     }
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glfwSetKeyCallback(window, bun2dInput);
+    glfwSetFramebufferSizeCallback(bun2d.window, framebuffer_size_callback);
+    glfwSetKeyCallback(bun2d.window, bun2dInput);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
@@ -636,11 +634,11 @@ int bun2dInit(int vsync)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-    buff = calloc(TEXT_SIZE, sizeof(Pixel *));
+    bun2d.buff = calloc(bun2d.src_width * bun2d.src_height, sizeof(Pixel *));
 
     fillPixelFont();
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bun2d.src_width, bun2d.src_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bun2d.buff);
     glGenerateMipmap(GL_TEXTURE_2D);
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
@@ -652,21 +650,16 @@ int bun2dTick()
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
-
-    glfwGetCursorPos(window, &mouseX, &mouseY);
-    // Have to adjust for mismatch in coordinates
-    mouseY = SCR_HEIGHT - mouseY;
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TEXT_X, TEXT_Y, 0, GL_RGBA, GL_UNSIGNED_BYTE, buff);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bun2d.src_width, bun2d.src_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bun2d.buff);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    glfwSwapBuffers(window);
+    glfwSwapBuffers(bun2d.window);
     glfwPollEvents();
-    return !glfwWindowShouldClose(window);
+    return !glfwWindowShouldClose(bun2d.window);
 }
 
 void bun2dInput(GLFWwindow *win, int key, int code, int action, int mod)
 {
-    keys[key] = action;
+    bun2d.keys[key] = action;
 }
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)

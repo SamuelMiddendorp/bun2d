@@ -4,7 +4,6 @@
 int main()
 {
     bun2dInit(0);
-
     Pixel color = {255,0,0,255};
     while (bun2dTick())
     {
@@ -17,9 +16,8 @@ int main()
             for(int x = 0; x<5 ; x++){
             for(int y = 0; y<5 ; y++){
                 if(bun2dGetPixel(x,y).a == 255){
-                    sprintf(res, "%i,%i,", x,y);
+                    printf("%i,%i,", x,y);
                 }
-                printf(res);
             }
             }
             printf("\n");
