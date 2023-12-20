@@ -269,10 +269,7 @@ void bun2dPixel(int x, int y, Pixel color)
         return;
     }
 
-    bun2d.buff[bun2d.src_width * y + x].r = color.r;
-    bun2d.buff[bun2d.src_width * y + x].g = color.g;
-    bun2d.buff[bun2d.src_width * y + x].b = color.b;
-    bun2d.buff[bun2d.src_width * y + x].a = color.a;
+    bun2d.buff[bun2d.src_width * y + x] = color;
 }
 
 void putPixel(int x, int y)
@@ -363,25 +360,19 @@ void bun2dRect(int x, int y, int width, int height)
         return;
     }
 
-    Point origin = {x, y};
-
     for (int i = 0; i < height; i++)
     {
         if (i == 0 || i == height - 1)
         {
             for (int j = 0; j < width + 1; j++)
             {
-                Point p = {j + x, i + y};
-                putPixel(p.x, p.y);
+                putPixel(j + x, i + y);
             }
         }
         else
         {
-            Point pA = {x, i + y};
-            putPixel(pA.x, pA.y);
-
-            Point pB = {x + width, i + y};
-            putPixel(pB.x, pB.y);
+            putPixel(x, i + y);
+            putPixel(x + width, i + y);
         }
     }
 }
