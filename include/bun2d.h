@@ -163,7 +163,7 @@ void bun2dPixel(int x, int y, Pixel color);
 Pixel bun2dGetPixel(int x, int y);
 void bun2dLine(int x0, int y0, int x1, int y1);
 void bun2dRect(int x, int y, int width, int height);
-void bun2dText(char* text, int x, int y);
+void bun2dText(char* text, int x, int y, Pixel color);
 int bun2dKey(int key);
 Point bun2dGetMouse();
 
@@ -282,7 +282,7 @@ void putPixel(int x, int y)
     bun2d.buff[bun2d.src_width * y + x] = bun2d.color;
 }
 
-int writeChar(char *l, int x, int y)
+int writeChar(char *l, int x, int y, Pixel color)
 {
     int index = *l;
     int maxXOffset = 0;
@@ -295,7 +295,12 @@ int writeChar(char *l, int x, int y)
         }
         int xOff = bun2d.chars[index].offsets[i];
 
+        Pixel temp = bun2d.color;
+        bun2d.color = color;
+
         putPixel(x + xOff, y + bun2d.chars[index].offsets[i + 1]);
+
+        bun2d.color = temp;
 
         if(xOff > maxXOffset){
             maxXOffset = xOff;
@@ -435,7 +440,8 @@ void bun2dCircle(int x, int y, int r)
 /// @param text The text to be written use double \\ for a newline
 /// @param x The x coordinate on the screen where the text should be written
 /// @param y The y coordinate on the screen where the text should be written
-void bun2dText(char* text, int x, int y)
+/// @param color The color with which the text should be displayed
+void bun2dText(char* text, int x, int y, Pixel color)
 {
     int xOffset = 0;
     int yOffset = 8;
@@ -455,7 +461,7 @@ void bun2dText(char* text, int x, int y)
             continue;
         }
 
-        int charOffset = writeChar(text, x + xOffset, y - yOffset);
+        int charOffset = writeChar(text, x + xOffset, y - yOffset, color);
         ++text;
         xOffset += charOffset + 2;
     }
