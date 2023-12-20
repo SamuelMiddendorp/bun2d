@@ -47,7 +47,7 @@ int main()
 
         Pixel p = bun2dGetPixel(20,31);
         
-        bun2dText("llli", x,y);
+        bun2dText("llli", x,y, color);
         bun2dColor(color2);
         bun2dRect(rectangleX, rectangleY,20,10);
 
