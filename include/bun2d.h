@@ -135,7 +135,7 @@
 
 typedef struct 
 {
-    int offsets[100];
+    int offsets[50];
 } Char;
 
 typedef struct 
