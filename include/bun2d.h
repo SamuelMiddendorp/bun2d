@@ -466,7 +466,7 @@ void bun2dText(char* text, int x, int y, Pixel color)
     }
 }
 
-int bun2dKey(int key){
+int bun2dKey(unsigned int key){
     if(key > 399){
         return 0;
     }
