@@ -184,7 +184,7 @@ static struct bun2dGlobal{
     Char* chars;
     Pixel* buff;
     Pixel color
-} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, NULL, {0,0,0,0}};
+} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, NULL, {255,255,255,255}};
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
