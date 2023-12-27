@@ -30,13 +30,13 @@ int main()
 
     int doSimul = 0;
 
-    int paddleHeight = 50;
+    int paddleHeight = 300;
     int paddleWidth = 10;
 
     int playerSpeed = 2;
 
     Player p1 = {0, paddleWidth, paddleHeight, 0};
-    Player p2 = {0, paddleWidth, paddleHeight, 0};
+    Player p2 = {0, paddleWidth, 100, 0};
 
     printf("Pong!");
     bun2dInit(1, buffX, buffY, 800, 800);
@@ -60,8 +60,8 @@ int main()
         // Render ball
         bun2dCircle(ball.posX, ball.posY, ball.size);
         // Render players
-        bun2dRect(0,p1.posY, paddleWidth, paddleHeight);
-        bun2dRect(buffX - paddleWidth - 1 , p2.posY, paddleWidth, paddleHeight);
+        bun2dRect(0,p1.posY, paddleWidth, p1.height);
+        bun2dRect(buffX - paddleWidth - 1 , p2.posY, paddleWidth, p2.height);
     }
 }
 
