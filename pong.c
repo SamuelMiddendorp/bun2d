@@ -3,6 +3,8 @@
 
 typedef struct{
     int posY;
+    int width;
+    int height;
     int score;
 } Player;
 
@@ -11,26 +13,28 @@ typedef struct{
     int posY;
     int velX;
     int velY;
+    int size;
 } Ball;
 
-void updateBall(Ball* ball, int wallX, int wallY);
+void updateBall(Ball* ball, int wallY);
 void updatePlayer1(Player* player, int playerSpeed);
 void updatePlayer2(Player* player, int playerSpeed);
+void updateGameState(Ball* ball, Player* p1, Player* p2);
 
 int main()
 {
     int buffY = 400;
     int buffX = 400;
 
-    Ball ball = {100,100,4,2};
+    Ball ball = {100,100,2,2,10};
 
     int paddleHeight = 50;
     int paddleWidth = 10;
 
     int playerSpeed = 2;
 
-    Player p1 = {0,0};
-    Player p2 = {0,0};
+    Player p1 = {0, paddleWidth, paddleHeight, 0};
+    Player p2 = {0, paddleWidth, paddleHeight, 0};
 
     printf("Pong!");
     bun2dInit(1, buffX, buffY, 400, 400);
@@ -40,15 +44,15 @@ int main()
         // Input
 
         // Logic
-        updateBall(&ball, 400, 400);
+        updateBall(&ball, 400);
         updatePlayer1(&p1, playerSpeed);
         updatePlayer2(&p2, playerSpeed);
-
+        updateGameState(&ball, &p1, &p2);
         // Render ball
-        bun2dCircle(ball.posX, ball.posY, 5);
+        bun2dCircle(ball.posX, ball.posY, ball.size);
         // Render players
         bun2dRect(0,p1.posY, paddleWidth, paddleHeight);
-        bun2dRect(buffY - paddleWidth - 1 , p2.posY, paddleWidth, paddleHeight);
+        bun2dRect(buffX - paddleWidth - 1 , p2.posY, paddleWidth, paddleHeight);
     }
 }
 
@@ -70,15 +74,27 @@ void updatePlayer2(Player* player, int playerSpeed){
     }
 }
 
-void updateBall(Ball* ball, int wallX, int wallY){
-    if(ball->posX >= wallX || ball->posX <= 0){
-        ball->velX = -ball->velX;
-    }
-
+void updateBall(Ball* ball, int wallY){
     if(ball->posY >= wallY || ball->posY <= 0){
         ball->velY = -ball->velY;
     }
 
     ball->posX += ball->velX;
     ball->posY += ball->velY;
+}
+
+void updateGameState(Ball* ball, Player* p1, Player* p2){
+    if(ball->posX + ball->size > 400 - p2->width
+        && (ball->posY + ball->size > p2->posY
+            && (ball->posY + ball->size < p2->posY + p2->height
+            )))
+    {
+        ball->velX = -ball->velX;
+    }
+    if(ball->posX + ball->size > 400 || ball->posX - ball->size < 0){
+        ball->posX = 100;
+        ball->posX = 100;
+        ball->velX = 2;
+        ball->velY = 1;
+    }
 }
