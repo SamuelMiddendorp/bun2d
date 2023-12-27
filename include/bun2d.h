@@ -164,7 +164,7 @@ Pixel bun2dGetPixel(int x, int y);
 void bun2dLine(int x0, int y0, int x1, int y1);
 void bun2dRect(int x, int y, int width, int height);
 void bun2dText(char* text, int x, int y, Pixel color);
-int bun2dKey(int key);
+int bun2dKey(unsigned int key);
 Point bun2dGetMouse();
 
 void bun2dClearPixel(int x, int y);
