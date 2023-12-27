@@ -26,7 +26,7 @@ int main()
     int buffY = 400;
     int buffX = 400;
 
-    Ball ball = {100,100,2,2,10};
+    Ball ball = {100,100,2,1,10};
 
     int doSimul = 0;
 
@@ -111,8 +111,8 @@ void updateGameState(Ball* ball, Player* p1, Player* p2){
 
     if(ball->posX + ball->size > 400){
 
-        ball->posX = 100;
-        ball->posX = 100;
+        ball->posX = 350;
+        ball->posY = 100;
         ball->velX = -2;
         ball->velY = 1;
         p1->score++;
@@ -120,8 +120,8 @@ void updateGameState(Ball* ball, Player* p1, Player* p2){
     }
 
     if(ball->posX - ball->size < 0){
-        ball->posX = 100;
-        ball->posX = 100;
+        ball->posX = 50;
+        ball->posY = 100;
         ball->velX = 2;
         ball->velY = 1;
         p2->score++;
