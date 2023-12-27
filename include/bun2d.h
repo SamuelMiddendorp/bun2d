@@ -359,10 +359,6 @@ void bun2dLine(int x0, int y0, int x1, int y1)
 
 void bun2dRect(int x, int y, int width, int height)
 {
-    if (x > bun2d.src_width || x < 0 || y > bun2d.src_height || y < 0)
-    {
-        return;
-    }
 
     for (int i = 0; i < height; i++)
     {
