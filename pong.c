@@ -28,6 +28,8 @@ int main()
 
     Ball ball = {100,100,2,2,10};
 
+    int doSimul = 0;
+
     int paddleHeight = 50;
     int paddleWidth = 10;
 
@@ -40,6 +42,12 @@ int main()
     bun2dInit(1, buffX, buffY, 800, 800);
     while (bun2dTick())
     {
+        if(bun2dKey(KEY_SPACE) == BUN2D_PRESS){
+            doSimul = true;
+        }
+
+        if(doSimul)
+        {
         bun2dClear();
         // Input
 
@@ -48,6 +56,7 @@ int main()
         updatePlayer1(&p1, playerSpeed);
         updatePlayer2(&p2, playerSpeed);
         updateGameState(&ball, &p1, &p2);
+        }
         // Render ball
         bun2dCircle(ball.posX, ball.posY, ball.size);
         // Render players
@@ -104,7 +113,7 @@ void updateGameState(Ball* ball, Player* p1, Player* p2){
 
         ball->posX = 100;
         ball->posX = 100;
-        ball->velX = 2;
+        ball->velX = -2;
         ball->velY = 1;
         p1->score++;
         printf("Point! p1 now has %i points", p1->score);
