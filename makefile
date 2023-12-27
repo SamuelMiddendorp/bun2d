@@ -10,3 +10,6 @@ text:
 font-creator:
 	gcc -Wall -Wextra -g -Iinclude font-creator.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
 	./run
+pong:
+	gcc -Wall -Wextra -g -Iinclude pong.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
+	./run
