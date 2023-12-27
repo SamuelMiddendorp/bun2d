@@ -37,7 +37,7 @@ int main()
     Player p2 = {0, paddleWidth, paddleHeight, 0};
 
     printf("Pong!");
-    bun2dInit(1, buffX, buffY, 400, 400);
+    bun2dInit(1, buffX, buffY, 800, 800);
     while (bun2dTick())
     {
         bun2dClear();
@@ -84,6 +84,14 @@ void updateBall(Ball* ball, int wallY){
 }
 
 void updateGameState(Ball* ball, Player* p1, Player* p2){
+    if(ball->posX - ball->size < 0 + p1->width
+        && (ball->posY + ball->size > p1->posY
+            && (ball->posY + ball->size < p1->posY + p1->height
+            )))
+    {
+        ball->velX = -ball->velX;
+    }
+
     if(ball->posX + ball->size > 400 - p2->width
         && (ball->posY + ball->size > p2->posY
             && (ball->posY + ball->size < p2->posY + p2->height
@@ -91,10 +99,23 @@ void updateGameState(Ball* ball, Player* p1, Player* p2){
     {
         ball->velX = -ball->velX;
     }
-    if(ball->posX + ball->size > 400 || ball->posX - ball->size < 0){
+
+    if(ball->posX + ball->size > 400){
+
         ball->posX = 100;
         ball->posX = 100;
         ball->velX = 2;
         ball->velY = 1;
+        p1->score++;
+        printf("Point! p1 now has %i points", p1->score);
+    }
+
+    if(ball->posX - ball->size < 0){
+        ball->posX = 100;
+        ball->posX = 100;
+        ball->velX = 2;
+        ball->velY = 1;
+        p2->score++;
+        printf("Point! p2 now has %i points", p2->score);
     }
 }
