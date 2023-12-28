@@ -161,8 +161,8 @@ void bun2dClear();
 
 void bun2dPixel(int x, int y, Pixel color);
 Pixel bun2dGetPixel(int x, int y);
-void bun2dLine(int x0, int y0, int x1, int y1);
-void bun2dRect(int x, int y, int width, int height);
+void bun2dLine(int x0, int y0, int x1, int y1, Pixel color);
+void bun2dRect(int x, int y, int width, int height, Pixel color);
 void bun2dText(char* text, int x, int y, Pixel color);
 int bun2dKey(unsigned int key);
 Point bun2dGetMouse();
@@ -271,14 +271,14 @@ void bun2dPixel(int x, int y, Pixel color)
     bun2d.buff[bun2d.src_width * y + x] = color;
 }
 
-void putPixel(int x, int y)
+void putPixel(int x, int y, Pixel color)
 {
     if (x >= bun2d.src_width || x < 0 || y >= bun2d.src_height || y < 0)
     {
         return;
     }
 
-    bun2d.buff[bun2d.src_width * y + x] = bun2d.color;
+    bun2d.buff[bun2d.src_width * y + x] = color;
 }
 
 int writeChar(char *l, int x, int y, Pixel color)
@@ -294,12 +294,8 @@ int writeChar(char *l, int x, int y, Pixel color)
         }
         int xOff = bun2d.chars[index].offsets[i];
 
-        Pixel temp = bun2d.color;
-        bun2d.color = color;
 
-        putPixel(x + xOff, y + bun2d.chars[index].offsets[i + 1]);
-
-        bun2d.color = temp;
+        putPixel(x + xOff, y + bun2d.chars[index].offsets[i + 1], color);
 
         if(xOff > maxXOffset){
             maxXOffset = xOff;
@@ -330,7 +326,7 @@ void bun2dClearPixel(int x, int y)
 /// @param y0 The y coordinate of the origin 
 /// @param x1 The x coordinate of the target 
 /// @param y1 The y coordinate of the target 
-void bun2dLine(int x0, int y0, int x1, int y1)
+void bun2dLine(int x0, int y0, int x1, int y1, Pixel color)
 {
     // We allow to draw lines to or from out of bounds
 
@@ -340,7 +336,7 @@ void bun2dLine(int x0, int y0, int x1, int y1)
 
     for (;;)
     {
-        putPixel(x0, y0);
+        putPixel(x0, y0, color);
         if (x0 == x1 && y0 == y1)
             break;
         e2 = 2 * err;
@@ -357,28 +353,23 @@ void bun2dLine(int x0, int y0, int x1, int y1)
     }
 }
 
-void bun2dRect(int x, int y, int width, int height)
+void bun2dRect(int x, int y, int width, int height, Pixel color)
 {
-
     for (int i = 0; i < height; i++)
     {
         if (i == 0 || i == height - 1)
         {
             for (int j = 0; j < width + 1; j++)
             {
-                putPixel(j + x, i + y);
+                putPixel(j + x, i + y, color);
             }
         }
         else
         {
-            putPixel(x, i + y);
-            putPixel(x + width, i + y);
+            putPixel(x, i + y, color);
+            putPixel(x + width, i + y, color);
         }
     }
-}
-
-void bun2dColor(Pixel color){
-    bun2d.color = color;
 }
 
 Pixel bun2dGetPixel(int x, int y){
@@ -391,23 +382,23 @@ Pixel bun2dGetPixel(int x, int y){
     return bun2d.buff[bun2d.src_width * y + x];
 }
 
-void drawCircle(int xc, int yc, int x, int y)
+void drawCircle(int xc, int yc, int x, int y, Pixel color)
 {
-    putPixel(xc + x, yc + y);
-    putPixel(xc - x, yc + y);
-    putPixel(xc + x, yc - y);
-    putPixel(xc - x, yc - y);
-    putPixel(xc + y, yc + x);
-    putPixel(xc - y, yc + x);
-    putPixel(xc + y, yc - x);
-    putPixel(xc - y, yc - x);
+    putPixel(xc + x, yc + y, color);
+    putPixel(xc - x, yc + y, color);
+    putPixel(xc + x, yc - y, color);
+    putPixel(xc - x, yc - y, color);
+    putPixel(xc + y, yc + x, color);
+    putPixel(xc - y, yc + x, color);
+    putPixel(xc + y, yc - x, color);
+    putPixel(xc - y, yc - x, color);
 }
 
 /// @brief Renders a circle to the screen
 /// @param x The x coordinate on the screen where the text should be written
 /// @param y The y coordinate on the screen where the text should be written
 /// @param r The radius of the circle 
-void bun2dCircle(int x, int y, int r)
+void bun2dCircle(int x, int y, int r, Pixel color)
 {
     if (x > bun2d.src_width || x < 0 || y > bun2d.src_height || y < 0)
     {
@@ -416,7 +407,7 @@ void bun2dCircle(int x, int y, int r)
 
     int _x = 0, _y = r;
     int d = 3 - 2 * r;
-    drawCircle(x, y, _x, _y);
+    drawCircle(x, y, _x, _y, color);
     while (_y >= _x)
     {
         _x++;
@@ -427,7 +418,7 @@ void bun2dCircle(int x, int y, int r)
         }
         else
             d = d + 4 * _x + 6;
-        drawCircle(x, y, _x, _y);
+        drawCircle(x, y, _x, _y, color);
     }
 }
 

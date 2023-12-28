@@ -49,7 +49,6 @@ int main()
         if(doSimul)
         {
         bun2dClear();
-        // Input
 
         // Logic
         updateBall(&ball, 400);
