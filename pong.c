@@ -57,10 +57,10 @@ int main()
         updateGameState(&ball, &p1, &p2);
         }
         // Render ball
-        bun2dCircle(ball.posX, ball.posY, ball.size);
+        bun2dCircle(ball.posX, ball.posY, ball.size, RED);
         // Render players
-        bun2dRect(0,p1.posY, paddleWidth, p1.height);
-        bun2dRect(buffX - paddleWidth - 1 , p2.posY, paddleWidth, p2.height);
+        bun2dRect(0,p1.posY, paddleWidth, p1.height, RED);
+        bun2dRect(buffX - paddleWidth - 1 , p2.posY, paddleWidth, p2.height, BLUE);
     }
 }
 

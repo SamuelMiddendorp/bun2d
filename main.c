@@ -16,7 +16,6 @@ int main()
 
     while (bun2dTick())
     {
-        bun2dColor(color);
         bun2dClear();
         // Input
         if(bun2dKey(KEY_D) == BUN2D_PRESS){
@@ -43,13 +42,12 @@ int main()
             rectangleX = rand() % 50;
         }
         // Rendering
-        bun2dPixel(20,30, color);
+        bun2dPixel(20, 30, color);
 
-        Pixel p = bun2dGetPixel(20,31);
+        Pixel p = bun2dGetPixel(20, 31);
         
-        bun2dText("llli", x,y, color);
-        bun2dColor(color2);
-        bun2dRect(rectangleX, rectangleY,20,10);
+        bun2dText("llli", x, y, color);
+        bun2dRect(rectangleX, rectangleY, 20, 10, color2);
 
     }
 }
