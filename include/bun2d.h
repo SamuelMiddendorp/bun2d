@@ -159,6 +159,8 @@ void bun2dClear();
 
 void bun2dPixel(int x, int y, Pixel color);
 Pixel bun2dGetPixel(int x, int y);
+void bun2dCircle(int x, int y, int r, Pixel color);
+void bun2dFillCircle(int x, int y, int r, Pixel color);
 void bun2dLine(int x0, int y0, int x1, int y1, Pixel color);
 void bun2dRect(int x, int y, int width, int height, Pixel color);
 void bun2dFillRect(int x, int y, int width, int height, Pixel color);
@@ -426,6 +428,14 @@ void bun2dCircle(int x, int y, int r, Pixel color)
             d = d + 4 * _x + 6;
         drawCircle(x, y, _x, _y, color);
     }
+}
+
+void bun2dFillCircle(int x, int y, int r, Pixel color)
+{
+    for(int _y=-r; _y<=r; _y++)
+    for(int _x=-r; _x<=r; _x++)
+        if(_x*_x+_y*_y <= r*r)
+            putPixel(x+_x, y+_y, color);
 }
 
 /// @brief Writes a pixel font text to the screen
