@@ -133,27 +133,25 @@
 #define KEY_RIGHT_SUPER 347
 #define KEY_MENU 348
 
-typedef struct 
+typedef struct
 {
     int offsets[50];
 } Char;
 
-typedef struct 
+typedef struct
 {
     unsigned char r, g, b, a;
 } Pixel;
 
-typedef struct 
+typedef struct
 {
     float x, y;
 } Vec2;
 
-typedef struct 
+typedef struct
 {
     int x, y;
 } Point;
-
-
 
 int bun2dTick();
 int bun2dInit(int vsync, int src_width, int src_height, int win_width, int win_height);
@@ -163,7 +161,8 @@ void bun2dPixel(int x, int y, Pixel color);
 Pixel bun2dGetPixel(int x, int y);
 void bun2dLine(int x0, int y0, int x1, int y1, Pixel color);
 void bun2dRect(int x, int y, int width, int height, Pixel color);
-void bun2dText(char* text, int x, int y, Pixel color);
+void bun2dFillRect(int x, int y, int width, int height, Pixel color);
+void bun2dText(char *text, int x, int y, Pixel color);
 int bun2dKey(unsigned int key);
 Point bun2dGetMouse();
 
@@ -172,19 +171,20 @@ void bun2dInput(GLFWwindow *win, int key, int code, int action, int mod);
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 
-#ifdef BUN2D_IMPLEMENTATION 
+#ifdef BUN2D_IMPLEMENTATION
 
-static struct bun2dGlobal{
-    GLFWwindow* window;
+static struct bun2dGlobal
+{
+    GLFWwindow *window;
     int win_width;
     int win_height;
     int src_width;
     int src_height;
-    unsigned char keys[400] ;
-    Char* chars;
-    Pixel* buff;
+    unsigned char keys[400];
+    Char *chars;
+    Pixel *buff;
     Pixel color
-} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, NULL, {255,255,255,255}};
+} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, NULL, {255, 255, 255, 255}};
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -212,43 +212,37 @@ const Pixel EMPTY = {
     0,
     0,
     0,
-    0
-};
+    0};
 
 const Pixel RED = {
     255,
     0,
     0,
-    255
-};
+    255};
 
 const Pixel GREEN = {
     0,
     255,
     0,
-    255
-};
+    255};
 
 const Pixel BLUE = {
     0,
     0,
     255,
-    255
-};
+    255};
 
 const Pixel WHITE = {
     255,
     255,
     255,
-    255
-};
-
+    255};
 
 const Char i = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, -1}};
 const Char l = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 2, 0, -1}};
 const Char o = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 1, 4, 2, 0, 2, 1, 2, 2, 2, 3, 2, 4, -1}};
 const Char t = {{1, 0, 1, 1, 1, 2, 1, 3, 1, 4, 2, 4, 0, 4, -1}};
-const Char d = {{0,0,0,1,0,2,0,3,0,4,1,0,1,4,2,1,2,2,2,3,-1}};
+const Char d = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 1, 4, 2, 1, 2, 2, 2, 3, -1}};
 Point rotatePoint(Point point, Point origin, int rot)
 {
 
@@ -294,38 +288,38 @@ int writeChar(char *l, int x, int y, Pixel color)
         }
         int xOff = bun2d.chars[index].offsets[i];
 
-
         putPixel(x + xOff, y + bun2d.chars[index].offsets[i + 1], color);
 
-        if(xOff > maxXOffset){
+        if (xOff > maxXOffset)
+        {
             maxXOffset = xOff;
         }
     }
     return maxXOffset;
 }
 
-/// @brief Clears the whole pixelbuffer 
+/// @brief Clears the whole pixelbuffer
 void bun2dClear()
 {
     memset(bun2d.buff, 0, bun2d.src_width * bun2d.src_height * sizeof(Pixel));
 }
 
 void bun2dClearPixel(int x, int y)
-{   
+{
     if (x > bun2d.src_width || x < 0 || y > bun2d.src_height || y < 0)
     {
         return;
     }
 
-    Pixel p = {0,0,0,0};
+    Pixel p = {0, 0, 0, 0};
     bun2d.buff[bun2d.src_width * y + x] = p;
 }
 
-/// @brief Renders a line to the screen 
-/// @param x0 The x coordinate of the origin 
-/// @param y0 The y coordinate of the origin 
-/// @param x1 The x coordinate of the target 
-/// @param y1 The y coordinate of the target 
+/// @brief Renders a line to the screen
+/// @param x0 The x coordinate of the origin
+/// @param y0 The y coordinate of the origin
+/// @param x1 The x coordinate of the target
+/// @param y1 The y coordinate of the target
 void bun2dLine(int x0, int y0, int x1, int y1, Pixel color)
 {
     // We allow to draw lines to or from out of bounds
@@ -372,13 +366,25 @@ void bun2dRect(int x, int y, int width, int height, Pixel color)
     }
 }
 
-Pixel bun2dGetPixel(int x, int y){
+void bun2dFillRect(int x, int y, int width, int height, Pixel color)
+{
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width + 1; j++)
+        {
+            putPixel(j + x, i + y, color);
+        }
+    }
+}
+
+Pixel bun2dGetPixel(int x, int y)
+{
 
     if (x > bun2d.src_width || x < 0 || y > bun2d.src_height || y < 0)
     {
         return EMPTY;
     }
-    
+
     return bun2d.buff[bun2d.src_width * y + x];
 }
 
@@ -397,7 +403,7 @@ void drawCircle(int xc, int yc, int x, int y, Pixel color)
 /// @brief Renders a circle to the screen
 /// @param x The x coordinate on the screen where the text should be written
 /// @param y The y coordinate on the screen where the text should be written
-/// @param r The radius of the circle 
+/// @param r The radius of the circle
 void bun2dCircle(int x, int y, int r, Pixel color)
 {
     if (x > bun2d.src_width || x < 0 || y > bun2d.src_height || y < 0)
@@ -422,25 +428,27 @@ void bun2dCircle(int x, int y, int r, Pixel color)
     }
 }
 
-/// @brief Writes a pixel font text to the screen   
+/// @brief Writes a pixel font text to the screen
 /// @param text The text to be written use double \\ for a newline
 /// @param x The x coordinate on the screen where the text should be written
 /// @param y The y coordinate on the screen where the text should be written
 /// @param color The color with which the text should be displayed
-void bun2dText(char* text, int x, int y, Pixel color)
+void bun2dText(char *text, int x, int y, Pixel color)
 {
     int xOffset = 0;
     int yOffset = 8;
     while (*text != '\0')
     {
-        if(isspace(*text)){
+        if (isspace(*text))
+        {
             xOffset += 1;
             ++text;
             continue;
         }
         // \\ is meant to introduce a nextline
         // Working on getting this to be \n
-        if(*text == '\\'){
+        if (*text == '\\')
+        {
             xOffset = 0;
             yOffset += 6;
             ++text;
@@ -453,11 +461,13 @@ void bun2dText(char* text, int x, int y, Pixel color)
     }
 }
 
-int bun2dKey(unsigned int key){
-    if(key > 399){
+int bun2dKey(unsigned int key)
+{
+    if (key > 399)
+    {
         return 0;
     }
-    return bun2d.keys[key]; 
+    return bun2d.keys[key];
 }
 
 Point bun2dGetMouse()
@@ -472,15 +482,15 @@ Point bun2dGetMouse()
     return p;
 }
 
-void fillPixelFont(){
+void fillPixelFont()
+{
 
-    bun2d.chars = calloc(150, sizeof(Char*));
+    bun2d.chars = calloc(150, sizeof(Char *));
     bun2d.chars[100] = d;
     bun2d.chars[105] = i;
     bun2d.chars[108] = l;
     bun2d.chars[111] = o;
     bun2d.chars[116] = t;
-
 }
 
 /// @brief Initializes the game engine
@@ -493,7 +503,7 @@ int bun2dInit(int vsync, int src_width, int src_height, int win_width, int win_h
     bun2d.src_height = src_height;
     bun2d.win_width = win_width;
     bun2d.win_height = win_height;
-    
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -512,7 +522,8 @@ int bun2dInit(int vsync, int src_width, int src_height, int win_width, int win_h
 
     glfwMakeContextCurrent(bun2d.window);
 
-    if(!vsync){
+    if (!vsync)
+    {
         glfwSwapInterval(0);
     }
     glfwSetFramebufferSizeCallback(bun2d.window, framebuffer_size_callback);
