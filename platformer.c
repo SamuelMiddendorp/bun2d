@@ -11,6 +11,7 @@ typedef struct
 {
     Vec2 position;
     Vec2 velocity;
+    Vec2 acceleration;
     Vec2 dims;
 } Player;
 
@@ -34,10 +35,11 @@ void updateGamestate();
 
 int main()
 {
-    float speed = 0.5;
+    float speed = 0.1;
+    float friction = 0.8;
     bun2dInit(1, 100, 100, 1000, 1000);
 
-    Player player = {{5, 0}, {0, 0}, {1, 2}};
+    Player player = {{5, 0}, {0, 0}, {0, 0}, {1, 2}};
     makePlatform(5, 5, 5, 3);
     makePlatform(5, 10, 5, 3);
     makePlatform(5, 15, 5, 3);
@@ -49,12 +51,12 @@ int main()
         bun2dClear();
         if (bun2dKey(KEY_D) > 0)
         {
-            player.velocity.x+=speed;
+            player.acceleration.x+=speed;
         }
 
         if (bun2dKey(KEY_A) > 0)
         {
-            player.velocity.x-=speed;
+            player.acceleration.x-=speed;
         }
 
         if (bun2dKey(KEY_W) > 0)
@@ -65,11 +67,16 @@ int main()
             }
             bulletTimer = 0;
         }
+        player.velocity.x += player.acceleration.x;
+        player.velocity.y += player.acceleration.y;
+
         player.position.x += player.velocity.x;
         player.position.y += player.velocity.y;
 
-        player.velocity.x = 0;
-        player.velocity.y = 0;
+        player.velocity.x *= friction;
+        player.velocity.y *= friction;
+        player.acceleration.x = 0;
+        player.acceleration.y = 0;
 
         // Render platforms;
         for (int i = 0; i < currentPlatAmount; i++)
