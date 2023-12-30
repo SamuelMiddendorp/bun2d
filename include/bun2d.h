@@ -372,7 +372,7 @@ void bun2dFillRect(int x, int y, int width, int height, Pixel color)
 {
     for (int i = 0; i < height; i++)
     {
-        for (int j = 0; j < width + 1; j++)
+        for (int j = 0; j < width; j++)
         {
             putPixel(j + x, i + y, color);
         }

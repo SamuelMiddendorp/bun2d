@@ -14,26 +14,37 @@ typedef struct
     Vec2 dims;
 } Player;
     
-void makePlatform(int posX, int posY, int width, int height);
+Platform platforms[100];
+int currentPlatAmount;
 
-Platform* platforms;
-int currentPlatAmount = 0;
+void makePlatform(int posX, int posY, int width, int height);
 
 int main()
 {
-    platforms = calloc(10, sizeof(Platform));
-    bun2dInit(1, 20, 20, 400, 400);
+    bun2dInit(1, 100, 100, 400, 400);
+
+    Player player = {{5,1},{0,0},{1,2}};
+    makePlatform(2,2,2,1);
+
     while (bun2dTick())
     {
+        if(bun2dKey(KEY_D) == BUN2D_PRESS){
+            player.position.x++;
+        }
+
+        if(bun2dKey(KEY_A) == BUN2D_PRESS){
+            player.position.x--;
+        }
+
         bun2dClear();
-        makePlatform(2,2,2,2);
-        makePlatform(2,8,2,2);
+
         // Render platforms;
         for(int i = 0; i < currentPlatAmount; i++)
         {
             Platform p = platforms[i];
             bun2dFillRect(p.position.x, p.position.y, p.dims.x, p.dims.y, RED);
         }
+        bun2dFillRect(player.position.x, player.position.y, player.dims.x, player.dims.y, BLUE);
     }
 }
 
