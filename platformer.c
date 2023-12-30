@@ -20,6 +20,12 @@ typedef struct
     Vec2 position;
 } Bullet;
 
+typedef struct{
+    Vec2 position;
+    Vec2 velocity;
+    int lifetime;
+} Particle;
+
 Platform platforms[100];
 int currentPlatAmount = 0;
 
@@ -27,16 +33,22 @@ Bullet bullets[100];
 int currentBulletAmount = 0;
 int currentBulletIndex = 0;
 
+Particle particles[100];
+int currentParticleAmount = 0;
+int currentParticleIndex = 0;
+
 int bulletTimer = 0;
 
 void makePlatform(int posX, int posY, int width, int height);
 void fireBullet(int x, int y);
 void updateGamestate();
+void spawnDestructionParticles(int x, int y);
+void spawnParticle(int x, int y, float velX, float velY);
 
 int main()
 {
-    float speed = 0.1;
-    float friction = 0.8;
+    float speed = 0.2;
+    float friction = 0.6;
     bun2dInit(1, 100, 100, 1000, 1000);
 
     Player player = {{5, 0}, {0, 0}, {0, 0}, {1, 2}};
@@ -91,6 +103,19 @@ int main()
             Bullet b = bullets[i];
             bun2dFillRect(b.position.x, b.position.y, 1, 1, RED);
         }
+
+        for (int i = 0; i < currentParticleAmount; i++)
+        {
+            Particle p = particles[i];
+            if(p.lifetime == 0)
+            {
+                continue;
+            }
+            particles[i].position.x += p.velocity.x;
+            particles[i].position.y += p.velocity.y;
+            bun2dFillRect(p.position.x, p.position.y, 1, 1, WHITE);
+            particles[i].lifetime--;
+        }
         updateGamestate();
 
         bun2dFillRect(player.position.x, player.position.y, player.dims.x, player.dims.y, BLUE);
@@ -133,9 +158,33 @@ void updateGamestate()
             && b.position.y >= p.position.y
             && b.position.y <= p.position.y + p.dims.y)
             {
-                Platform newPlat = {{rand() % 100, rand() % 100 + 5}, {5,3}};
+                Platform newPlat = {{rand() % 100, rand() % 100 + 15}, {5,3}};
+                spawnDestructionParticles(b.position.x, b.position.y);
                 platforms[i] = newPlat;
             }
         }
+    }
+}
+
+void spawnDestructionParticles(int x, int y){
+    spawnParticle(x,y,0.4,0.4);
+    spawnParticle(x,y,0.4,-0.4);
+    spawnParticle(x,y,-0.4,0.4);
+    spawnParticle(x,y,-0.4,-0.4);
+}
+
+void spawnParticle(int x, int y, float velX, float velY){
+    Particle p = {{x, y}, {velX, velY}, 120};
+    if (currentParticleAmount == 100)
+    {
+        if (currentParticleIndex == 100)
+        {
+            currentParticleIndex = 0;
+        }
+        particles[currentParticleIndex++] = p;
+    }
+    else
+    {
+        particles[currentParticleAmount++] = p;
     }
 }
