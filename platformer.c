@@ -36,6 +36,8 @@ int currentBulletIndex = 0;
 Particle particles[100];
 int currentParticleAmount = 0;
 int currentParticleIndex = 0;
+float particleSpeed = 0.3;
+float particleLifeSpan = 60;
 
 int bulletTimer = 0;
 
@@ -53,10 +55,8 @@ int main()
 
     Player player = {{5, 0}, {0, 0}, {0, 0}, {1, 2}};
     makePlatform(5, 5, 5, 3);
-    makePlatform(5, 10, 5, 3);
-    makePlatform(5, 15, 5, 3);
-    makePlatform(7, 11, 5, 3);
-    makePlatform(12, 12, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
 
     while (bun2dTick())
     {
@@ -167,14 +167,14 @@ void updateGamestate()
 }
 
 void spawnDestructionParticles(int x, int y){
-    spawnParticle(x,y,0.4,0.4);
-    spawnParticle(x,y,0.4,-0.4);
-    spawnParticle(x,y,-0.4,0.4);
-    spawnParticle(x,y,-0.4,-0.4);
+    spawnParticle(x,y,particleSpeed,particleSpeed);
+    spawnParticle(x,y,particleSpeed,-particleSpeed);
+    spawnParticle(x,y,-particleSpeed,particleSpeed);
+    spawnParticle(x,y,-particleSpeed,-particleSpeed);
 }
 
 void spawnParticle(int x, int y, float velX, float velY){
-    Particle p = {{x, y}, {velX, velY}, 120};
+    Particle p = {{x, y}, {velX, velY}, particleLifeSpan};
     if (currentParticleAmount == 100)
     {
         if (currentParticleIndex == 100)
