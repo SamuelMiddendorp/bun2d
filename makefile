@@ -13,3 +13,6 @@ font-creator:
 pong:
 	gcc -Wall -Wextra -g -Iinclude pong.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
 	./run
+platformer:
+	gcc -Wall -Wextra -g -Iinclude platformer.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
+	./run

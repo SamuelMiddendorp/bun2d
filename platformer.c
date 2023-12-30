@@ -1,33 +1,44 @@
-#define BUN2D_IMPLEMENTATION 
+#define BUN2D_IMPLEMENTATION
 #include <bun2d.h>
 
+typedef struct
+{
+    Vec2 position;
+    Vec2 dims;
+} Platform;
 
-typedef struct{
-    int x;
-    int y;
-} Vec2;
-
-typedef struct{
-    Vec2 Position;
-    Vec2 Dims;
-} Platfom;
-
-typedef struct{
-    Vec2 Position;
-    Vec2 Velocity;
-    Vec2 Dims;
+typedef struct
+{
+    Vec2 position;
+    Vec2 velocity;
+    Vec2 dims;
 } Player;
+    
+void makePlatform(int posX, int posY, int width, int height);
+
+Platform* platforms;
+int currentPlatAmount = 0;
 
 int main()
 {
-    bun2dInit(1, 400, 400, 400, 400);
-    Pixel textColor = { 255,
-                        255,
-                        255,
-                        255 };
-
+    platforms = calloc(10, sizeof(Platform));
+    bun2dInit(1, 20, 20, 400, 400);
     while (bun2dTick())
     {
         bun2dClear();
+        makePlatform(2,2,2,2);
+        makePlatform(2,8,2,2);
+        // Render platforms;
+        for(int i = 0; i < currentPlatAmount; i++)
+        {
+            Platform p = platforms[i];
+            bun2dFillRect(p.position.x, p.position.y, p.dims.x, p.dims.y, RED);
+        }
     }
+}
+
+void makePlatform(int posX, int posY, int width, int height)
+{
+    Platform p = {{posX, posY}, {width, height}};
+    platforms[currentPlatAmount++] = p;
 }
