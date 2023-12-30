@@ -18,6 +18,7 @@ typedef struct
 typedef struct
 {
     Vec2 position;
+    Vec2 velocity;
 } Bullet;
 
 typedef struct{
@@ -29,7 +30,7 @@ typedef struct{
 Platform platforms[100];
 int currentPlatAmount = 0;
 
-Bullet bullets[100];
+Bullet bullets[1000];
 int currentBulletAmount = 0;
 int currentBulletIndex = 0;
 
@@ -42,22 +43,81 @@ float particleLifeSpan = 60;
 int bulletTimer = 0;
 
 void makePlatform(int posX, int posY, int width, int height);
-void fireBullet(int x, int y);
+void fireBullet(int x, int y, float velX, float velY);
 void updateGamestate();
 void spawnDestructionParticles(int x, int y);
+void spawnBullets(int x, int y);
 void spawnParticle(int x, int y, float velX, float velY);
 
 int main()
 {
     float speed = 0.2;
     float friction = 0.6;
-    bun2dInit(1, 100, 100, 1000, 1000);
+    bun2dInit(0, 1000, 1000, 1000, 1000);
 
     Player player = {{5, 0}, {0, 0}, {0, 0}, {1, 2}};
     makePlatform(5, 5, 5, 3);
     makePlatform(5, 20, 5, 3);
     makePlatform(5, 45, 5, 3);
-
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    int frameTimer = 0;
     while (bun2dTick())
     {
         bun2dClear();
@@ -73,11 +133,11 @@ int main()
 
         if (bun2dKey(KEY_W) > 0)
         {
-            if (bulletTimer > 5)
+            if (bulletTimer > 1)
             {
-                fireBullet(player.position.x, player.position.y);
+                fireBullet(player.position.x, player.position.y, 0, 1);
+                bulletTimer = 0;
             }
-            bulletTimer = 0;
         }
         player.velocity.x += player.acceleration.x;
         player.velocity.y += player.acceleration.y;
@@ -89,7 +149,10 @@ int main()
         player.velocity.y *= friction;
         player.acceleration.x = 0;
         player.acceleration.y = 0;
-
+        if(frameTimer > 100){
+            printf("frametime: %f ms", bun2dGetFrameTime());
+            frameTimer = 0;
+        }
         // Render platforms;
         for (int i = 0; i < currentPlatAmount; i++)
         {
@@ -99,8 +162,9 @@ int main()
 
         for (int i = 0; i < currentBulletAmount; i++)
         {
-            bullets[i].position.y++;
             Bullet b = bullets[i];
+            bullets[i].position.x += b.velocity.x;
+            bullets[i].position.y += b.velocity.y;
             bun2dFillRect(b.position.x, b.position.y, 1, 1, RED);
         }
 
@@ -120,6 +184,7 @@ int main()
 
         bun2dFillRect(player.position.x, player.position.y, player.dims.x, player.dims.y, BLUE);
         bulletTimer++;
+        frameTimer++;
     }
     return 0;
 }
@@ -130,12 +195,12 @@ void makePlatform(int posX, int posY, int width, int height)
     platforms[currentPlatAmount++] = p;
 }
 
-void fireBullet(int x, int y)
+void fireBullet(int x, int y, float velX, float velY)
 {
-    Bullet b = {{x, y}};
-    if (currentBulletAmount == 100)
+    Bullet b = {{x, y}, {velX, velY}};
+    if (currentBulletAmount == 1000)
     {
-        if (currentBulletIndex == 100)
+        if (currentBulletIndex == 1000)
         {
             currentBulletIndex = 0;
         }
@@ -158,12 +223,20 @@ void updateGamestate()
             && b.position.y >= p.position.y
             && b.position.y <= p.position.y + p.dims.y)
             {
-                Platform newPlat = {{rand() % 100, rand() % 100 + 15}, {5,3}};
+                Platform newPlat = {{rand() % 1000, rand() % 1000 + 15}, {5,3}};
                 spawnDestructionParticles(b.position.x, b.position.y);
+                //spawnBullets(b.position.x, b.position.y);
                 platforms[i] = newPlat;
             }
         }
     }
+}
+
+void spawnBullets(int x, int y){
+    fireBullet(x,y,particleSpeed,particleSpeed);
+    fireBullet(x,y,particleSpeed,-particleSpeed);
+    fireBullet(x,y,-particleSpeed,particleSpeed);
+    fireBullet(x,y,-particleSpeed,-particleSpeed);
 }
 
 void spawnDestructionParticles(int x, int y){

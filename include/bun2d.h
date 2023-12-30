@@ -165,6 +165,7 @@ void bun2dLine(int x0, int y0, int x1, int y1, Pixel color);
 void bun2dRect(int x, int y, int width, int height, Pixel color);
 void bun2dFillRect(int x, int y, int width, int height, Pixel color);
 void bun2dText(char *text, int x, int y, Pixel color);
+double bun2dGetFrameTime();
 int bun2dKey(unsigned int key);
 Point bun2dGetMouse();
 
@@ -184,9 +185,11 @@ static struct bun2dGlobal
     int src_height;
     unsigned char keys[400];
     Char *chars;
+    double lastTime;
+    double frameTime;
     Pixel *buff;
     Pixel color
-} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, NULL, {255, 255, 255, 255}};
+} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, 0, 0, NULL, {255, 255, 255, 255}};
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -388,6 +391,10 @@ Pixel bun2dGetPixel(int x, int y)
     }
 
     return bun2d.buff[bun2d.src_width * y + x];
+}
+
+double bun2dGetFrameTime(){
+    return bun2d.frameTime * 1000;
 }
 
 void drawCircle(int xc, int yc, int x, int y, Pixel color)
@@ -637,7 +644,9 @@ int bun2dInit(int vsync, int src_width, int src_height, int win_width, int win_h
 
 int bun2dTick()
 {
-
+    double currentTime = glfwGetTime();
+    bun2d.frameTime = currentTime - bun2d.lastTime;
+    bun2d.lastTime = currentTime;
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bun2d.src_width, bun2d.src_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bun2d.buff);
