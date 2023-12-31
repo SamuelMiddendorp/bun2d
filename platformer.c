@@ -60,63 +60,6 @@ int main()
     makePlatform(5, 20, 5, 3);
     makePlatform(5, 45, 5, 3);
     makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 5, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 5, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 5, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 5, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 20, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
-    makePlatform(5, 45, 5, 3);
     int frameTimer = 0;
     while (bun2dTick())
     {
@@ -224,8 +167,8 @@ void updateGamestate()
             && b.position.y <= p.position.y + p.dims.y)
             {
                 Platform newPlat = {{rand() % 1000, rand() % 1000 + 15}, {5,3}};
-                spawnDestructionParticles(b.position.x, b.position.y);
-                //spawnBullets(b.position.x, b.position.y);
+                //spawnDestructionParticles(b.position.x, b.position.y);
+                spawnBullets(b.position.x, b.position.y);
                 platforms[i] = newPlat;
             }
         }
