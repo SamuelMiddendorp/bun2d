@@ -53,7 +53,7 @@ int main()
 {
     float speed = 0.2;
     float friction = 0.6;
-    bun2dInit(0, 1000, 1000, 1000, 1000);
+    bun2dInit(1, 1000, 1000, 1000, 1000);
 
     Player player = {{5, 0}, {0, 0}, {0, 0}, {1, 2}};
     makePlatform(5, 5, 5, 3);
