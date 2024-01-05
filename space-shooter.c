@@ -51,12 +51,64 @@ void spawnParticle(int x, int y, float velX, float velY);
 
 int main()
 {
-    float speed = 0.2;
+    float speed = 0.4;
     float friction = 0.6;
-    bun2dInit(1, 1000, 1000, 1000, 1000);
+    bun2dInit(1, 200, 200, 1000, 1000);
 
     Player player = {{5, 0}, {0, 0}, {0, 0}, {1, 2}};
     makePlatform(5, 5, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 5, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 20, 5, 3);
+    makePlatform(5, 45, 5, 3);
+    makePlatform(5, 20, 5, 3);
     makePlatform(5, 20, 5, 3);
     makePlatform(5, 45, 5, 3);
     makePlatform(5, 20, 5, 3);
@@ -166,9 +218,9 @@ void updateGamestate()
             && b.position.y >= p.position.y
             && b.position.y <= p.position.y + p.dims.y)
             {
-                Platform newPlat = {{rand() % 1000, rand() % 1000 + 15}, {5,3}};
-                //spawnDestructionParticles(b.position.x, b.position.y);
-                spawnBullets(b.position.x, b.position.y);
+                Platform newPlat = {{rand() % 200, rand() % 200 + 15}, {5,3}};
+                spawnDestructionParticles(b.position.x, b.position.y);
+                //spawnBullets(b.position.x, b.position.y);
                 platforms[i] = newPlat;
             }
         }
