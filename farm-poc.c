@@ -29,7 +29,7 @@ typedef struct
 int main()
 {
     float speed = 0.2;
-    bun2dInit(1, 40, 40, 400, 400);
+    bun2dInit(1, 100, 100, 800, 800);
     Player p = {{0, 0}, {0, 0}, 3, 3};
     Farm f = {{5, 5}, 9, NULL, 5,0};
     Crop currentCrop = {{50,0,0,255}, 50, 0, 20};
