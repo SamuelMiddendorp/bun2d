@@ -13,6 +13,8 @@ typedef struct
 {
     Pixel color;
     float lifeTime;
+    int isGrown;
+    int growMultiplier;
 } Crop;
 
 typedef struct
@@ -30,7 +32,7 @@ int main()
     bun2dInit(1, 40, 40, 400, 400);
     Player p = {{0, 0}, {0, 0}, 3, 3};
     Farm f = {{5, 5}, 9, NULL, 5,0};
-    Crop currentCrop = {{50,0,0,255}, 0};
+    Crop currentCrop = {{50,0,0,255}, 50, 0, 20};
     f.crops = calloc(f.maxCrops, sizeof(Crop));
     int placeTimer = 0;
     while (bun2dTick())
@@ -62,7 +64,8 @@ int main()
            placeTimer = 0; 
         }
         
-        updateCrops(&f);
+        // Updates
+        updateCrops(&f, bun2dGetFrameTime());
 
         p.position.x += p.velocity.x;
         p.position.y += p.velocity.y;
@@ -70,6 +73,7 @@ int main()
         drawFarm(&f);
         // Draw player;
         bun2dFillRect(p.position.x, p.position.y, p.width, p.height, RED);
+
         placeTimer++;
     }
 }
@@ -82,8 +86,19 @@ void placeCrop(Farm *f, Crop c){
     f->crops[f->currentCrop++] = c;
 }
 
-void updateCrops(Farm *f){
-
+void updateCrops(Farm *f, double frameTime){
+    for(int i = 0; i < f->maxCrops; i++){
+        if(f->crops[i].isGrown){
+            continue;
+        }
+        f->crops[i].lifeTime += frameTime / 1000 * f->crops[i].growMultiplier;
+        if(f->crops[i].lifeTime >= 150){
+            f->crops[i].isGrown = 1;
+            f->crops[i].color.r = 255;
+            continue;
+        }
+        f->crops[i].color.r = f->crops[i].lifeTime;
+    }
 }
 void drawFarm(Farm *f)
 {
@@ -92,12 +107,12 @@ void drawFarm(Farm *f)
     {
         for (int y = 0; y < rootCrop; y++)
         {
-            Crop* c = &f->crops[rootCrop * x + y];
-            if(c->color.a == 0){
+            Crop c = f->crops[rootCrop * x + y];
+            if(c.color.a == 0){
                 bun2dRect(f->position.x + x * f->cropSize, f->position.y + y * f->cropSize, f->cropSize, f->cropSize, RED);
                 continue;
             }
-            bun2dFillRect(f->position.x + x * f->cropSize, f->position.y + y * f->cropSize, f->cropSize, f->cropSize, c->color);
+            bun2dFillRect(f->position.x + x * f->cropSize, f->position.y + y * f->cropSize, f->cropSize, f->cropSize, c.color);
         }
     }
 }
