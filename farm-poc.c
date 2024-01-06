@@ -32,7 +32,7 @@ int main()
     bun2dInit(1, 100, 100, 800, 800);
     Player p = {{0, 0}, {0, 0}, 3, 3};
     Farm f = {{5, 5}, 9, NULL, 5,0};
-    Crop currentCrop = {{50,0,0,255}, 50, 0, 20};
+    Crop currentCrop = {{50,0,0,255}, 50, 0, 5};
     f.crops = calloc(f.maxCrops, sizeof(Crop));
     int placeTimer = 0;
     while (bun2dTick())

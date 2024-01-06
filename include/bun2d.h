@@ -358,7 +358,7 @@ void bun2dRect(int x, int y, int width, int height, Pixel color)
     {
         if (i == 0 || i == height - 1)
         {
-            for (int j = 0; j < width + 1; j++)
+            for (int j = 0; j < width; j++)
             {
                 putPixel(j + x, i + y, color);
             }
@@ -366,7 +366,7 @@ void bun2dRect(int x, int y, int width, int height, Pixel color)
         else
         {
             putPixel(x, i + y, color);
-            putPixel(x + width, i + y, color);
+            putPixel(x + width - 1, i + y, color);
         }
     }
 }
