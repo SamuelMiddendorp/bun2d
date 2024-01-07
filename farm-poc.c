@@ -29,6 +29,7 @@ typedef struct
 int main()
 {
     float speed = 0.2;
+    float lightStrength = 1;
     bun2dInit(1, 100, 100, 800, 800);
     Player p = {{0, 0}, {0, 0}, 3, 3};
     Farm f = {{5, 5}, 9, NULL, 5,0};
@@ -63,12 +64,19 @@ int main()
            }
            placeTimer = 0; 
         }
+        if(bun2dKey(KEY_UP) == BUN2D_PRESS){
+            lightStrength+=0.1;
+        }
+        if(bun2dKey(KEY_DOWN) == BUN2D_PRESS){
+            lightStrength-=0.1;
+        }
         
         // Updates
         updateCrops(&f, bun2dGetFrameTime());
 
         p.position.x += p.velocity.x;
         p.position.y += p.velocity.y;
+        bun2dSetLight(p.position.x, p.position.y, lightStrength);
         // Draw farm;
         drawFarm(&f);
         // Draw player;

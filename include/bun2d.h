@@ -178,6 +178,9 @@ void bun2dClearPixel(int x, int y);
 void bun2dInput(GLFWwindow *win, int key, int code, int action, int mod);
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+Pixel divPixel(Pixel p, float d);
+float getDist(int x1, int y1, int x2, int y2);
+
 
 #ifdef BUN2D_IMPLEMENTATION
 
@@ -282,6 +285,14 @@ void putPixel(int x, int y, Pixel color)
     if (x >= bun2d.src_width || x < 0 || y >= bun2d.src_height || y < 0)
     {
         return;
+    }
+
+    if(bun2d.light.strength > 0){
+        float dist = getDist(bun2d.light.x, bun2d.light.y, x, y);
+        float newDist = dist / bun2d.light.strength;
+        if(newDist > 0.1){
+            color = divPixel(color, newDist);
+        }
     }
 
     bun2d.buff[bun2d.src_width * y + x] = color;
@@ -681,8 +692,24 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-float dist(int x1, int y1, int x2, int y2){
+float getDist(int x1, int y1, int x2, int y2){
     float distSquared = ((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1));
     return sqrt(distSquared);
 }
+
+Pixel divPixel(Pixel p, float d){
+    int r = (int)p.r / d;
+    int g = (int)p.g / d;
+    int b = (int)p.b / d;
+    Pixel new = {
+        r > 255 ? 255 : r,
+        g > 255 ? 255 : g,
+        b > 255 ? 255 : b,
+        p.a
+    };
+
+    return new;
+}
+
+
 #endif
