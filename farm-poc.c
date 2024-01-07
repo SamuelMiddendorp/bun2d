@@ -26,6 +26,13 @@ typedef struct
     int currentCrop;
 } Farm;
 
+Crop empty = {
+    {0,0,0,0},
+    0.0,
+    0,
+    0
+};
+
 int main()
 {
     float speed = 0.2;
@@ -33,8 +40,10 @@ int main()
     bun2dInit(1, 100, 100, 800, 800);
     Player p = {{0, 0}, {0, 0}, 3, 3};
     Farm f = {{5, 5}, 9, NULL, 5,0};
+    Farm f2 = {{35, 35}, 9, NULL, 5,0};
     Crop currentCrop = {{50,0,0,255}, 50, 0, 35};
     f.crops = calloc(f.maxCrops, sizeof(Crop));
+    f2.crops = calloc(f2.maxCrops, sizeof(Crop));
     int placeTimer = 0;
     while (bun2dTick())
     {
@@ -62,23 +71,40 @@ int main()
            if(placeTimer > 20 && isPlayerInFarm(&f, &p)){
                 placeCrop(&f, currentCrop);
            }
+           else if(placeTimer > 20 && isPlayerInFarm(&f2, &p)){
+                placeCrop(&f2, currentCrop);
+           }
            placeTimer = 0; 
         }
+
+        if(bun2dKey(KEY_H) == BUN2D_PRESS){
+            if(isPlayerInFarm(&f, &p)){
+                harvestCrops(&f);
+            }
+
+            if(isPlayerInFarm(&f2, &p)){
+                harvestCrops(&f2);
+            }
+        }
+
         if(bun2dKey(KEY_UP) == BUN2D_PRESS){
             lightStrength+=0.1;
         }
+
         if(bun2dKey(KEY_DOWN) == BUN2D_PRESS){
             lightStrength-=0.1;
         }
         
         // Updates
         updateCrops(&f, bun2dGetFrameTime());
+        updateCrops(&f2, bun2dGetFrameTime());
 
         p.position.x += p.velocity.x;
         p.position.y += p.velocity.y;
         bun2dSetLight(p.position.x, p.position.y, lightStrength);
         // Draw farm;
         drawFarm(&f);
+        drawFarm(&f2);
         // Draw player;
         bun2dFillRect(p.position.x, p.position.y, p.width, p.height, RED);
 
@@ -94,6 +120,13 @@ void placeCrop(Farm *f, Crop c){
     f->crops[f->currentCrop++] = c;
 }
 
+void harvestCrops(Farm *f){
+    for(int i = 0; i < f->maxCrops; i++){
+        if(f->crops[i].isGrown){
+            f->crops[i] = empty;
+        }
+    }
+}
 void updateCrops(Farm *f, double frameTime){
     for(int i = 0; i < f->maxCrops; i++){
         if(f->crops[i].isGrown){
