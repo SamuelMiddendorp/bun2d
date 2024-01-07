@@ -43,7 +43,7 @@ int main()
     bun2dInit(1, 100, 100, 800, 800);
     Player p = {{0, 0}, {0, 0}, 3, 3};
     Farm f = {{5, 5}, 9, NULL, 5,0};
-    Farm f2 = {{35, 35}, 9, NULL, 5,0};
+    Farm f2 = {{35, 35}, 25, NULL, 5,0};
     Crop currentCrop = {{50,0,0,255}, 50, 0, 35, 5};
     f.crops = calloc(f.maxCrops, sizeof(Crop));
     f2.crops = calloc(f2.maxCrops, sizeof(Crop));
