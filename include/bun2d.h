@@ -153,6 +153,10 @@ typedef struct
     int x, y;
 } Point;
 
+typedef struct{
+    int x, y, strength;
+} Light;
+
 int bun2dTick();
 int bun2dInit(int vsync, int src_width, int src_height, int win_width, int win_height);
 void bun2dClear();
@@ -165,6 +169,7 @@ void bun2dLine(int x0, int y0, int x1, int y1, Pixel color);
 void bun2dRect(int x, int y, int width, int height, Pixel color);
 void bun2dFillRect(int x, int y, int width, int height, Pixel color);
 void bun2dText(char *text, int x, int y, Pixel color);
+void bun2dSetLight(int x, int y, int strength);
 double bun2dGetFrameTime();
 int bun2dKey(unsigned int key);
 Point bun2dGetMouse();
@@ -188,8 +193,10 @@ static struct bun2dGlobal
     double lastTime;
     double frameTime;
     Pixel *buff;
-    Pixel color
-} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, 0, 0, NULL, {255, 255, 255, 255}};
+    Pixel color;
+    Light light;
+
+} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, 0, 0, NULL, {255, 255, 255, 255}, {0,0,0}};
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -435,6 +442,12 @@ void bun2dCircle(int x, int y, int r, Pixel color)
             d = d + 4 * _x + 6;
         drawCircle(x, y, _x, _y, color);
     }
+}
+
+void bun2dSetLight(int x, int y, int strength)
+{
+    Light l = {x,y,strength};
+    bun2d.light = l;
 }
 
 void bun2dFillCircle(int x, int y, int r, Pixel color)
