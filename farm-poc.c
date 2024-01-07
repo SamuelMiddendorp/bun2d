@@ -15,6 +15,7 @@ typedef struct
     float lifeTime;
     int isGrown;
     int growMultiplier;
+    int value;
 } Crop;
 
 typedef struct
@@ -30,18 +31,20 @@ Crop empty = {
     {0,0,0,0},
     0.0,
     0,
+    0,
     0
 };
 
 int main()
 {
+    int money = 0;
     float speed = 0.2;
     float lightStrength = 1;
     bun2dInit(1, 100, 100, 800, 800);
     Player p = {{0, 0}, {0, 0}, 3, 3};
     Farm f = {{5, 5}, 9, NULL, 5,0};
     Farm f2 = {{35, 35}, 9, NULL, 5,0};
-    Crop currentCrop = {{50,0,0,255}, 50, 0, 35};
+    Crop currentCrop = {{50,0,0,255}, 50, 0, 35, 5};
     f.crops = calloc(f.maxCrops, sizeof(Crop));
     f2.crops = calloc(f2.maxCrops, sizeof(Crop));
     int placeTimer = 0;
@@ -79,11 +82,13 @@ int main()
 
         if(bun2dKey(KEY_H) == BUN2D_PRESS){
             if(isPlayerInFarm(&f, &p)){
-                harvestCrops(&f);
+                money += harvestCrops(&f);
+                printf("%i", money);
             }
 
             if(isPlayerInFarm(&f2, &p)){
-                harvestCrops(&f2);
+                money += harvestCrops(&f2);
+                printf("%i", money);
             }
         }
 
@@ -101,12 +106,16 @@ int main()
 
         p.position.x += p.velocity.x;
         p.position.y += p.velocity.y;
-        bun2dSetLight(p.position.x, p.position.y, lightStrength);
+        //bun2dSetLight(p.position.x, p.position.y, lightStrength);
         // Draw farm;
         drawFarm(&f);
         drawFarm(&f2);
         // Draw player;
         bun2dFillRect(p.position.x, p.position.y, p.width, p.height, RED);
+
+        char buf[20];
+        sprintf(buf, "%d", money);
+        bun2dText(&buf, 2, 50, WHITE);
 
         placeTimer++;
     }
@@ -114,18 +123,23 @@ int main()
 
 void placeCrop(Farm *f, Crop c){
     printf("Placing crop");
-    if(f->currentCrop >= f->maxCrops){
-        f->currentCrop = 0;
+    for(int i = 0; i < f->maxCrops; i++){
+        if(f->crops[i].color.a == 0){
+            f->crops[i] = c;
+            break;
+        }
     }
-    f->crops[f->currentCrop++] = c;
 }
 
-void harvestCrops(Farm *f){
+int harvestCrops(Farm *f){
+    int value = 0;
     for(int i = 0; i < f->maxCrops; i++){
         if(f->crops[i].isGrown){
+            value += f->crops[i].value;
             f->crops[i] = empty;
         }
     }
+    return value;
 }
 void updateCrops(Farm *f, double frameTime){
     for(int i = 0; i < f->maxCrops; i++){
