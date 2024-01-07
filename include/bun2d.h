@@ -158,7 +158,7 @@ typedef struct{
 } Light;
 
 int bun2dTick();
-int bun2dInit(int vsync, int src_width, int src_height, int win_width, int win_height);
+int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_height);
 void bun2dClear();
 
 void bun2dPixel(int x, int y, Pixel color);
@@ -273,7 +273,7 @@ void bun2dPixel(int x, int y, Pixel color)
     {
         return;
     }
-
+    
     bun2d.buff[bun2d.src_width * y + x] = color;
 }
 
@@ -526,7 +526,7 @@ void fillPixelFont()
 /// @brief Initializes the game engine
 /// @param vsync 0 for off 1 for on
 /// @return Wether or not the init method was succesfull
-int bun2dInit(int vsync, int src_width, int src_height, int win_width, int win_height)
+int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_height)
 {
 
     bun2d.src_width = src_width;
@@ -679,5 +679,10 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
     bun2d.win_width = width;
     bun2d.win_height = height;
     glViewport(0, 0, width, height);
+}
+
+float dist(int x1, int y1, int x2, int y2){
+    float distSquared = ((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1));
+    return sqrt(distSquared);
 }
 #endif
