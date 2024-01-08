@@ -184,6 +184,7 @@ void bun2dFillRect(int x, int y, int width, int height, Pixel color);
 void bun2dText(char *text, int x, int y, Pixel color);
 void bun2dSetLight(int x, int y, unsigned int strength);
 Model* bun2dMakeModel(Voxel* data, unsigned int length);
+Model* bun2dLoadModel(char* adress);
 void bun2dDrawModel(Model* model, int x, int y);
 double bun2dGetFrameTime();
 int bun2dKey(unsigned int key);
@@ -213,9 +214,8 @@ static struct bun2dGlobal
     Pixel *buff;
     Pixel color;
     Light light;
-    Model* model;
 
-} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, 0, 0, NULL, {255, 255, 255, 255}, {0,0,0}, NULL};
+} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, 0, 0, NULL, {255, 255, 255, 255}, {0,0,0}};
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -496,6 +496,39 @@ Model* bun2dMakeModel(Voxel* data, unsigned int length)
     Model* m = (Model*)bar;
     m->data = data,
     m->length = length;
+    return m;
+}
+
+Model* bun2dLoadModel(char *adress)
+{
+    FILE *file;
+    file = fopen(adress, "r");
+    Voxel* temp = malloc(sizeof(Voxel) * 1000);
+    int entries = 0;
+    do
+    {
+        int foo = fscanf(file,
+            "%hhu,%hhu,%hhu,%hhu,%d,%d\n",
+            &temp[entries].r,
+            &temp[entries].g,
+            &temp[entries].b,
+            &temp[entries].a,
+            &temp[entries].x,
+            &temp[entries].y
+            );
+        printf("Fields read: %i", foo);
+        entries++;
+    } while (!feof(file));
+
+
+    void* bar = malloc(entries * sizeof(Voxel) + sizeof(unsigned int));
+    Model* m = (Model*)bar;
+    memcpy(&m->data, &temp, sizeof(Voxel) * entries);
+
+    //free(temp);
+
+    printf("heere");
+    m->length = entries;
     return m;
 }
 
