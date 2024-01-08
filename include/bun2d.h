@@ -213,8 +213,9 @@ static struct bun2dGlobal
     Pixel *buff;
     Pixel color;
     Light light;
+    Model* model;
 
-} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, 0, 0, NULL, {255, 255, 255, 255}, {0,0,0}};
+} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, 0, 0, NULL, {255, 255, 255, 255}, {0,0,0}, NULL};
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -283,6 +284,7 @@ const Char l_6 = {{0,0,0,1,0,2,0,3,0,4,1,0,1,2,1,4,2,0,2,2,2,4,3,0,3,1,3,2,3,4,-
 const Char l_7 = {{0,0,0,4,1,1,1,4,2,2,2,4,3,3,3,4,-1}};
 const Char l_8 = {{0,0,0,1,0,3,0,4,1,0,1,2,1,4,2,0,2,2,2,4,3,0,3,1,3,3,3,4,-1}};
 const Char l_9 = {{0,0,0,2,0,3,0,4,1,0,1,2,1,4,2,0,2,2,2,4,3,0,3,1,3,2,3,3,3,4,-1}};
+
 Point rotatePoint(Point point, Point origin, int rot)
 {
 
@@ -486,14 +488,24 @@ void bun2dSetLight(int x, int y, unsigned int strength)
     bun2d.light = l;
 }
 
-Model *bun2dMakeModel(Voxel *data, unsigned int length)
+Model* bun2dMakeModel(Voxel* data, unsigned int length)
 {
 
+
+    void* bar = malloc(length * sizeof(Voxel) + sizeof(unsigned int));
+    Model* m = (Model*)bar;
+    m->data = data,
+    m->length = length;
+    return m;
 }
 
 void bun2dDrawModel(Model *model, int x, int y)
 {
-    
+    for(int i = 0; i < model->length; i++){
+        Voxel v = model->data[i];
+        Pixel color = {v.r, v.g, v.b, v.a};
+        putPixel(x + v.x, y + v.y, color);
+    }
 }
 
 void bun2dFillCircle(int x, int y, int r, Pixel color)

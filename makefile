@@ -22,3 +22,6 @@ farm-poc:
 light:
 	gcc -Wall -Wextra -g -Iinclude light.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
 	./run
+model:
+	gcc -Wall -Wextra -g -Iinclude model.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
+	./run
