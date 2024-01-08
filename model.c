@@ -25,7 +25,11 @@ int main()
         bun2dClear();
         //bun2dDrawModel(foo, 10,10);
         //bun2dDrawModel(foo, 20,20);
+        if(bun2dKey(KEY_L) == BUN2D_PRESS){
+            foo3 = bun2dLoadModel("model.csv");
+        }
         //bun2dDrawModel(foo2, 20,20);
         bun2dDrawModel(foo3, 40,20);
     }
 }
+

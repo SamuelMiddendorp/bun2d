@@ -26,5 +26,5 @@ model:
 	gcc -Wall -Wextra -g -Iinclude model.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
 	./run
 model-creator:
-	gcc -Wall -Wextra -g -Iinclude model-creator.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
-	./run
+	gcc -Wall -Wextra -g -Iinclude model-creator.c glad.c -o run-model-creator -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
+	./run-model-creator

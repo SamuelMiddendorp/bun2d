@@ -519,7 +519,7 @@ Model* bun2dLoadModel(char *adress)
         printf("Fields read: %i", foo);
         entries++;
     } while (!feof(file));
-
+    fclose(file);
 
     void* bar = malloc(entries * sizeof(Voxel) + sizeof(unsigned int));
     Model* m = (Model*)bar;
@@ -529,6 +529,7 @@ Model* bun2dLoadModel(char *adress)
 
     printf("heere");
     m->length = entries;
+
     return m;
 }
 

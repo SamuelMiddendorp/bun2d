@@ -20,7 +20,7 @@ int main()
         if(bun2dKey(KEY_S) == 1){
             if(saveTimer > 10){
                 FILE* file;
-                file = fopen("model_f.csv", "w");
+                file = fopen("model.csv", "w");
             for(int x = 0; x<width ; x++){
             for(int y = 0; y<width ; y++){
                 Pixel p = bun2dGetPixel(x,y);
