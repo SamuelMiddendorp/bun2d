@@ -624,6 +624,38 @@ void fillPixelFont()
     bun2d.chars[56] = l_8;
     bun2d.chars[57] = l_9;
 }
+static void bun2dResizeDrawingArea()
+{
+    printf("bar");
+    float vertices[16] = {
+        1.0f,   1.0f,   1.0f,   1.0f,
+        1.0f,  -1.0f,   1.0f,   0.0f,
+        -1.0f, -1.0f,   0.0f,   0.0f,
+        -1.0f,  1.0f,   0.0f,   1.0f
+    };
+
+    const float w = (float)bun2d.win_width / (float)bun2d.src_width;
+    const float h = (float)bun2d.win_height / (float)bun2d.src_height;
+    
+    float width = (h < w) ? (h / w) : 1.0f;
+    float height = (w < h) ? (w / h) : 1.0f;
+
+    for (int i = 0; i < 16; i += 4) {
+        vertices[i] *= width;
+        vertices[i + 1] *= height;
+    }
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+}
+
+static void bun2dResizeWindow(GLFWwindow* window, int width, int height)
+{
+#ifndef __APPLE__
+    glViewport(0, 0, width, height);
+#endif
+    bun2d.win_width = width;
+    bun2d.win_height = height;
+    bun2dResizeDrawingArea();
+}
 
 /// @brief Initializes the game engine
 /// @param vsync 0 for off 1 for on
@@ -660,6 +692,7 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
     }
     glfwSetFramebufferSizeCallback(bun2d.window, framebuffer_size_callback);
     glfwSetKeyCallback(bun2d.window, bun2dInput);
+    glfwSetWindowSizeCallback(bun2d.window, bun2dResizeWindow);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
     {
