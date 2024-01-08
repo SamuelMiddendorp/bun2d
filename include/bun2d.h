@@ -145,6 +145,19 @@ typedef struct
 
 typedef struct
 {
+    unsigned char r, g, b, a;
+    int x, y;
+} Voxel;
+
+typedef struct
+{
+    Voxel* data;
+    unsigned int length;
+} Model;
+
+
+typedef struct
+{
     float x, y;
 } Vec2;
 
@@ -170,6 +183,8 @@ void bun2dRect(int x, int y, int width, int height, Pixel color);
 void bun2dFillRect(int x, int y, int width, int height, Pixel color);
 void bun2dText(char *text, int x, int y, Pixel color);
 void bun2dSetLight(int x, int y, unsigned int strength);
+Model* bun2dMakeModel(Voxel* data, unsigned int length);
+void bun2dDrawModel(Model* model, int x, int y);
 double bun2dGetFrameTime();
 int bun2dKey(unsigned int key);
 Point bun2dGetMouse();
@@ -469,6 +484,16 @@ void bun2dSetLight(int x, int y, unsigned int strength)
 {
     Light l = {x,y,strength};
     bun2d.light = l;
+}
+
+Model *bun2dMakeModel(Voxel *data, unsigned int length)
+{
+
+}
+
+void bun2dDrawModel(Model *model, int x, int y)
+{
+    
 }
 
 void bun2dFillCircle(int x, int y, int r, Pixel color)
