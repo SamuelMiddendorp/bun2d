@@ -30,6 +30,8 @@ int main()
         }
         //bun2dDrawModel(foo2, 20,20);
         bun2dDrawModel(foo3, 40,20);
+        bun2dDrawModel(foo3, 20,20);
+        bun2dDrawModel(foo3, 0,10);
     }
 }
 
