@@ -31,3 +31,6 @@ model-creator:
 bun2d-mark:
 	gcc -Wall -Wextra -g -Iinclude bun2d-mark.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
 	./run
+animation:
+	gcc -Wall -Wextra -g -Iinclude animation.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
+	./run
