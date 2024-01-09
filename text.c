@@ -8,7 +8,6 @@ int main()
                         255,
                         255,
                         255 };
-
     while (bun2dTick())
     {
         bun2dClear();

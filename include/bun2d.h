@@ -151,8 +151,8 @@ typedef struct
 
 typedef struct
 {
+    int length;
     Voxel* data;
-    unsigned int length;
 } Model;
 
 
@@ -503,7 +503,7 @@ Model* bun2dLoadModel(char *adress)
 {
     FILE *file;
     file = fopen(adress, "r");
-    Voxel* temp = malloc(sizeof(Voxel) * 1000);
+    Voxel* temp = malloc(sizeof(Voxel) * 10000);
     int entries = 0;
     do
     {
@@ -520,14 +520,11 @@ Model* bun2dLoadModel(char *adress)
     } while (!feof(file));
     fclose(file);
 
-    void* bar = malloc(entries * sizeof(Voxel) + sizeof(unsigned int));
-    Model* m = (Model*)bar;
-    memcpy(&m->data, &temp, sizeof(Voxel) * entries);
-
-
+    Model* m = (Model*)malloc(sizeof(Voxel*) + sizeof(int));
+    m->data = malloc(sizeof(Voxel) * entries);
     m->length = entries;
-
-    //free(temp);
+    memcpy(m->data, temp, sizeof(Voxel) * entries);
+    free(temp);
 
     return m;
 }

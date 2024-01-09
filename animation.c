@@ -7,8 +7,8 @@ int main()
 
     int animFrameTime = 500;
     unsigned int currentAnimFrame = 0;
-    Model* anim_1 = bun2dLoadModel("anim_1.csv");
-    Model* anim_2 = bun2dLoadModel("anim_2.csv");
+    Model* anim_1 = bun2dLoadModel("bow_1.csv");
+    Model* anim_2 = bun2dLoadModel("bow_2.csv");
     Model* frames[2];
     frames[0] = anim_1;
     frames[1] = anim_2;
