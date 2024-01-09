@@ -11,6 +11,7 @@ int main()
     bun2dInit(1, 1000, 1000, 1000, 1000);
 
     Model* bun = bun2dLoadModel("bun.csv");
+    Model* flower = bun2dLoadModel("flower.csv");
     Bun b = {20,0,0,0,0,0};
     bool bunIsOnGround = true;
     while (bun2dTick())
@@ -50,5 +51,6 @@ int main()
         bun2dDrawModel(bun, b.x + 100, b.y);
         bun2dDrawModel(bun, b.x + 110, b.y);
         bun2dDrawModel(bun, b.x + 40, b.y);
+        bun2dDrawModel(flower, 20,0);
     }
 }
