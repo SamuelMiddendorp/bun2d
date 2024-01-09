@@ -47,10 +47,10 @@ int main()
         if(b.x < 0){
             b.x = 999;
         }
-        bun2dDrawModel(bun, b.x, b.y);
-        bun2dDrawModel(bun, b.x + 100, b.y);
-        bun2dDrawModel(bun, b.x + 110, b.y);
-        bun2dDrawModel(bun, b.x + 40, b.y);
-        bun2dDrawModel(flower, 20,0);
+        bun2dDrawModel(bun, b.x, b.y, 20);
+        bun2dDrawModel(bun, b.x + 100, b.y,1);
+        bun2dDrawModel(bun, b.x + 110, b.y,1);
+        bun2dDrawModel(bun, b.x + 40, b.y,1);
+        bun2dDrawModel(flower, 20,0,10);
     }
 }

@@ -152,9 +152,8 @@ typedef struct
 typedef struct
 {
     int length;
-    Voxel* data;
+    Voxel *data;
 } Model;
-
 
 typedef struct
 {
@@ -166,7 +165,8 @@ typedef struct
     int x, y;
 } Point;
 
-typedef struct{
+typedef struct
+{
     int x, y, strength;
 } Light;
 
@@ -183,9 +183,9 @@ void bun2dRect(int x, int y, int width, int height, Pixel color);
 void bun2dFillRect(int x, int y, int width, int height, Pixel color);
 void bun2dText(char *text, int x, int y, Pixel color);
 void bun2dSetLight(int x, int y, unsigned int strength);
-Model* bun2dMakeModel(Voxel* data, unsigned int length);
-Model* bun2dLoadModel(char* adress);
-void bun2dDrawModel(Model* model, int x, int y);
+Model *bun2dMakeModel(Voxel *data, unsigned int length);
+Model *bun2dLoadModel(char *adress);
+void bun2dDrawModel(Model *model, int x, int y, unsigned int scale);
 double bun2dGetFrameTime();
 int bun2dKey(unsigned int key);
 Point bun2dGetMouse();
@@ -196,7 +196,6 @@ void bun2dInput(GLFWwindow *win, int key, int code, int action, int mod);
 void framebuffer_size_callback(GLFWwindow *window, int width, int height);
 Pixel divPixel(Pixel p, float d);
 float getDist(int x1, int y1, int x2, int y2);
-
 
 #ifdef BUN2D_IMPLEMENTATION
 
@@ -215,7 +214,7 @@ static struct bun2dGlobal
     Pixel color;
     Light light;
 
-} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, 0, 0, NULL, {255, 255, 255, 255}, {0,0,0}};
+} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, 0, 0, NULL, {255, 255, 255, 255}, {0, 0, 0}};
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec3 aPos;\n"
@@ -274,16 +273,16 @@ const Char l = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 2, 0, -1}};
 const Char o = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 1, 4, 2, 0, 2, 1, 2, 2, 2, 3, 2, 4, -1}};
 const Char t = {{1, 0, 1, 1, 1, 2, 1, 3, 1, 4, 2, 4, 0, 4, -1}};
 const Char d = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 1, 4, 2, 1, 2, 2, 2, 3, -1}};
-const Char l_0 = {{0,1,0,2,0,3,1,0,1,4,2,0,2,4,3,0,3,4,4,1,4,2,4,3,-1}};
-const Char l_1 = {{0,4,1,0,1,1,1,2,1,3,1,4,-1}};
-const Char l_2 = {{0,0,0,3,1,0,1,1,1,4,2,0,2,2,2,4,3,0,3,3,-1}};
-const Char l_3 = {{0,0,0,4,1,0,1,2,1,4,2,0,2,2,2,4,3,0,3,1,3,2,3,3,3,4,-1}};
-const Char l_4 = {{0,2,0,3,0,4,1,2,2,2,3,0,3,1,3,2,3,3,3,4,-1}};
-const Char l_5 = {{0,0,0,2,0,3,1,0,1,2,1,4,2,0,2,2,2,4,3,0,3,1,3,2,3,4,-1}};
-const Char l_6 = {{0,0,0,1,0,2,0,3,0,4,1,0,1,2,1,4,2,0,2,2,2,4,3,0,3,1,3,2,3,4,-1}};
-const Char l_7 = {{0,0,0,4,1,1,1,4,2,2,2,4,3,3,3,4,-1}};
-const Char l_8 = {{0,0,0,1,0,3,0,4,1,0,1,2,1,4,2,0,2,2,2,4,3,0,3,1,3,3,3,4,-1}};
-const Char l_9 = {{0,0,0,2,0,3,0,4,1,0,1,2,1,4,2,0,2,2,2,4,3,0,3,1,3,2,3,3,3,4,-1}};
+const Char l_0 = {{0, 1, 0, 2, 0, 3, 1, 0, 1, 4, 2, 0, 2, 4, 3, 0, 3, 4, 4, 1, 4, 2, 4, 3, -1}};
+const Char l_1 = {{0, 4, 1, 0, 1, 1, 1, 2, 1, 3, 1, 4, -1}};
+const Char l_2 = {{0, 0, 0, 3, 1, 0, 1, 1, 1, 4, 2, 0, 2, 2, 2, 4, 3, 0, 3, 3, -1}};
+const Char l_3 = {{0, 0, 0, 4, 1, 0, 1, 2, 1, 4, 2, 0, 2, 2, 2, 4, 3, 0, 3, 1, 3, 2, 3, 3, 3, 4, -1}};
+const Char l_4 = {{0, 2, 0, 3, 0, 4, 1, 2, 2, 2, 3, 0, 3, 1, 3, 2, 3, 3, 3, 4, -1}};
+const Char l_5 = {{0, 0, 0, 2, 0, 3, 1, 0, 1, 2, 1, 4, 2, 0, 2, 2, 2, 4, 3, 0, 3, 1, 3, 2, 3, 4, -1}};
+const Char l_6 = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 1, 2, 1, 4, 2, 0, 2, 2, 2, 4, 3, 0, 3, 1, 3, 2, 3, 4, -1}};
+const Char l_7 = {{0, 0, 0, 4, 1, 1, 1, 4, 2, 2, 2, 4, 3, 3, 3, 4, -1}};
+const Char l_8 = {{0, 0, 0, 1, 0, 3, 0, 4, 1, 0, 1, 2, 1, 4, 2, 0, 2, 2, 2, 4, 3, 0, 3, 1, 3, 3, 3, 4, -1}};
+const Char l_9 = {{0, 0, 0, 2, 0, 3, 0, 4, 1, 0, 1, 2, 1, 4, 2, 0, 2, 2, 2, 4, 3, 0, 3, 1, 3, 2, 3, 3, 3, 4, -1}};
 
 Point rotatePoint(Point point, Point origin, int rot)
 {
@@ -303,7 +302,7 @@ void bun2dPixel(int x, int y, Pixel color)
     {
         return;
     }
-    
+
     bun2d.buff[bun2d.src_width * y + x] = color;
 }
 
@@ -314,10 +313,12 @@ void putPixel(int x, int y, Pixel color)
         return;
     }
 
-    if(bun2d.light.strength > 0){
+    if (bun2d.light.strength > 0)
+    {
         float dist = getDist(bun2d.light.x, bun2d.light.y, x, y);
         float newDist = dist / bun2d.light.strength;
-        if(newDist > 0.1){
+        if (newDist > 0.1)
+        {
             color = divPixel(color, newDist);
         }
     }
@@ -438,7 +439,8 @@ Pixel bun2dGetPixel(int x, int y)
     return bun2d.buff[bun2d.src_width * y + x];
 }
 
-double bun2dGetFrameTime(){
+double bun2dGetFrameTime()
+{
     return bun2d.frameTime * 1000;
 }
 
@@ -484,43 +486,41 @@ void bun2dCircle(int x, int y, int r, Pixel color)
 
 void bun2dSetLight(int x, int y, unsigned int strength)
 {
-    Light l = {x,y,strength};
+    Light l = {x, y, strength};
     bun2d.light = l;
 }
 
-Model* bun2dMakeModel(Voxel* data, unsigned int length)
+Model *bun2dMakeModel(Voxel *data, unsigned int length)
 {
 
-
-    void* bar = malloc(length * sizeof(Voxel) + sizeof(unsigned int));
-    Model* m = (Model*)bar;
+    void *bar = malloc(length * sizeof(Voxel) + sizeof(unsigned int));
+    Model *m = (Model *)bar;
     m->data = data,
     m->length = length;
     return m;
 }
 
-Model* bun2dLoadModel(char *adress)
+Model *bun2dLoadModel(char *adress)
 {
     FILE *file;
     file = fopen(adress, "r");
-    Voxel* temp = malloc(sizeof(Voxel) * 10000);
+    Voxel *temp = malloc(sizeof(Voxel) * 10000);
     int entries = 0;
     do
     {
         int foo = fscanf(file,
-            "%hhu,%hhu,%hhu,%hhu,%d,%d\n",
-            &temp[entries].r,
-            &temp[entries].g,
-            &temp[entries].b,
-            &temp[entries].a,
-            &temp[entries].x,
-            &temp[entries].y
-            );
+                         "%hhu,%hhu,%hhu,%hhu,%d,%d\n",
+                         &temp[entries].r,
+                         &temp[entries].g,
+                         &temp[entries].b,
+                         &temp[entries].a,
+                         &temp[entries].x,
+                         &temp[entries].y);
         entries++;
     } while (!feof(file));
     fclose(file);
 
-    Model* m = (Model*)malloc(sizeof(Voxel*) + sizeof(int));
+    Model *m = (Model *)malloc(sizeof(Voxel *) + sizeof(int));
     m->data = malloc(sizeof(Voxel) * entries);
     m->length = entries;
     memcpy(m->data, temp, sizeof(Voxel) * entries);
@@ -529,21 +529,31 @@ Model* bun2dLoadModel(char *adress)
     return m;
 }
 
-void bun2dDrawModel(Model *model, int x, int y)
+void bun2dDrawModel(Model *model, int x, int y, unsigned int scale)
 {
-    for(int i = 0; i < model->length; i++){
+    for (int i = 0; i < model->length; i++)
+    {
         Voxel v = model->data[i];
+        v.x = v.x * scale;
+        v.y = v.y * scale;
         Pixel color = {v.r, v.g, v.b, v.a};
-        putPixel(x + v.x, y + v.y, color);
+        if (scale == 1)
+        {
+            putPixel(x + v.x, y + v.y, color);
+        }
+        else
+        {
+            bun2dFillRect(x + v.x, y + v.y, scale, scale, color);
+        }
     }
 }
 
 void bun2dFillCircle(int x, int y, int r, Pixel color)
 {
-    for(int _y=-r; _y<=r; _y++)
-    for(int _x=-r; _x<=r; _x++)
-        if(_x*_x+_y*_y <= r*r)
-            putPixel(x+_x, y+_y, color);
+    for (int _y = -r; _y <= r; _y++)
+        for (int _x = -r; _x <= r; _x++)
+            if (_x * _x + _y * _y <= r * r)
+                putPixel(x + _x, y + _y, color);
 }
 
 /// @brief Writes a pixel font text to the screen
@@ -624,26 +634,26 @@ static void bun2dResizeDrawingArea()
 {
     printf("bar");
     float vertices[16] = {
-        1.0f,   1.0f,   1.0f,   1.0f,
-        1.0f,  -1.0f,   1.0f,   0.0f,
-        -1.0f, -1.0f,   0.0f,   0.0f,
-        -1.0f,  1.0f,   0.0f,   1.0f
-    };
+        1.0f, 1.0f, 1.0f, 1.0f,
+        1.0f, -1.0f, 1.0f, 0.0f,
+        -1.0f, -1.0f, 0.0f, 0.0f,
+        -1.0f, 1.0f, 0.0f, 1.0f};
 
     const float w = (float)bun2d.win_width / (float)bun2d.src_width;
     const float h = (float)bun2d.win_height / (float)bun2d.src_height;
-    
+
     float width = (h < w) ? (h / w) : 1.0f;
     float height = (w < h) ? (w / h) : 1.0f;
 
-    for (int i = 0; i < 16; i += 4) {
+    for (int i = 0; i < 16; i += 4)
+    {
         vertices[i] *= width;
         vertices[i + 1] *= height;
     }
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 }
 
-static void bun2dResizeWindow(GLFWwindow* window, int width, int height)
+static void bun2dResizeWindow(GLFWwindow *window, int width, int height)
 {
 #ifndef __APPLE__
     glViewport(0, 0, width, height);
@@ -812,12 +822,14 @@ void framebuffer_size_callback(GLFWwindow *window, int width, int height)
     glViewport(0, 0, width, height);
 }
 
-float getDist(int x1, int y1, int x2, int y2){
-    float distSquared = ((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1));
+float getDist(int x1, int y1, int x2, int y2)
+{
+    float distSquared = ((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1));
     return sqrt(distSquared);
 }
 
-Pixel divPixel(Pixel p, float d){
+Pixel divPixel(Pixel p, float d)
+{
     int r = (int)p.r / d;
     int g = (int)p.g / d;
     int b = (int)p.b / d;
@@ -825,11 +837,9 @@ Pixel divPixel(Pixel p, float d){
         r > 255 ? 255 : r,
         g > 255 ? 255 : g,
         b > 255 ? 255 : b,
-        p.a
-    };
+        p.a};
 
     return new;
 }
-
 
 #endif
