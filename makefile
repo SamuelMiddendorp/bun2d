@@ -34,3 +34,6 @@ bun2d-mark:
 animation:
 	gcc -Wall -Wextra -g -Iinclude animation.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
 	./run
+bunny-hop:
+	gcc -Wall -Wextra -g -Iinclude bunny-hop.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
+	./run

@@ -48,7 +48,7 @@ int main()
     f.crops = calloc(f.maxCrops, sizeof(Crop));
     f2.crops = calloc(f2.maxCrops, sizeof(Crop));
     int placeTimer = 0;
-    Model* playerModel = bun2dLoadModel("model.csv");
+    Model* playerModel = bun2dLoadModel("bun.csv");
     while (bun2dTick())
     {
         p.velocity.x = 0;
