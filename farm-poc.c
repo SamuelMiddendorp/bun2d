@@ -112,7 +112,7 @@ int main()
         drawFarm(&f);
         drawFarm(&f2);
         // Draw player;
-        bun2dDrawModel(playerModel, p.position.x, p.position.y);
+        bun2dDrawModel(playerModel, p.position.x, p.position.y,1);
         //bun2dFillRect(p.position.x, p.position.y, p.width, p.height, RED);
 
         char buf[20];

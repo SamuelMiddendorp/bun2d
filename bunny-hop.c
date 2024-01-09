@@ -48,9 +48,9 @@ int main()
             b.x = 999;
         }
         bun2dDrawModel(bun, b.x, b.y, 20);
-        bun2dDrawModel(bun, b.x + 100, b.y,1);
-        bun2dDrawModel(bun, b.x + 110, b.y,1);
-        bun2dDrawModel(bun, b.x + 40, b.y,1);
+        bun2dDrawModel(bun, b.x + 300, b.y,10);
+        bun2dDrawModel(bun, b.x + 450, b.y,5);
+        bun2dDrawModel(bun, b.x + 550, b.y,7);
         bun2dDrawModel(flower, 20,0,10);
     }
 }

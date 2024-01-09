@@ -22,9 +22,9 @@ int main()
     while (bun2dTick())
     {
         bun2dClear();
-        bun2dDrawModel(foo, 40,20);
-        bun2dDrawModel(foo3, 20,20);
-        bun2dDrawModel(foo3, 0,10);
+        bun2dDrawModel(foo, 40,20,1);
+        bun2dDrawModel(foo3, 20,20,1);
+        bun2dDrawModel(foo3, 0,10,1);
     }
 }
 

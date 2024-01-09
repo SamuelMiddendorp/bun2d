@@ -65,7 +65,7 @@ int main()
         // Draw some buns
         for (int i = 0; i < MAX_BUNS; i++)
         {
-            bun2dDrawModel(bunModel, buns[i].x, buns[i].y,2);
+            bun2dDrawModel(bunModel, buns[i].x, buns[i].y,1);
         }
         if(frameTimer > 100){
             printf("frametime: %f ms", bun2dGetFrameTime());
