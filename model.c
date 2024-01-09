@@ -18,18 +18,11 @@ int main()
     data[1] = i;
 
     Model* foo = bun2dMakeModel(data, 2);
-    Model* foo2 = bun2dMakeModel(data, 2);
-    Model* foo3 = bun2dLoadModel("model.csv");
+    Model* foo3 = bun2dLoadModel("bun.csv");
     while (bun2dTick())
     {
         bun2dClear();
-        //bun2dDrawModel(foo, 10,10);
-        //bun2dDrawModel(foo, 20,20);
-        if(bun2dKey(KEY_L) == BUN2D_PRESS){
-            foo3 = bun2dLoadModel("model.csv");
-        }
-        //bun2dDrawModel(foo2, 20,20);
-        bun2dDrawModel(foo3, 40,20);
+        bun2dDrawModel(foo, 40,20);
         bun2dDrawModel(foo3, 20,20);
         bun2dDrawModel(foo3, 0,10);
     }

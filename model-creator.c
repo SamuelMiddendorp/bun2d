@@ -5,7 +5,8 @@ int main()
 {
     int width = 20;
     bun2dInit(1,width,width,400,400);
-    Pixel color = {255,0,0,255};
+    int i = 0;
+    Pixel color = {255,i,0,255};
     int saveTimer = 0;
     while (bun2dTick())
     {
@@ -16,6 +17,10 @@ int main()
         if(bun2dKey(KEY_D) == 1 || bun2dKey(KEY_D) == 2){
             Point foo = bun2dGetMouse();
             bun2dClearPixel(foo.x, foo.y);
+        }
+        if(bun2dKey(KEY_UP) == 1){
+            i++;
+            color.g = i;
         }
         if(bun2dKey(KEY_S) == 1){
             if(saveTimer > 10){

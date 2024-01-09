@@ -516,7 +516,6 @@ Model* bun2dLoadModel(char *adress)
             &temp[entries].x,
             &temp[entries].y
             );
-        printf("Fields read: %i", foo);
         entries++;
     } while (!feof(file));
     fclose(file);
@@ -525,10 +524,10 @@ Model* bun2dLoadModel(char *adress)
     Model* m = (Model*)bar;
     memcpy(&m->data, &temp, sizeof(Voxel) * entries);
 
-    //free(temp);
 
-    printf("heere");
     m->length = entries;
+
+    //free(temp);
 
     return m;
 }
