@@ -541,9 +541,13 @@ Model* bun2dLoadPngModel(char *adress) {
     m->data = malloc(sizeof(Voxel) * entries);
     m->length = entries;
     int currentEntry = 0;
+    int threshHold = 220;
     for(int i = 0; i < x * n; i+=n){
     for(int j = 0; j < y * n; j+=n){
         int index = j * x + i;
+        if(data[index] >= threshHold && data[index + 1] >= threshHold && data[index + 2] >= threshHold){
+            continue;
+        }
         m->data[currentEntry].r = data[index];    
         m->data[currentEntry].g = data[index + 1];    
         m->data[currentEntry].b = data[index + 2];    

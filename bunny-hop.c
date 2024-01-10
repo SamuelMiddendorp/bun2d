@@ -11,6 +11,7 @@ int main()
     bun2dInit(1, 1000, 1000, 1000, 1000);
 
     Model* bun = bun2dLoadModel("bun.csv");
+    Model* bunPng = bun2dLoadPngModel("bun.png");
     Model* flower = bun2dLoadModel("flower.csv");
     Bun b = {20,0,0,0,0,0};
     bool bunIsOnGround = true;
@@ -47,10 +48,10 @@ int main()
         if(b.x < 0){
             b.x = 999;
         }
-        bun2dDrawModel(bun, b.x, b.y, 20);
-        bun2dDrawModel(bun, b.x + 300, b.y,10);
+        bun2dDrawModel(bun, b.x + 300, b.y,2);
         bun2dDrawModel(bun, b.x + 450, b.y,5);
         bun2dDrawModel(bun, b.x + 550, b.y,7);
         bun2dDrawModel(flower, 20,0,10);
+        bun2dDrawModel(bunPng, b.x, b.y, 1);
     }
 }
