@@ -21,7 +21,7 @@ int main()
             currentAnimFrame = !currentAnimFrame;
             animationTimer = 0;
         }
-        bun2dDrawModel(frames[currentAnimFrame],20,0);
+        bun2dDrawModel(frames[currentAnimFrame],20,0,1);
         animationTimer += bun2dGetFrameTime();
     }
 }

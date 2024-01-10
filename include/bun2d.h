@@ -185,6 +185,7 @@ void bun2dText(char *text, int x, int y, Pixel color);
 void bun2dSetLight(int x, int y, unsigned int strength);
 Model *bun2dMakeModel(Voxel *data, unsigned int length);
 Model *bun2dLoadModel(char *adress);
+Model *bun2dLoadPngModel(char *adress);
 void bun2dDrawModel(Model *model, int x, int y, unsigned int scale);
 double bun2dGetFrameTime();
 int bun2dKey(unsigned int key);
@@ -526,6 +527,34 @@ Model *bun2dLoadModel(char *adress)
     memcpy(m->data, temp, sizeof(Voxel) * entries);
     free(temp);
 
+    return m;
+}
+
+Model* bun2dLoadPngModel(char *adress) {
+    printf("Loading png");
+    stbi_set_flip_vertically_on_load(1);
+    int x,y,n;
+    unsigned char* data = stbi_load(adress, &x, &y, &n, 0); 
+    printf("Loading png, width: %d, height: %d, channels: %d", x, y, n);
+    int entries = x * y;
+    Model *m = malloc(sizeof(Voxel *) + sizeof(int));
+    m->data = malloc(sizeof(Voxel) * entries);
+    m->length = entries;
+    int currentEntry = 0;
+    for(int i = 0; i < x * n; i+=n){
+    for(int j = 0; j < y * n; j+=n){
+        int index = j * x + i;
+        m->data[currentEntry].r = data[index];    
+        m->data[currentEntry].g = data[index + 1];    
+        m->data[currentEntry].b = data[index + 2];    
+        // For now always fully opaque
+        m->data[currentEntry].a = 255;
+        m->data[currentEntry].x = i == 0 ? 0 : i/n;
+        m->data[currentEntry].y = j == 0 ? 0 : j/n;
+        currentEntry++;
+    }
+    }
+    stbi_image_free(data);
     return m;
 }
 

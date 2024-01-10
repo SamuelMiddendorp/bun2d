@@ -3,11 +3,7 @@
 
 int main()
 {
-    bun2dInit(1, 100, 100, 400, 400);
-    Pixel textColor = { 255,
-                        255,
-                        255,
-                        255 };
+    bun2dInit(1, 200, 200, 800, 800);
 
     Voxel p = {255,10,100,255,0,0};
     Voxel i = {255,10,100,255,1,1};
@@ -17,14 +13,15 @@ int main()
     data[0] = p;
     data[1] = i;
 
-    Model* foo = bun2dMakeModel(data, 2);
-    Model* foo3 = bun2dLoadModel("bun.csv");
+    Model* fooInternal = bun2dMakeModel(data, 2);
+    Model* fooCsv = bun2dLoadModel("bun.csv");
+    Model* fooPng = bun2dLoadPngModel("bun.png");
     while (bun2dTick())
     {
         bun2dClear();
-        bun2dDrawModel(foo, 40,20,1);
-        bun2dDrawModel(foo3, 20,20,1);
-        bun2dDrawModel(foo3, 0,10,1);
+        bun2dDrawModel(fooInternal, 40,20,1);
+        bun2dDrawModel(fooCsv, 0,10,1);
+        bun2dDrawModel(fooPng, 10,10,1);
     }
 }
 
