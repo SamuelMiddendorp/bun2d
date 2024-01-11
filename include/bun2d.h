@@ -207,6 +207,8 @@ static struct bun2dGlobal
     int win_height;
     int src_width;
     int src_height;
+    float width_ratio;
+    float height_ratio; 
     unsigned char keys[400];
     Char *chars;
     double lastTime;
@@ -215,7 +217,7 @@ static struct bun2dGlobal
     Pixel color;
     Light light;
 
-} bun2d = {NULL, 400, 400, 50, 50, {0}, NULL, 0, 0, NULL, {255, 255, 255, 255}, {0, 0, 0}};
+} bun2d = {NULL, 400, 400, 50, 50, 1.0f, 1.0f, {0}, NULL, 0, 0, NULL, {255, 255, 255, 255}, {0, 0, 0}};
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec4 vert;\n"
@@ -683,13 +685,16 @@ static void bun2dResizeDrawingArea()
     const float w = (float)bun2d.win_width / (float)bun2d.src_width;
     const float h = (float)bun2d.win_height / (float)bun2d.src_height;
 
-    float width = (h < w) ? (h / w) : 1.0f;
-    float height = (w < h) ? (w / h) : 1.0f;
+    bun2d.width_ratio = (h < w) ? (h / w) : 1.0f;
+    bun2d.height_ratio = (w < h) ? (w / h) : 1.0f;
 
     for (int i = 0; i < 16; i += 4)
     {
-        vertices[i] *= width;
-        vertices[i + 1] *= height;
+        vertices[i] *= bun2d.width_ratio;
+        vertices[i + 1] *= bun2d.height_ratio;
+    }
+    for(int i = 0; i < 16; i++){
+        printf("%f \n", vertices[i]);
     }
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 }
@@ -807,11 +812,8 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0,0);
     glEnableVertexAttribArray(0);
-
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0,0);
 
     glBindVertexArray(0);
     unsigned int texture;
@@ -832,11 +834,13 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
     glGenerateMipmap(GL_TEXTURE_2D);
     glUseProgram(shaderProgram);
     glBindVertexArray(VAO);
+    bun2dResizeDrawingArea();
     return 0;
 }
 
 int bun2dTick()
 {
+    glfwPollEvents();
     double currentTime = glfwGetTime();
     bun2d.frameTime = currentTime - bun2d.lastTime;
     bun2d.lastTime = currentTime;
@@ -845,7 +849,6 @@ int bun2dTick()
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bun2d.src_width, bun2d.src_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bun2d.buff);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
     glfwSwapBuffers(bun2d.window);
-    glfwPollEvents();
     return !glfwWindowShouldClose(bun2d.window);
 }
 
