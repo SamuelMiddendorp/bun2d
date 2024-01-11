@@ -1,7 +1,7 @@
 #define BUN2D_IMPLEMENTATION
 #include <bun2d.h>
 
-#define MAX_BUNS 10000
+#define MAX_BUNS 500
 
 typedef struct
 {
@@ -14,7 +14,7 @@ int main()
     int bound = 1000; 
     bun2dInit(0, bound, bound, 2560, 1440);
 
-    Model *bunModel = bun2dLoadModel("bun.csv");
+    Model *bunModel = bun2dLoadPngModel("kells_rip_small.png");
 
     int bunWidth = 12;
     int bunheight = 8;
@@ -28,7 +28,7 @@ int main()
         buns[i].xvel =  (100.0f - rand () % 200) / 200; 
         buns[i].yvel =  (100.0f - rand () % 200) / 200; 
     }
-
+    int* bunPositions = malloc(sizeof(float) * MAX_BUNS * 2);
     int frameTimer = 0;
     while (bun2dTick())
     {
@@ -59,14 +59,16 @@ int main()
 
             buns[i].x += buns[i].xvel;
             buns[i].y += buns[i].yvel;
-
+            bunPositions[i * 2] = buns[i].x;
+            bunPositions[i * 2 + 1] = buns[i].y;
         }
 
         // Draw some buns
-        for (int i = 0; i < MAX_BUNS; i++)
-        {
-            bun2dDrawModel(bunModel, buns[i].x, buns[i].y,1);
-        }
+        // for (int i = 0; i < MAX_BUNS; i++)
+        // {
+        //     bun2dDrawModel(bunModel, buns[i].x, buns[i].y,1);
+        // }
+        bun2dDrawModelBulk(bunModel, MAX_BUNS, bunPositions);
         if(frameTimer > 100){
             printf("frametime: %f ms", bun2dGetFrameTime());
             frameTimer = 0;

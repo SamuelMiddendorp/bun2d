@@ -570,13 +570,25 @@ void bun2dDrawModel(Model *model, int x, int y, unsigned int scale)
         v.x = v.x * scale;
         v.y = v.y * scale;
         Pixel color = {v.r, v.g, v.b, v.a};
-        if (scale == 1)
-        {
-            putPixel(x + v.x, y + v.y, color);
-        }
-        else
-        {
-            bun2dFillRect(x + v.x, y + v.y, scale, scale, color);
+    if (scale == 1)
+     {
+        putPixel(x + v.x, y + v.y, color);
+    }
+    else
+    {
+    bun2dFillRect(x + v.x, y + v.y, scale, scale, color);
+    }
+    }
+}
+
+void bun2dDrawModelBulk(Model *model, int count, int* coords)
+{
+    for (int i = 0; i < model->length; i++)
+    {
+        Voxel v = model->data[i];
+        Pixel color = {v.r, v.g, v.b, v.a};
+        for(int j = 0; j < count * 2; j+=2){
+            putPixel(coords[j] + v.x, coords[j + 1] + v.y, color);
         }
     }
 }
@@ -715,7 +727,7 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-    bun2d.window = glfwCreateWindow(bun2d.win_width, bun2d.win_height, "bun2d", NULL, NULL);
+    bun2d.window = glfwCreateWindow(bun2d.win_width, bun2d.win_height, "bun2d", glfwGetPrimaryMonitor(), NULL);
     if (bun2d.window == NULL)
     {
         printf("Failed to create glfwwindow");

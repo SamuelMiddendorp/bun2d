@@ -8,10 +8,10 @@ typedef struct{
 
 int main()
 {
-    bun2dInit(1, 1000, 1000, 1000, 1000);
+    bun2dInit(1, 1280, 720, 1920, 1080);
 
     Model* bun = bun2dLoadModel("bun.csv");
-    Model* bunPng = bun2dLoadPngModel("bun.png");
+    Model* bunPng = bun2dLoadPngModel("kells_rip.png");
     Model* flower = bun2dLoadModel("flower.csv");
     Bun b = {20,0,0,0,0,0};
     bool bunIsOnGround = true;
