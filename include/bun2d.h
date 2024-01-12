@@ -187,6 +187,7 @@ Model *bun2dMakeModel(Voxel *data, unsigned int length);
 Model *bun2dLoadModel(char *adress);
 Model *bun2dLoadPngModel(char *adress);
 void bun2dDrawModel(Model *model, int x, int y, unsigned int scale);
+void bun2dDrawModelBulk(Model *model, int count, int* coords);
 double bun2dGetFrameTime();
 int bun2dKey(unsigned int key);
 Point bun2dGetMouse();
@@ -675,7 +676,6 @@ void fillPixelFont()
 }
 static void bun2dResizeDrawingArea()
 {
-    printf("bar");
     float vertices[16] = {
         1.0f, 1.0f, 1.0f, 1.0f,
         1.0f, -1.0f, 1.0f, 0.0f,
@@ -692,9 +692,6 @@ static void bun2dResizeDrawingArea()
     {
         vertices[i] *= bun2d.width_ratio;
         vertices[i + 1] *= bun2d.height_ratio;
-    }
-    for(int i = 0; i < 16; i++){
-        printf("%f \n", vertices[i]);
     }
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 }
