@@ -35,7 +35,7 @@ int main()
 
         bun2dClear();
         Point p = bun2dGetMouse();
-        bun2dSetLight(p.x, p.y, 100);
+        //bun2dSetLight(p.x, p.y, 100);
         // Update some buns pos;
         for (int i = 0; i < MAX_BUNS; i++)
         {
@@ -63,7 +63,7 @@ int main()
             bunPositions[i * 2 + 1] = buns[i].y;
         }
 
-        // Draw some buns
+        //Draw some buns
         // for (int i = 0; i < MAX_BUNS; i++)
         // {
         //     bun2dDrawModel(bunModel, buns[i].x, buns[i].y,1);
