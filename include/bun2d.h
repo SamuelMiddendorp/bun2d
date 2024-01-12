@@ -146,12 +146,12 @@ typedef struct
 typedef struct
 {
     unsigned char r, g, b, a;
-    int x, y;
+    unsigned short x, y;
 } Voxel;
 
 typedef struct
 {
-    int length;
+    unsigned short length;
     Voxel *data;
 } Model;
 
@@ -509,7 +509,7 @@ Model *bun2dLoadModel(char *adress)
     do
     {
         int foo = fscanf(file,
-                         "%hhu,%hhu,%hhu,%hhu,%d,%d\n",
+                         "%hhu,%hhu,%hhu,%hhu,%hu,%hu\n",
                          &temp[entries].r,
                          &temp[entries].g,
                          &temp[entries].b,
@@ -520,7 +520,7 @@ Model *bun2dLoadModel(char *adress)
     } while (!feof(file));
     fclose(file);
 
-    Model *m = (Model *)malloc(sizeof(Voxel *) + sizeof(int));
+    Model *m = (Model *)malloc(sizeof(Model));
     m->data = malloc(sizeof(Voxel) * entries);
     m->length = entries;
     memcpy(m->data, temp, sizeof(Voxel) * entries);
@@ -587,7 +587,8 @@ void bun2dDrawModelBulk(Model *model, int count, int* coords)
         Voxel v = model->data[i];
         Pixel color = {v.r, v.g, v.b, v.a};
         for(int j = 0; j < count * 2; j+=2){
-            putPixel(coords[j] + v.x, coords[j + 1] + v.y, color);
+            bun2d.buff[bun2d.src_width * (coords[j + 1] + v.y) + (coords[j] + v.x)] = color;
+            //putPixel(coords[j] + v.x, coords[j + 1] + v.y, color);
         }
     }
 }
