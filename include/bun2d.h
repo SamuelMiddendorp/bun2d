@@ -571,7 +571,8 @@ void bun2dDrawModel(Model *model, int x, int y, unsigned int scale)
         Pixel color = {v.r, v.g, v.b, v.a};
     if (scale == 1)
      {
-        putPixel(x + v.x, y + v.y, color);
+        // putPixel(x + v.x, y + v.y, color);
+        memcpy(&bun2d.buff[bun2d.src_width * (v.y + y) + v.x + x], &color, sizeof(Pixel));
     }
     else
     {

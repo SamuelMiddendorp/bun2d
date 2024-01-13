@@ -18,6 +18,7 @@ int main()
 
     int bunWidth = 12;
     int bunheight = 8;
+
     Bun buns[MAX_BUNS];
     for (int i = 0; i < MAX_BUNS; i++)
     {
@@ -61,10 +62,11 @@ int main()
             buns[i].y += buns[i].yvel;
             bunPositions[i * 2] = buns[i].x;
             bunPositions[i * 2 + 1] = buns[i].y;
+            bunPositions[i * 2 + 1] = buns[i].y;
         }
 
-        //Draw some buns
-        // for (int i = 0; i < MAX_BUNS; i++)
+        // Draw some buns
+        // for(int i = 0; i < MAX_BUNS; i++)
         // {
         //     bun2dDrawModel(bunModel, buns[i].x, buns[i].y,1);
         // }
