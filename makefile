@@ -38,5 +38,5 @@ bunny-hop:
 	gcc -Wall -Wextra -g -Iinclude bunny-hop.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
 	./run
 bun2d-benchmark:
-	gcc -Wall -Wextra -g -Iinclude bun2d-benchmark.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
+	gcc -Wall -Wextra -g -Iinclude bun2d-benchmark.c glad.c -O1 -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
 	./run
