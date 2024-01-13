@@ -587,8 +587,9 @@ void bun2dDrawModelBulk(Model *model, int count, int* coords)
         Voxel v = model->data[i];
         Pixel color = {v.r, v.g, v.b, v.a};
         for(int j = 0; j < count * 2; j+=2){
-            bun2d.buff[bun2d.src_width * (coords[j + 1] + v.y) + (coords[j] + v.x)] = color;
-            //putPixel(coords[j] + v.x, coords[j + 1] + v.y, color);
+            //bun2d.buff[bun2d.src_width * (coords[j + 1] + v.y) + (coords[j] + v.x)] = color;
+            memcpy(&bun2d.buff[bun2d.src_width * (coords[j + 1] + v.y) + (coords[j] + v.x)], &color, sizeof(Pixel));
+            // putPixel(coords[j] + v.x, coords[j + 1] + v.y, color);
         }
     }
 }
