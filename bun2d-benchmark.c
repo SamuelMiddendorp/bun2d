@@ -1,6 +1,6 @@
 #define BUN2D_IMPLEMENTATION 
 #include <bun2d.h>
-#define MAX_BUNS 1000
+#define MAX_BUNS 10000
 int main()
 {
     int boundX = 1000;
@@ -18,7 +18,7 @@ int main()
     {
         //bun2dClear();
         bun2dDrawModelBulk(bun, MAX_BUNS, buns);
-        if(frameTimer > 1000){
+        if(frameTimer > 100){
             printf("frametime: %f ms", bun2dGetFrameTime());
             frameTimer = 0;
         }
