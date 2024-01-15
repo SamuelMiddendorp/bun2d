@@ -235,7 +235,10 @@ const char *fragmentShaderSource = "#version 330 core\n"
                                    "uniform sampler2D texture1;\n"
                                    "void main()\n"
                                    "{\n"
-                                   "FragColor = texture(texture1, TexCoord);\n"
+                                   "vec4 texColor = texture(texture1, TexCoord);\n"
+                                   "if(texColor.a < 0.1)\n"
+            	                   "discard;\n"
+                                   "FragColor = texColor;\n"
                                    "}\n\0";
 
 const Pixel EMPTY = {
@@ -751,7 +754,7 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
         printf("Failed to load glad");
         return -1;
     }
-
+    //glEnable(GL_BLEND);  
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
@@ -843,7 +846,7 @@ int bun2dTick()
     double currentTime = glfwGetTime();
     bun2d.frameTime = currentTime - bun2d.lastTime;
     bun2d.lastTime = currentTime;
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.2f, 1.0f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bun2d.src_width, bun2d.src_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bun2d.buff);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
