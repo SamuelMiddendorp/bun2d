@@ -846,7 +846,7 @@ int bun2dTick()
     double currentTime = glfwGetTime();
     bun2d.frameTime = currentTime - bun2d.lastTime;
     bun2d.lastTime = currentTime;
-    glClearColor(0.2f, 1.0f, 0.2f, 1.0f);
+    glClearColor(0.2f, 0.7f, 0.2f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bun2d.src_width, bun2d.src_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bun2d.buff);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

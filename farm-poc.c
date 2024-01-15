@@ -128,7 +128,7 @@ int main()
 
         char buf[20];
         sprintf(buf, "%d", money);
-        bun2dText(&buf, 2, 50, WHITE);
+        bun2dText(&buf, 2, 380, WHITE);
 
         placeTimer++;
     }
