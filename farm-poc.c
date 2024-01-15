@@ -49,13 +49,23 @@ int main()
     Player p = {{0, 0}, {0, 0}, 3, 3};
     Farm f = {{5, 5}, 9, NULL, 16,0};
     Farm f2 = {{80, 80}, 25, NULL, 16,0};
-    Crop currentCrop = {{50,0,0,255}, 50, 0, 35, 5};
-    currentCrop.maxState = 2;
-    currentCrop.state = 0;
-    currentCrop.models = malloc(sizeof(Model*) * currentCrop.maxState);
-    currentCrop.models[0] = bun2dLoadPngModel("Sprite-0001.png");
-    currentCrop.models[1] = bun2dLoadPngModel("Sprite-0002.png");
-    currentCrop.models[2] = bun2dLoadPngModel("Sprite-0003.png");
+    Crop carrot = {{50,0,0,255}, 50, 0, 35, 5};
+    carrot.maxState = 2;
+    carrot.state = 0;
+    carrot.models = malloc(sizeof(Model*) * carrot.maxState);
+    carrot.models[0] = bun2dLoadPngModel("Sprite-0001.png");
+    carrot.models[1] = bun2dLoadPngModel("Sprite-0002.png");
+    carrot.models[2] = bun2dLoadPngModel("Sprite-0003.png");
+    Crop radish = {{50,0,0,255}, 50, 0, 35, 5};
+    radish.maxState = 2;
+    radish.state = 0;
+    radish.models = malloc(sizeof(Model*) * radish.maxState);
+    radish.models[0] = bun2dLoadPngModel("Sprite-radish1.png");
+    radish.models[1] = bun2dLoadPngModel("Sprite-radish2.png");
+    radish.models[2] = bun2dLoadPngModel("Sprite-radish3.png");
+
+    Crop currentCrop = carrot;
+    
     f.crops = calloc(f.maxCrops, sizeof(Crop));
     f2.crops = calloc(f2.maxCrops, sizeof(Crop));
     int placeTimer = 0;
