@@ -43,9 +43,9 @@ int main()
 {
     emptyModel = bun2dLoadPngModel("Sprite-empty.png");
     int money = 0;
-    float speed = 0.2;
+    float speed = 0.8;
     float lightStrength = 1;
-    bun2dInit(1, 400, 400, 1000, 1000);
+    bun2dInit(1, 400, 400, 2560, 1440);
     Player p = {{0, 0}, {0, 0}, 3, 3};
     Farm f = {{5, 5}, 9, NULL, 16,0};
     Farm f2 = {{80, 80}, 25, NULL, 16,0};
@@ -65,7 +65,7 @@ int main()
     radish.models[2] = bun2dLoadPngModel("Sprite-radish3.png");
 
     Crop currentCrop = carrot;
-    
+
     f.crops = calloc(f.maxCrops, sizeof(Crop));
     f2.crops = calloc(f2.maxCrops, sizeof(Crop));
     int placeTimer = 0;
@@ -90,6 +90,14 @@ int main()
         if (bun2dKey(KEY_D) > 0)
         {
             p.velocity.x = speed;
+        }
+
+        if (bun2dKey(KEY_R) > 0){
+            currentCrop = radish;
+        }
+
+        if(bun2dKey(KEY_T) > 0){
+            currentCrop = carrot;
         }
 
         if(bun2dKey(KEY_C) == BUN2D_PRESS){
@@ -134,6 +142,11 @@ int main()
         drawFarm(&f2);
         // Draw player;
         bun2dDrawModel(playerModel, p.position.x, p.position.y,1);
+
+        // Draw current crop
+        // Small little outline :)
+        bun2dFillRect(345, 15, 42, 42, WHITE);
+        bun2dDrawModel(currentCrop.models[2], 350, 20, 2);
         //bun2dFillRect(p.position.x, p.position.y, p.width, p.height, RED);
 
         char buf[20];
