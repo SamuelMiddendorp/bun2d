@@ -332,6 +332,7 @@ void putPixel(int x, int y, Pixel color)
 int writeChar(char *l, int x, int y, Pixel color)
 {
     int index = *l;
+    printf("index %d \n", index);
     int maxXOffset = 0;
     for (int i = 0; i < 30; i += 2)
     {
@@ -613,6 +614,7 @@ void bun2dFillCircle(int x, int y, int r, Pixel color)
 /// @param color The color with which the text should be displayed
 void bun2dText(char *text, int x, int y, Pixel color)
 {
+    printf("%s \n", text);
     int xOffset = 0;
     int yOffset = 8;
     while (*text != '\0')
@@ -663,7 +665,7 @@ Point bun2dGetMouse()
 void fillPixelFont()
 {
 
-    bun2d.chars = calloc(150, sizeof(Char *));
+    bun2d.chars = calloc(150, sizeof(Char));
     bun2d.chars[100] = d;
     bun2d.chars[105] = i;
     bun2d.chars[108] = l;
@@ -846,7 +848,7 @@ int bun2dTick()
     double currentTime = glfwGetTime();
     bun2d.frameTime = currentTime - bun2d.lastTime;
     bun2d.lastTime = currentTime;
-    glClearColor(0.2f, 0.7f, 0.2f, 1.0f);
+    glClearColor(0.33f, 0.2f, 0.22f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, bun2d.src_width, bun2d.src_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, bun2d.buff);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

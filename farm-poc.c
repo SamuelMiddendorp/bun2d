@@ -144,13 +144,12 @@ int main()
         bun2dDrawModel(playerModel, p.position.x, p.position.y,1);
 
         // Draw current crop
-        // Small little outline :)
         bun2dFillRect(345, 15, 42, 42, WHITE);
         bun2dDrawModel(currentCrop.models[2], 350, 20, 2);
         //bun2dFillRect(p.position.x, p.position.y, p.width, p.height, RED);
 
         char buf[20];
-        sprintf(buf, "%d", money);
+        sprintf(&buf, "%d", money);
         bun2dText(&buf, 2, 380, WHITE);
 
         placeTimer++;
