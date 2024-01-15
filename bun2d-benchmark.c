@@ -37,13 +37,13 @@ int main()
             p.r = ((float)255/boundX) * i;
             for (int j = 0; j < boundY; j++)
             {
-                p.b = ((float)255/boundX) * j;
+                p.g = ((float)255/boundX) * j;
                 bun2dPixel(i, j, p);
             }
         }
         p.r = 0;
-        p.b = 0;
-        if (frameTimer > 100)
+        p.g = 0;
+        if (frameTimer > 100)   
         {
             printf("frametime: %f ms", bun2dGetFrameTime());
             frameTimer = 0;

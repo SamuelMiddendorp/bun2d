@@ -16,6 +16,9 @@ typedef struct
     int isGrown;
     int growMultiplier;
     int value;
+    Model** models;
+    unsigned char maxState;
+    unsigned char state;
 } Crop;
 
 typedef struct
@@ -34,17 +37,25 @@ Crop empty = {
     0,
     0
 };
+Model* emptyModel; 
 
 int main()
 {
+    emptyModel = bun2dLoadPngModel("Sprite-empty.png");
     int money = 0;
     float speed = 0.2;
     float lightStrength = 1;
-    bun2dInit(1, 100, 100, 800, 800);
+    bun2dInit(1, 400, 400, 1000, 1000);
     Player p = {{0, 0}, {0, 0}, 3, 3};
-    Farm f = {{5, 5}, 9, NULL, 5,0};
-    Farm f2 = {{35, 35}, 25, NULL, 5,0};
+    Farm f = {{5, 5}, 9, NULL, 16,0};
+    Farm f2 = {{80, 80}, 25, NULL, 16,0};
     Crop currentCrop = {{50,0,0,255}, 50, 0, 35, 5};
+    currentCrop.maxState = 2;
+    currentCrop.state = 0;
+    currentCrop.models = malloc(sizeof(Model*) * currentCrop.maxState);
+    currentCrop.models[0] = bun2dLoadPngModel("Sprite-0001.png");
+    currentCrop.models[1] = bun2dLoadPngModel("Sprite-0002.png");
+    currentCrop.models[2] = bun2dLoadPngModel("Sprite-0003.png");
     f.crops = calloc(f.maxCrops, sizeof(Crop));
     f2.crops = calloc(f2.maxCrops, sizeof(Crop));
     int placeTimer = 0;
@@ -127,6 +138,7 @@ void placeCrop(Farm *f, Crop c){
     printf("Placing crop");
     for(int i = 0; i < f->maxCrops; i++){
         if(f->crops[i].color.a == 0){
+            f->crops[i].models = malloc(sizeof(Model*) * c.maxState);
             f->crops[i] = c;
             break;
         }
@@ -152,8 +164,10 @@ void updateCrops(Farm *f, double frameTime){
         if(f->crops[i].lifeTime >= 150){
             f->crops[i].isGrown = 1;
             f->crops[i].color.r = 255;
+            f->crops[i].state = f->crops[i].maxState;
             continue;
         }
+        f->crops[i].state = (f->crops[i].lifeTime / 50 - 1) < 0 ? 0 : f->crops[i].lifeTime / 50 - 1;
         f->crops[i].color.r = f->crops[i].lifeTime;
     }
 }
@@ -166,10 +180,12 @@ void drawFarm(Farm *f)
         {
             Crop c = f->crops[rootCrop * x + y];
             if(c.color.a == 0){
-                bun2dRect(f->position.x + x * f->cropSize, f->position.y + y * f->cropSize, f->cropSize, f->cropSize, RED);
+                // bun2dRect(f->position.x + x * f->cropSize, f->position.y + y * f->cropSize, f->cropSize, f->cropSize, RED);
+                bun2dDrawModel(emptyModel ,f->position.x + x * f->cropSize, f->position.y + y * f->cropSize, 1);
                 continue;
             }
-            bun2dFillRect(f->position.x + x * f->cropSize, f->position.y + y * f->cropSize, f->cropSize, f->cropSize, c.color);
+            //bun2dFillRect(f->position.x + x * f->cropSize, f->position.y + y * f->cropSize, f->cropSize, f->cropSize, c.color);
+            bun2dDrawModel(c.models[c.state], f->position.x + x * f->cropSize, f->position.y + y * f->cropSize, 1);
         }
     }
 }
