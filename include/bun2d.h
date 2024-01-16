@@ -157,6 +157,14 @@ typedef struct
 
 typedef struct
 {
+    unsigned int length;
+    unsigned short width;
+    unsigned short height;
+    Pixel *data;
+} FastModel;
+
+typedef struct
+{
     float x, y;
 } Vec2;
 
@@ -187,8 +195,11 @@ void bun2dSetLight(int x, int y, unsigned int strength);
 Model *bun2dMakeModel(Voxel *data, unsigned int length);
 Model *bun2dLoadModel(char *adress);
 Model *bun2dLoadPngModel(char *adress);
+FastModel *bun2dLoadPngModelFast(char *adress);
 void bun2dDrawModel(Model *model, int x, int y, unsigned int scale);
-void bun2dDrawModelBulk(Model *model, int count, int* coords);
+void bun2dDrawModelFast(FastModel *model, int x, int y);
+void bun2dDrawModelBulk(Model *model, int count, int *coords);
+void bun2dDrawModelBulkFast(FastModel *model, int count, int *coords);
 double bun2dGetFrameTime();
 int bun2dKey(unsigned int key);
 Point bun2dGetMouse();
@@ -210,13 +221,13 @@ static struct bun2dGlobal
     int src_width;
     int src_height;
     float width_ratio;
-    float height_ratio; 
+    float height_ratio;
     unsigned char keys[400];
     Char *chars;
     double lastTime;
     double frameTime;
     Pixel *buff;
-    unsigned char* rowBuff;
+    unsigned char *rowBuff;
     Pixel color;
     Light light;
 
@@ -239,7 +250,7 @@ const char *fragmentShaderSource = "#version 330 core\n"
                                    "{\n"
                                    "vec4 texColor = texture(texture1, TexCoord);\n"
                                    "if(texColor.a < 0.1)\n"
-            	                   "discard;\n"
+                                   "discard;\n"
                                    "FragColor = texColor;\n"
                                    "}\n\0";
 
@@ -440,14 +451,16 @@ void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
     // Does not check bounds, this might cause trouble
     // Arbitrairy value that keeps width in check
     int widthCorrected = width;
-    unsigned int size = sizeof(Pixel) * widthCorrected; 
-    for(int i = 0; i < widthCorrected * 4; i+=4){
+    unsigned int size = sizeof(Pixel) * widthCorrected;
+    for (int i = 0; i < widthCorrected * 4; i += 4)
+    {
         bun2d.rowBuff[i] = color.r;
         bun2d.rowBuff[i + 1] = color.g;
         bun2d.rowBuff[i + 2] = color.b;
         bun2d.rowBuff[i + 3] = color.a;
     }
-    for(int j = 0; j < height; j++){
+    for (int j = 0; j < height; j++)
+    {
         memcpy(&bun2d.buff[bun2d.src_width * (j + y) + x], bun2d.rowBuff, size);
     }
 }
@@ -553,33 +566,69 @@ Model *bun2dLoadModel(char *adress)
     return m;
 }
 
-Model* bun2dLoadPngModel(char *adress) {
+Model *bun2dLoadPngModel(char *adress)
+{
     printf("Loading png");
     stbi_set_flip_vertically_on_load(1);
-    int x,y,n;
-    unsigned char* data = stbi_load(adress, &x, &y, &n, 0); 
+    int x, y, n;
+    unsigned char *data = stbi_load(adress, &x, &y, &n, 0);
     printf("Loading png, width: %d, height: %d, channels: %d", x, y, n);
     int entries = x * y;
-    Model *m = malloc(sizeof(Voxel *) + sizeof(int));
+    Model *m = malloc(sizeof(Model));
     m->data = malloc(sizeof(Voxel) * entries);
     m->length = entries;
     int currentEntry = 0;
     int threshHold = 220;
-    for(int i = 0; i < x * n; i+=n){
-    for(int j = 0; j < y * n; j+=n){
-        int index = j * x + i;
-        if(data[index] >= threshHold && data[index + 1] >= threshHold && data[index + 2] >= threshHold){
-            continue;
+    for (int i = 0; i < x * n; i += n)
+    {
+        for (int j = 0; j < y * n; j += n)
+        {
+            int index = x * j + i;
+            if (data[index] >= threshHold && data[index + 1] >= threshHold && data[index + 2] >= threshHold)
+            {
+                continue;
+            }
+            m->data[currentEntry].r = data[index];
+            m->data[currentEntry].g = data[index + 1];
+            m->data[currentEntry].b = data[index + 2];
+            // For now always fully opaque
+            m->data[currentEntry].a = 255;
+            m->data[currentEntry].x = i == 0 ? 0 : i / n;
+            m->data[currentEntry].y = j == 0 ? 0 : j / n;
+            currentEntry++;
         }
-        m->data[currentEntry].r = data[index];    
-        m->data[currentEntry].g = data[index + 1];    
-        m->data[currentEntry].b = data[index + 2];    
-        // For now always fully opaque
-        m->data[currentEntry].a = 255;
-        m->data[currentEntry].x = i == 0 ? 0 : i/n;
-        m->data[currentEntry].y = j == 0 ? 0 : j/n;
-        currentEntry++;
     }
+    stbi_image_free(data);
+    return m;
+}
+/// @brief Only for opaque models without transparent pixels
+/// @param adress
+/// @return The model reference that can be passed to render
+FastModel *bun2dLoadPngModelFast(char *adress)
+{
+    printf("Loading png");
+    stbi_set_flip_vertically_on_load(1);
+    int x, y, n;
+    unsigned char *data = stbi_load(adress, &x, &y, &n, 0);
+    printf("Loading png, width: %d, height: %d, channels: %d", x, y, n);
+    int entries = x * y;
+    FastModel *m = malloc(sizeof(FastModel));
+    m->data = malloc(sizeof(Pixel) * entries);
+    m->length = entries;
+    m->width = x;
+    m->height = y;
+    int currentEntry = 0;
+    for (int i = 0; i < x * n; i += n)
+    {
+        for (int j = 0; j < y * n; j += n)
+        {
+            int index = x * j + i;
+            m->data[currentEntry].r = data[index];
+            m->data[currentEntry].g = data[index + 1];
+            m->data[currentEntry].b = data[index + 2];
+            m->data[currentEntry].a = 255;
+            currentEntry++;
+        }
     }
     stbi_image_free(data);
     return m;
@@ -593,30 +642,65 @@ void bun2dDrawModel(Model *model, int x, int y, unsigned int scale)
         v.x = v.x * scale;
         v.y = v.y * scale;
         Pixel color = {v.r, v.g, v.b, v.a};
-    if (scale == 1)
-     {
-        // putPixel(x + v.x, y + v.y, color);
-        memcpy(&bun2d.buff[bun2d.src_width * (v.y + y) + v.x + x], &color, sizeof(Pixel));
-    }
-    else
-    {
-    bun2dFillRect(x + v.x, y + v.y, scale, scale, color);
-    }
+        if (scale == 1)
+        {
+            // putPixel(x + v.x, y + v.y, color);
+            memcpy(&bun2d.buff[bun2d.src_width * (v.y + y) + v.x + x], &color, sizeof(Pixel));
+        }
+        else
+        {
+            bun2dFillRect(x + v.x, y + v.y, scale, scale, color);
+        }
     }
 }
 
-void bun2dDrawModelBulk(Model *model, int count, int* coords)
+void bun2dDrawModelFast(FastModel *model, int x, int y)
+{
+
+    for (int i = 0; i < model->height; i++)
+    {
+        if (i + y > bun2d.src_height || i + y < 0)
+        {
+            continue;
+        }
+        int adjustedWidth = bun2d.src_width > (model->width + x) ? model->width : bun2d.src_width - x;
+        int modelStartingPoint = model->width * i;
+        int buffStartingPoint = bun2d.src_width * (y + i) + x;
+        memcpy(&bun2d.buff[buffStartingPoint], &model->data[modelStartingPoint], adjustedWidth * sizeof(Pixel));
+    }
+}
+
+void bun2dDrawModelBulk(Model *model, int count, int *coords)
 {
     for (int i = 0; i < model->length; i++)
     {
         Voxel v = model->data[i];
         Pixel color = {v.r, v.g, v.b, v.a};
-        for(int j = 0; j < count * 2; j+=2){
-            bun2d.buff[bun2d.src_width * (coords[j + 1] + v.y) + (coords[j] + v.x)] = color;
+        for (int j = 0; j < count * 2; j += 2)
+        {
+            // bun2d.buff[bun2d.src_width * (coords[j + 1] + v.y) + (coords[j] + v.x)] = color;
             memcpy(&bun2d.buff[bun2d.src_width * (coords[j + 1] + v.y) + (coords[j] + v.x)], &color, sizeof(Pixel));
-            //putPixel(coords[j] + v.x, coords[j + 1] + v.y, color);
+            // putPixel(coords[j] + v.x, coords[j + 1] + v.y, color);
         }
-   }
+    }
+}
+
+void bun2dDrawModelBulkFast(FastModel *model, int count, int *coords)
+{
+    for (int i = 0; i < model->height; i++)
+    {
+        for (int j = 0; j < count * 2; j += 2)
+        {
+            if (i + coords[j + 1] > bun2d.src_height || i + coords[j + 1] < 0)
+            {
+                continue;
+            }
+            int adjustedWidth = bun2d.src_width > (model->width + coords[j]) ? model->width : bun2d.src_width - coords[j];
+            int modelStartingPoint = model->width * i;
+            int buffStartingPoint = bun2d.src_width * (coords[j + 1] + i) + coords[j];
+            memcpy(&bun2d.buff[buffStartingPoint], &model->data[modelStartingPoint], adjustedWidth * sizeof(Pixel));
+        }
+    }
 }
 
 void bun2dFillCircle(int x, int y, int r, Pixel color)
@@ -776,7 +860,7 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
         printf("Failed to load glad");
         return -1;
     }
-    //glEnable(GL_BLEND);  
+    // glEnable(GL_BLEND);
     unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
     glCompileShader(vertexShader);
@@ -838,7 +922,7 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0,0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBindVertexArray(0);
     unsigned int texture;
@@ -851,7 +935,7 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     // very important
-    bun2d.buff = calloc(bun2d.src_width * bun2d.src_height, sizeof(Pixel*));
+    bun2d.buff = calloc(bun2d.src_width * bun2d.src_height, sizeof(Pixel *));
     bun2d.rowBuff = calloc(bun2d.src_width, sizeof(Pixel));
 
     fillPixelFont();

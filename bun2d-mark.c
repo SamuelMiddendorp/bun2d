@@ -1,7 +1,7 @@
 #define BUN2D_IMPLEMENTATION
 #include <bun2d.h>
 
-#define MAX_BUNS 500
+#define MAX_BUNS 5000
 
 typedef struct
 {
@@ -15,6 +15,7 @@ int main()
     bun2dInit(0, bound, bound, 2560, 1440);
 
     Model *bunModel = bun2dLoadPngModel("kells_rip_small.png");
+    FastModel *fastModel = bun2dLoadPngModelFast("kells_rip_small.png");
 
     int bunWidth = 12;
     int bunheight = 8;
@@ -66,11 +67,11 @@ int main()
         }
 
         // Draw some buns
-        // for(int i = 0; i < MAX_BUNS; i++)
-        // {
-        //     bun2dDrawModel(bunModel, buns[i].x, buns[i].y,1);
-        // }
-        bun2dDrawModelBulk(bunModel, MAX_BUNS, bunPositions);
+        for(int i = 0; i < MAX_BUNS; i++)
+        {
+            bun2dDrawModelFast(fastModel, buns[i].x, buns[i].y);
+        }
+        //bun2dDrawModelBulkFast(fastModel, MAX_BUNS, bunPositions);
         if(frameTimer > 100){
             printf("frametime: %f ms", bun2dGetFrameTime());
             frameTimer = 0;
