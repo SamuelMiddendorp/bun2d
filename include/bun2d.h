@@ -622,7 +622,7 @@ FastModel *bun2dLoadPngModelFast(char *adress)
     {
         for (int j = 0; j < y * n; j += n)
         {
-            int index = x * j + i;
+            int index = x * i + j;
             m->data[currentEntry].r = data[index];
             m->data[currentEntry].g = data[index + 1];
             m->data[currentEntry].b = data[index + 2];
