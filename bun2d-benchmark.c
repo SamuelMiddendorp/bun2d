@@ -43,11 +43,11 @@ int main()
             breakTimer = 0;
             break;
         }
-        for (int i = 0; i < boundX; i+=2)
+        for (int i = 0; i < boundX - 10; i++)
         {
-            for (int j = 0; j < boundY; j+=2)
+            for (int j = 0; j < boundY - 10; j++)
             {
-                bun2dFillRect(i,j,7,7, RED);
+                bun2dFillRectEXP(i,j,20,20, RED);
             }
         }
         if (frameTimer > 10)   

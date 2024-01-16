@@ -216,10 +216,11 @@ static struct bun2dGlobal
     double lastTime;
     double frameTime;
     Pixel *buff;
+    unsigned char* rowBuff;
     Pixel color;
     Light light;
 
-} bun2d = {NULL, 400, 400, 50, 50, 1.0f, 1.0f, {0}, NULL, 0, 0, NULL, {255, 255, 255, 255}, {0, 0, 0}};
+} bun2d = {NULL, 400, 400, 50, 50, 1.0f, 1.0f, {0}, NULL, 0, 0, NULL, NULL, {255, 255, 255, 255}, {0, 0, 0}};
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec4 vert;\n"
@@ -435,6 +436,20 @@ void bun2dFillRect(int x, int y, int width, int height, Pixel color)
 
 void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
 {
+    // Allocate enough for the full line of the rect
+    // Does not check bounds, this might cause trouble
+    // Arbitrairy value that keeps width in check
+    int widthCorrected = width;
+    unsigned int size = sizeof(Pixel) * widthCorrected; 
+    for(int i = 0; i < widthCorrected * 4; i+=4){
+        bun2d.rowBuff[i] = color.r;
+        bun2d.rowBuff[i + 1] = color.g;
+        bun2d.rowBuff[i + 2] = color.b;
+        bun2d.rowBuff[i + 3] = color.a;
+    }
+    for(int j = 0; j < height; j++){
+        memcpy(&bun2d.buff[bun2d.src_width * (j + y) + x], bun2d.rowBuff, size);
+    }
 }
 
 Pixel bun2dGetPixel(int x, int y)
@@ -835,8 +850,9 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-    bun2d.buff = calloc(bun2d.src_width * bun2d.src_height, sizeof(Pixel *));
+    // very important
+    bun2d.buff = calloc(bun2d.src_width * bun2d.src_height, sizeof(Pixel*));
+    bun2d.rowBuff = calloc(bun2d.src_width, sizeof(Pixel));
 
     fillPixelFont();
 
