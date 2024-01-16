@@ -181,6 +181,7 @@ void bun2dFillCircle(int x, int y, int r, Pixel color);
 void bun2dLine(int x0, int y0, int x1, int y1, Pixel color);
 void bun2dRect(int x, int y, int width, int height, Pixel color);
 void bun2dFillRect(int x, int y, int width, int height, Pixel color);
+void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color);
 void bun2dText(char *text, int x, int y, Pixel color);
 void bun2dSetLight(int x, int y, unsigned int strength);
 Model *bun2dMakeModel(Voxel *data, unsigned int length);
@@ -430,6 +431,10 @@ void bun2dFillRect(int x, int y, int width, int height, Pixel color)
             putPixel(j + x, i + y, color);
         }
     }
+}
+
+void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
+{
 }
 
 Pixel bun2dGetPixel(int x, int y)

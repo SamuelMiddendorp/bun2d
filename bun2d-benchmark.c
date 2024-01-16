@@ -9,6 +9,7 @@ int main()
     bun2dInit(0, boundX, boundY, 1000, 1000);
     Model *bun = bun2dLoadModel("bun.csv");
     int *buns = malloc(sizeof(int) * 2 * MAX_BUNS);
+    int breakTimer = 0;
     for (int i = 0; i < MAX_BUNS * 2; i += 2)
     {
         buns[i] = 5 + rand() % boundX - 5;
@@ -20,34 +21,41 @@ int main()
     {
         bun2dClear();
         bun2dDrawModelBulk(bun, MAX_BUNS, buns);
+        if (bun2dKey(KEY_SPACE) == BUN2D_PRESS && breakTimer > 150){
+            breakTimer++;
+            breakTimer = 0;
+            break;
+        }
         if (frameTimer > 100)
         {
             printf("frametime: %f ms", bun2dGetFrameTime());
             frameTimer = 0;
-            break;
         }
+        breakTimer++;
         frameTimer++;
     }
     Pixel p = {0, 0, 0, 255};
     while (bun2dTick())
     {
         bun2dClear();
-        for (int i = 0; i < boundX; i++)
+        if (bun2dKey(KEY_SPACE) == BUN2D_PRESS && breakTimer > 150){
+            breakTimer++;
+            breakTimer = 0;
+            break;
+        }
+        for (int i = 0; i < boundX; i+=2)
         {
-            p.r = ((float)255/boundX) * i;
-            for (int j = 0; j < boundY; j++)
+            for (int j = 0; j < boundY; j+=2)
             {
-                p.g = ((float)255/boundX) * j;
-                bun2dPixel(i, j, p);
+                bun2dFillRect(i,j,7,7, RED);
             }
         }
-        p.r = 0;
-        p.g = 0;
-        if (frameTimer > 100)   
+        if (frameTimer > 10)   
         {
             printf("frametime: %f ms", bun2dGetFrameTime());
             frameTimer = 0;
         }
+        breakTimer++;
         frameTimer++;
     }
 }
