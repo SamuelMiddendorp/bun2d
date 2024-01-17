@@ -1,7 +1,7 @@
 #define BUN2D_IMPLEMENTATION
 #include <bun2d.h>
 
-#define MAX_BUNS 5000
+#define MAX_BUNS 50000
 
 typedef struct
 {
@@ -12,7 +12,7 @@ typedef struct
 int main()
 {
     int bound = 1000; 
-    bun2dInit(0, bound, bound, 2560, 1440);
+    bun2dInit(1, bound, bound, 2560, 1440);
 
     Model *bunModel = bun2dLoadPngModel("kells_rip_small.png");
     FastModel *fastModel = bun2dLoadPngModelFast("kells_rip_small.png");

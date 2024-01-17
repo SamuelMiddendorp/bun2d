@@ -345,7 +345,6 @@ void putPixel(int x, int y, Pixel color)
 int writeChar(char *l, int x, int y, Pixel color)
 {
     int index = *l;
-    printf("index %d \n", index);
     int maxXOffset = 0;
     for (int i = 0; i < 30; i += 2)
     {
@@ -626,7 +625,7 @@ FastModel *bun2dLoadPngModelFast(char *adress)
             m->data[currentEntry].r = data[index];
             m->data[currentEntry].g = data[index + 1];
             m->data[currentEntry].b = data[index + 2];
-            m->data[currentEntry].a = 255;
+            m->data[currentEntry].a = n > 3 ? data[index + 3] : 255;
             currentEntry++;
         }
     }
@@ -718,7 +717,6 @@ void bun2dFillCircle(int x, int y, int r, Pixel color)
 /// @param color The color with which the text should be displayed
 void bun2dText(char *text, int x, int y, Pixel color)
 {
-    printf("%s \n", text);
     int xOffset = 0;
     int yOffset = 8;
     while (*text != '\0')
