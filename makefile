@@ -40,3 +40,6 @@ bunny-hop:
 bun2d-benchmark:
 	gcc -Wall -Wextra -g -Iinclude bun2d-benchmark.c glad.c -O1 -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
 	./run
+camera:
+	gcc -Wall -Wextra -g -Iinclude camera.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
+	./run
