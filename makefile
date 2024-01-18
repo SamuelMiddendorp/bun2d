@@ -17,7 +17,7 @@ space-shooter:
 	gcc -Wall -Wextra -g -Iinclude space-shooter.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
 	./run
 farm-poc:
-	gcc -Wall -Wextra -g -Iinclude farm-poc.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
+	gcc -Wall -Wextra -g -Iinclude farm-poc.c glad.c -O1 -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32
 	./run
 light:
 	gcc -Wall -Wextra -g -Iinclude light.c glad.c -o run -Llib lib/libglfw3.a lib/libglfw3dll.a -lgdi32

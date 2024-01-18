@@ -446,10 +446,9 @@ void bun2dFillRect(int x, int y, int width, int height, Pixel color)
 
 void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
 {
-    // Allocate enough for the full line of the rect
     // Does not check bounds, this might cause trouble
     // Arbitrairy value that keeps width in check
-    int widthCorrected = width;
+    int widthCorrected = width + x > bun2d.src_width ? bun2d.src_width - x : width; 
     unsigned int size = sizeof(Pixel) * widthCorrected;
     for (int i = 0; i < widthCorrected * 4; i += 4)
     {
