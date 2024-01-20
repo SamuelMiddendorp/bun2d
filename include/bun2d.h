@@ -178,10 +178,10 @@ typedef struct
     int x, y, strength;
 } Light;
 
+// Engine functions
 int bun2dTick();
 int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_height);
 void bun2dClear();
-
 void bun2dPixel(int x, int y, Pixel color);
 Pixel bun2dGetPixel(int x, int y);
 void bun2dCircle(int x, int y, int r, Pixel color);
@@ -194,6 +194,7 @@ void bun2dText(char *text, int x, int y, Pixel color);
 void bun2dSetLight(int x, int y, unsigned int strength);
 Model *bun2dMakeModel(Voxel *data, unsigned int length);
 Model *bun2dLoadModel(char *adress);
+Model *bun2dHotLoadPngModel(char *adress);
 Model *bun2dLoadPngModel(char *adress);
 FastModel *bun2dLoadPngModelFast(char *adress);
 void bun2dDrawModel(Model *model, int x, int y, unsigned int scale);
@@ -299,7 +300,6 @@ const Char l_6 = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 1, 2, 1, 4, 2, 0, 2, 2, 2
 const Char l_7 = {{0, 0, 0, 4, 1, 1, 1, 4, 2, 2, 2, 4, 3, 3, 3, 4, -1}};
 const Char l_8 = {{0, 0, 0, 1, 0, 3, 0, 4, 1, 0, 1, 2, 1, 4, 2, 0, 2, 2, 2, 4, 3, 0, 3, 1, 3, 3, 3, 4, -1}};
 const Char l_9 = {{0, 0, 0, 2, 0, 3, 0, 4, 1, 0, 1, 2, 1, 4, 2, 0, 2, 2, 2, 4, 3, 0, 3, 1, 3, 2, 3, 3, 3, 4, -1}};
-
 Point rotatePoint(Point point, Point origin, int rot)
 {
 
@@ -562,6 +562,10 @@ Model *bun2dLoadModel(char *adress)
     free(temp);
 
     return m;
+}
+
+Model *bun2dHotLoadPngModel(char *adress)
+{
 }
 
 Model *bun2dLoadPngModel(char *adress)
@@ -947,6 +951,9 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
 
 int bun2dTick()
 {
+    #ifdef BUN2D_HOTRELOAD
+    
+    #endif
     double currentTime = glfwGetTime();
     bun2d.frameTime = currentTime - bun2d.lastTime;
     bun2d.lastTime = currentTime;
