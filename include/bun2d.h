@@ -1,6 +1,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-
+#include <pthread.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
@@ -162,6 +162,15 @@ typedef struct
     unsigned short height;
     Pixel *data;
 } FastModel;
+
+typedef struct
+{
+    unsigned short x;
+    unsigned short y;
+    unsigned short size;
+    unsigned short start;
+    unsigned short end;
+} RectThreadData;
 
 typedef struct
 {
@@ -444,6 +453,15 @@ void bun2dFillRect(int x, int y, int width, int height, Pixel color)
     }
 }
 
+void* drawRect(void* arg){
+    RectThreadData* r = (RectThreadData*) arg;
+    for (int j = r->start; j < r->end; j++)
+    {
+        memcpy(&bun2d.buff[bun2d.src_width * (j + r->y) + r->x], bun2d.rowBuff, r->size);
+    }
+    return NULL;
+}
+
 void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
 {
     // Does not check bounds, this might cause trouble
@@ -457,11 +475,27 @@ void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
         bun2d.rowBuff[i + 2] = color.b;
         bun2d.rowBuff[i + 3] = color.a;
     }
-    for (int j = 0; j < height; j++)
-    {
-        memcpy(&bun2d.buff[bun2d.src_width * (j + y) + x], bun2d.rowBuff, size);
+    // Some arbitrairy thread pool;
+    pthread_t threads[10];
+    unsigned short offset = height / 10;
+    for (int i = 0; i < 5 - 1; i++){
+        RectThreadData r = {i * offset, (i + 1) * offset, x, y, size};
+        pthread_create(&threads[i], NULL, drawRect, &r);
     }
+    for (int i = 0; i < 5 - 1; i++){
+        pthread_join(threads[i], NULL);
+    }
+    // for (int j = 0; j < height; j++)
+    // {
+    //     memcpy(&bun2d.buff[bun2d.src_width * (j + y) + x], bun2d.rowBuff, size);
+    // }
+
+    // for (int j = 0; j < height; j++)
+    // {
+    //     //memcpy(&bun2d.buff[bun2d.src_width * (j + y) + x], bun2d.rowBuff, size);
+    // }
 }
+
 
 Pixel bun2dGetPixel(int x, int y)
 {
