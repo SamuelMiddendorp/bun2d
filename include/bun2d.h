@@ -167,9 +167,9 @@ typedef struct
 {
     unsigned short x;
     unsigned short y;
-    unsigned short size;
     unsigned short start;
     unsigned short end;
+    unsigned short size;
 } RectThreadData;
 
 typedef struct
@@ -240,8 +240,9 @@ static struct bun2dGlobal
     unsigned char *rowBuff;
     Pixel color;
     Light light;
+    RectThreadData* r;
 
-} bun2d = {NULL, 400, 400, 50, 50, 1.0f, 1.0f, {0}, NULL, 0, 0, NULL, NULL, {255, 255, 255, 255}, {0, 0, 0}};
+} bun2d = {NULL, 400, 400, 50, 50, 1.0f, 1.0f, {0}, NULL, 0, 0, NULL, NULL, {255, 255, 255, 255}, {0, 0, 0}, NULL};
 
 const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec4 vert;\n"
@@ -464,6 +465,7 @@ void* drawRect(void* arg){
 
 void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
 {
+
     // Does not check bounds, this might cause trouble
     // Arbitrairy value that keeps width in check
     int widthCorrected = width + x > bun2d.src_width ? bun2d.src_width - x : width; 
@@ -476,15 +478,15 @@ void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
         bun2d.rowBuff[i + 3] = color.a;
     }
     // Some arbitrairy thread pool;
-    pthread_t threads[10];
-    unsigned short offset = height / 10;
-    for (int i = 0; i < 5 - 1; i++){
-        RectThreadData r = {i * offset, (i + 1) * offset, x, y, size};
-        pthread_create(&threads[i], NULL, drawRect, &r);
-    }
-    for (int i = 0; i < 5 - 1; i++){
-        pthread_join(threads[i], NULL);
-    }
+    pthread_t thread;
+    unsigned short offset = height;
+        bun2d.r->start = 0;
+        bun2d.r->end = offset;
+        bun2d.r->x = x;
+        bun2d.r->y = y;
+        bun2d.r->size = size;
+        pthread_create(&thread, NULL, drawRect, bun2d.r);
+        pthread_join(thread, NULL);
     // for (int j = 0; j < height; j++)
     // {
     //     memcpy(&bun2d.buff[bun2d.src_width * (j + y) + x], bun2d.rowBuff, size);
@@ -972,6 +974,7 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
     // very important
     bun2d.buff = calloc(bun2d.src_width * bun2d.src_height, sizeof(Pixel *));
     bun2d.rowBuff = calloc(bun2d.src_width, sizeof(Pixel));
+    bun2d.r = malloc(sizeof(RectThreadData));
 
     fillPixelFont();
 

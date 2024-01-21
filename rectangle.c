@@ -3,16 +3,13 @@
 
 int main()
 {
-    bun2dInit(0);
+    bun2dInit(1, 100,100,1000,1000);
 
 
-    int rectangleY = 100;
-    int rectangleX = rand() % 50;
     
     while (bun2dTick())
     {
-        bun2dColor(RED);
         bun2dClear();
-        bun2dRect(rectangleX, rectangleY,20,10);
+        bun2dFillRectEXP(20,20,20,20,RED);
     }
 }
