@@ -375,9 +375,7 @@ void bun2dClearPixel(int x, int y)
     {
         return;
     }
-
-    Pixel p = {0, 0, 0, 0};
-    bun2d.buff[bun2d.src_width * y + x] = p;
+    bun2d.buff[bun2d.src_width * y + x] = EMPTY;
 }
 
 /// @brief Renders a line to the screen
@@ -462,7 +460,6 @@ void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
         memcpy(&bun2d.buff[bun2d.src_width * (j + y) + x], bun2d.rowBuff, size);
     }
 }
-
 
 Pixel bun2dGetPixel(int x, int y)
 {
