@@ -2,7 +2,9 @@
     "files.associations": {
         "stdio.h": "c",
         "bun2d.h": "c",
-        "glad.h": "c"
+        "glad.h": "c",
+        "bun2d_image.h": "c",
+        "stdbool.h": "c"
     },
     "clangd.fallbackFlags": [
         "  -I${workspaceFolder}/include"

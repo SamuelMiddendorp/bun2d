@@ -1,10 +1,14 @@
-#define STB_IMAGE_IMPLEMENTATION
-#include <stb_image.h>
+#ifndef MY_HEADER_INCLUDED
+#define MY_HEADER_INCLUDED
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
 #include <stdio.h>
 #include <ctype.h>
+#include <math.h>
+#include <string.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 #define BUN2D_PRESS 1
@@ -193,9 +197,6 @@ void bun2dText(char *text, int x, int y, Pixel color);
 void bun2dSetLight(int x, int y, unsigned int strength);
 Model *bun2dMakeModel(Voxel *data, unsigned int length);
 Model *bun2dLoadModel(char *adress);
-Model *bun2dHotLoadPngModel(char *adress);
-Model *bun2dLoadPngModel(char *adress);
-FastModel *bun2dLoadPngModelFast(char *adress);
 void bun2dDrawModel(Model *model, int x, int y, unsigned int scale);
 void bun2dDrawModelFast(FastModel *model, int x, int y);
 void bun2dDrawModelBulk(Model *model, int count, int *coords);
@@ -445,7 +446,7 @@ void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
 
     // Does not check bounds, this might cause trouble
     // Arbitrairy value that keeps width in check
-    int widthCorrected = width + x > bun2d.src_width ? bun2d.src_width - x : width; 
+    int widthCorrected = width + x > bun2d.src_width ? bun2d.src_width - x : width;
     unsigned int size = sizeof(Pixel) * widthCorrected;
     for (int i = 0; i < widthCorrected * 4; i += 4)
     {
@@ -541,14 +542,14 @@ Model *bun2dLoadModel(char *adress)
     int entries = 0;
     do
     {
-        int foo = fscanf(file,
-                         "%hhu,%hhu,%hhu,%hhu,%hu,%hu\n",
-                         &temp[entries].r,
-                         &temp[entries].g,
-                         &temp[entries].b,
-                         &temp[entries].a,
-                         &temp[entries].x,
-                         &temp[entries].y);
+        fscanf(file,
+               "%hhu,%hhu,%hhu,%hhu,%hu,%hu\n",
+               &temp[entries].r,
+               &temp[entries].g,
+               &temp[entries].b,
+               &temp[entries].a,
+               &temp[entries].x,
+               &temp[entries].y);
         entries++;
     } while (!feof(file));
     fclose(file);
@@ -559,78 +560,6 @@ Model *bun2dLoadModel(char *adress)
     memcpy(m->data, temp, sizeof(Voxel) * entries);
     free(temp);
 
-    return m;
-}
-
-Model *bun2dHotLoadPngModel(char *adress)
-{
-}
-
-Model *bun2dLoadPngModel(char *adress)
-{
-    printf("Loading png %s", adress);
-    stbi_set_flip_vertically_on_load(1);
-    int x, y, n;
-    unsigned char *data = stbi_load(adress, &x, &y, &n, 0);
-    printf("Loading png, width: %d, height: %d, channels: %d", x, y, n);
-    int entries = x * y;
-    Model *m = malloc(sizeof(Model));
-    m->data = malloc(sizeof(Voxel) * entries);
-    m->length = entries;
-    int currentEntry = 0;
-    int threshHold = 220;
-    for (int i = 0; i < x * n; i += n)
-    {
-        for (int j = 0; j < y * n; j += n)
-        {
-            int index = x * j + i;
-            if (data[index] >= threshHold && data[index + 1] >= threshHold && data[index + 2] >= threshHold)
-            {
-                continue;
-            }
-            m->data[currentEntry].r = data[index];
-            m->data[currentEntry].g = data[index + 1];
-            m->data[currentEntry].b = data[index + 2];
-            // For now always fully opaque
-            m->data[currentEntry].a = 255;
-            m->data[currentEntry].x = i == 0 ? 0 : i / n;
-            m->data[currentEntry].y = j == 0 ? 0 : j / n;
-            currentEntry++;
-        }
-    }
-    stbi_image_free(data);
-    return m;
-}
-/// @brief Only for opaque models without transparent pixels
-/// @param adress
-/// @return The model reference that can be passed to render
-FastModel *bun2dLoadPngModelFast(char *adress)
-{
-    printf("Loading png");
-    stbi_set_flip_vertically_on_load(1);
-    int x, y, n;
-    unsigned char *data = stbi_load(adress, &x, &y, &n, 0);
-    printf("Loading png, width: %d, height: %d, channels: %d", x, y, n);
-    int entries = x * y;
-    FastModel *m = malloc(sizeof(FastModel));
-    m->data = malloc(sizeof(Pixel) * entries);
-    m->length = entries;
-    m->width = x;
-    m->height = y;
-    int currentEntry = 0;
-    for (int i = 0; i < x * n; i += n)
-    {
-        for (int j = 0; j < y * n; j += n)
-        {
-            int index = x * i + j;
-            m->data[currentEntry].r = data[index];
-            m->data[currentEntry].g = data[index + 1];
-            m->data[currentEntry].b = data[index + 2];
-            m->data[currentEntry].a = n > 3 ? data[index + 3] : 255;
-            currentEntry++;
-        }
-    }
-    stbi_image_free(data);
     return m;
 }
 
@@ -809,6 +738,7 @@ static void bun2dResizeDrawingArea()
 
 static void bun2dResizeWindow(GLFWwindow *window, int width, int height)
 {
+    (void)window;
 #ifndef __APPLE__
     glViewport(0, 0, width, height);
 #endif
@@ -949,9 +879,9 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
 
 int bun2dTick()
 {
-    #ifdef BUN2D_HOTRELOAD
-    
-    #endif
+#ifdef BUN2D_HOTRELOAD
+
+#endif
     double currentTime = glfwGetTime();
     bun2d.frameTime = currentTime - bun2d.lastTime;
     bun2d.lastTime = currentTime;
@@ -966,11 +896,15 @@ int bun2dTick()
 
 void bun2dInput(GLFWwindow *win, int key, int code, int action, int mod)
 {
+    (void)win;
+    (void)code;
+    (void)mod;
     bun2d.keys[key] = action;
 }
 
 void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
+    (void)window;
     bun2d.win_width = width;
     bun2d.win_height = height;
     glViewport(0, 0, width, height);
@@ -996,4 +930,5 @@ Pixel divPixel(Pixel p, float d)
     return new;
 }
 
+#endif
 #endif

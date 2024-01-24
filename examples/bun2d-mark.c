@@ -1,5 +1,6 @@
 #define BUN2D_IMPLEMENTATION
 #include <bun2d.h>
+#include <bun2d_image.h>
 
 #define MAX_BUNS 50000
 
