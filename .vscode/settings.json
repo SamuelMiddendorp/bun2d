@@ -1,7 +1,8 @@
 {
     "files.associations": {
         "stdio.h": "c",
-        "bun2d.h": "c"
+        "bun2d.h": "c",
+        "glad.h": "c"
     },
     "clangd.fallbackFlags": [
         "  -I${workspaceFolder}/include"

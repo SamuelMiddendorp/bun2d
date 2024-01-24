@@ -14,8 +14,8 @@ int main()
     int bound = 1000; 
     bun2dInit(1, bound, bound, 2560, 1440);
 
-    Model *bunModel = bun2dLoadPngModel("kells_rip_small.png");
-    FastModel *fastModel = bun2dLoadPngModelFast("kells_rip_small.png");
+    Model *bunModel = bun2dLoadPngModel("res/kells_rip_small.png");
+    FastModel *fastModel = bun2dLoadPngModelFast("res/kells_rip_small.png");
 
     int bunWidth = 12;
     int bunheight = 8;
