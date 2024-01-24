@@ -1,5 +1,5 @@
-#ifndef MY_HEADER_INCLUDED
-#define MY_HEADER_INCLUDED
+#ifndef BUN2D
+#define BUN2D 
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
