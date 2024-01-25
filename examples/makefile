@@ -48,3 +48,6 @@ bun2d-benchmark:
 camera:
 	gcc $(FLAGS) $(INCLUDE) camera.c glad.c -O1 -o run $(LIB) 
 	./run
+raycaster:
+	gcc $(FLAGS) $(INCLUDE) raycaster.c glad.c -O1 -o run $(LIB) 
+	./run
