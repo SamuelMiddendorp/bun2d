@@ -10,12 +10,13 @@ Vec2 vec_sub(Vec2 a, Vec2 b);
 
 int main()
 {
-    bool world[50 * 50];
+    int worldSize = 800;
+    bool world[800 * 800];
     Vec2 pos = {5, 0};
     // init world
-    for (int i = 0; i < 50 * 50; i++)
+    for (int i = 0; i < worldSize * worldSize; i++)
     {
-        if (rand() % 100 > 98)
+        if (rand() % 1000 > 995)
         {
             world[i] = true;
         }
@@ -26,12 +27,25 @@ int main()
     }
     Pixel color = {255, 50, 50, 255};
 
-    char maxRayMarch = 100;
-    bun2dInit(1, 50, 50, 800, 800);
+    int maxRayMarch = 500;
+    bun2dInit(0, worldSize, worldSize, 1440, 1440);
     while (bun2dTick())
     {
         bun2dClear();
         Point p = bun2dGetMouse();
+        if(bun2dKey(KEY_W) > 0){
+            pos.y+=0.1;
+        }
+        if(bun2dKey(KEY_S) > 0){
+            pos.y-=0.1;
+        }
+        if(bun2dKey(KEY_D) > 0){
+            pos.x+=0.1;
+        }
+        if(bun2dKey(KEY_A) > 0){
+            pos.x-=0.1;
+        }
+
         // for (int i = 0; i < rays; i++)
         // {
         //     Vec2 headingVec = {cos(radians), sin(radians)};
@@ -54,13 +68,14 @@ int main()
             newHeading.y = headingVec.y * (i + 1);
             Vec2 newPos;
             vec_sum(&newPos, pos, newHeading);
-            int worldPos = 50 * (int)newPos.x + (int)newPos.y;
+            int worldPos = worldSize * (int)newPos.x + (int)newPos.y;
             // Check for uninitialized memory
-            if(worldPos > 50 * 50 - 1){
+            if(worldPos > worldSize * worldSize - 1){
                 break;
             }
             if(world[worldPos]){
                 bun2dLine(pos.x, pos.y, newPos.x, newPos.y, GREEN);
+                world[worldPos] = false;
                 found = true;
                 break;
             }
@@ -70,9 +85,9 @@ int main()
         }
 
         // draw the world
-        for(int i = 0; i < 50; i++){
-        for(int j = 0; j < 50; j++){
-            if(world[50 * i + j]){
+        for(int i = 0; i < worldSize; i++){
+        for(int j = 0; j < worldSize; j++){
+            if(world[worldSize* i + j]){
                 bun2dPixel(i,j,color);
             }
         }
