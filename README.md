@@ -5,8 +5,12 @@ Small game engine to render some 2d games
 - Shapes (cirlce, line, rectangle) ✓
 - Input (key state)  ✓
 - Pixel font [] (Not all letters included yet)
-- Prefabs []
-- Engine []
+- Prefabs ✓
+- Engine ✓
+- Png loading ✓
+- Png rendering ✓
+- Scaling ✓
+- Optimized rendering ✓
 - Physics []
 - ECS []
 
