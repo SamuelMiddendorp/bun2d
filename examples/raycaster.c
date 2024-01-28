@@ -34,15 +34,17 @@ int main()
             world[i] = false;
         }
     }
-    Pixel color = {255, 50, 50, 255};
+    Pixel color = {255, 50, 50, 50};
 
-    int maxRayMarch = 50;
+    int maxRayMarch = 20;
     bun2dInit(1, WORLD_SIZE, WORLD_SIZE, 1440, 1440);
     while (bun2dTick())
     {
         bun2dClear();
         Point p = bun2dGetMouse();
         Vec2 mouseHeadingVec = {p.x - pos.x, p.y - pos.y};
+        float mag = vec_mag(mouseHeadingVec);
+        vec_div(&mouseHeadingVec, mag);
         float mouseAngle = atan2(mouseHeadingVec.y, mouseHeadingVec.x);
         Vec2 heading = {cos(mouseAngle), sin(mouseAngle)};
         heading.x *= 10;
@@ -69,6 +71,7 @@ int main()
         if (bun2dKey(KEY_SPACE) > 0){
             world[WORLD_SIZE * p.x + p.y] = true;
         }
+        // start
         float radians = mouseAngle - 1;
         // March a ray, very naive
         for (int x = 0; x < WORLD_SIZE; x++)
@@ -91,8 +94,14 @@ int main()
                 // Check for uninitialized memory
                 if (world[worldPos])
                 {
+                    // offset for warping
+                    float dist = getDist(pos.x, pos.y, newPos.x, newPos.y);
+                    float ca = mouseAngle - radians;
+                    dist = dist * cos(ca);                    
                     // bun2dLine(pos.x, pos.y, newPos.x, newPos.y, GREEN);
-                    bun2dFillRect(WORLD_SIZE - x, 0, 1, 50 - i, BLUE);
+                    Pixel col = BLUE;
+                    col.b = col.b / (dist/10);
+                    bun2dFillRect(WORLD_SIZE - x, 25, 1, 100 / dist, col);
                     found = true;
                     break;
                 }
