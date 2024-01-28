@@ -1,5 +1,6 @@
 #define BUN2D_IMPLEMENTATION
 #include <bun2d.h>
+#include <bun2d_image.h>
 
 typedef struct
 {
@@ -41,7 +42,7 @@ FastModel* emptyModel;
 
 int main()
 {
-    emptyModel = bun2dLoadPngModelFast("Sprite-empty.png");
+    emptyModel = bun2dLoadPngModelFast("res/Sprite-empty.png");
     int money = 0;
     float speed = 0.8;
     float lightStrength = 1;
@@ -53,16 +54,16 @@ int main()
     carrot.maxState = 2;
     carrot.state = 0;
     carrot.models = malloc(sizeof(Model*) * carrot.maxState);
-    carrot.models[0] = bun2dLoadPngModelFast("Sprite-0001.png");
-    carrot.models[1] = bun2dLoadPngModelFast("Sprite-0002.png");
-    carrot.models[2] = bun2dLoadPngModelFast("Sprite-0003.png");
+    carrot.models[0] = bun2dLoadPngModelFast("res/Sprite-0001.png");
+    carrot.models[1] = bun2dLoadPngModelFast("res/Sprite-0002.png");
+    carrot.models[2] = bun2dLoadPngModelFast("res/Sprite-0003.png");
     Crop radish = {{50,0,0,255}, 50, 0, 35, 5};
     radish.maxState = 2;
     radish.state = 0;
     radish.models = malloc(sizeof(Model*) * radish.maxState);
-    radish.models[0] = bun2dLoadPngModelFast("Sprite-radish1.png");
-    radish.models[1] = bun2dLoadPngModelFast("Sprite-radish2.png");
-    radish.models[2] = bun2dLoadPngModelFast("Sprite-radish3.png");
+    radish.models[0] = bun2dLoadPngModelFast("res/Sprite-radish1.png");
+    radish.models[1] = bun2dLoadPngModelFast("res/Sprite-radish2.png");
+    radish.models[2] = bun2dLoadPngModelFast("res/Sprite-radish3.png");
 
     Crop currentCrop = carrot;
 
@@ -70,7 +71,7 @@ int main()
     f2.crops = calloc(f2.maxCrops, sizeof(Crop));
     int placeTimer = 0;
     int frameTimer = 0;
-    Model* playerModel = bun2dLoadModel("bun.csv");
+    Model* playerModel = bun2dLoadModel("res/bun.csv");
     while (bun2dTick())
     {
         p.velocity.x = 0;
