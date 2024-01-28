@@ -32,7 +32,7 @@ int main()
     bun2dInit(1, worldSize, worldSize, 1440, 1440);
     while (bun2dTick())
     {
-        float radians = 0.6;
+        float radians = 2.5;
         bun2dClear();
         Point p = bun2dGetMouse();
         if (bun2dKey(KEY_W) > 0)
@@ -60,7 +60,7 @@ int main()
         for (int x = 0; x < rays; x++)
         {
             Vec2 headingVec = {cos(radians), sin(radians)};
-            radians += 0.05;
+            radians -= 0.05;
             bool found = false;
             for (int i = 0; i < maxRayMarch; i++)
             {
@@ -78,7 +78,7 @@ int main()
                 if (world[worldPos])
                 {
                     // bun2dLine(pos.x, pos.y, newPos.x, newPos.y, GREEN);
-                    bun2dFillRect(x + 1, 0, 1, 60 / (i / 2), BLUE);
+                    bun2dFillRect(x + 1, 0, 1, 60 / (i), BLUE);
                     found = true;
                     break;
                 }
