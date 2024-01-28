@@ -42,6 +42,13 @@ int main()
     {
         bun2dClear();
         Point p = bun2dGetMouse();
+        Vec2 mouseHeadingVec = {p.x - pos.x, p.y - pos.y};
+        float mouseAngle = atan2(mouseHeadingVec.y, mouseHeadingVec.x);
+        Vec2 heading = {cos(mouseAngle), sin(mouseAngle)};
+        heading.x *= 10;
+        heading.y *= 10;
+        bun2dLine(pos.x, pos.y, pos.x + heading.x, pos.y + heading.y, color);
+        printf("Angle: %f", mouseAngle);
         if (bun2dKey(KEY_W) > 0)
         {
             pos.y += 0.1;
@@ -62,7 +69,7 @@ int main()
         if (bun2dKey(KEY_SPACE) > 0){
             world[WORLD_SIZE * p.x + p.y] = true;
         }
-        float radians = RADIANS_START;
+        float radians = mouseAngle - 1;
         // March a ray, very naive
         for (int x = 0; x < WORLD_SIZE; x++)
         {
