@@ -74,7 +74,7 @@ int main()
                 Vec3 headingBar;
                 headingBar.x = uv.x;
                 headingBar.y = uv.y;
-                headingBar.z = 1;
+                headingBar.z = 0.4;
 
                 float mag = getMag(headingBar);
 
