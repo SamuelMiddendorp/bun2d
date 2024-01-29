@@ -30,9 +30,9 @@ int main()
         }
     }
 
-    Vec3 pos = {1, 1, 5};
+    Vec3 pos = {0, 0, 5};
     bun2dInit(1, screenWidth, screenHeight, 800, 800);
-    int maxRays = 20;
+    int maxRays = 50;
     while (bun2dTick())
     {
         float fov = toRad(120);
@@ -40,16 +40,22 @@ int main()
 
         bun2dClear();
         if(bun2dKey(KEY_W) > 0){
-            pos.z-=0.01;
+            pos.z-=0.1;
         }
         if(bun2dKey(KEY_S) > 0){
-            pos.z+=0.01;
+            pos.z+=0.1;
+        }
+        if(bun2dKey(KEY_A) > 0){
+            pos.x+=0.01;
+        }
+        if(bun2dKey(KEY_D) > 0){
+            pos.x-=0.01;
         }
         // Cast rays for every pixel on the screen
-        float radY = toRad(30);
+        float radY = toRad(120);
         for (int y = 0; y < screenHeight; y++)
         {
-            float radX = toRad(30);
+            float radX = toRad(120);
             for (int x = 0; x < screenWidth; x++)
             {
                 // Cast ray
@@ -60,8 +66,8 @@ int main()
 
                 for (int r = 0; r < maxRays; r++)
                 {
-                    Vec3 heading3 = {headingX.y * (r + 1), headingY.y * (r + 1), headingX.x * (r + 1)};
-                    Vec3 newWorldPos = {pos.x + heading3.x, pos.y + heading3.y, pos.z + heading3.y};
+                    Vec3 heading3 = {headingY.x * (r + 1), headingY.y * (r + 1), headingX.y * (r + 1)};
+                    Vec3 newWorldPos = {pos.x + heading3.x, pos.y + heading3.y, pos.z + heading3.z};
                     int worldDim = toWorldArray(newWorldPos.x, newWorldPos.y, newWorldPos.z);
                     if (newWorldPos.x > WORLD_DIM || newWorldPos.y > WORLD_DIM || newWorldPos.z > WORLD_DIM ){
                         break;
@@ -69,12 +75,13 @@ int main()
                     if (world[worldDim])
                     {
                         Pixel c = RED;
-                        bun2dPixel(x, y, c);
+                        c.r = c.r / (r + 1);
+                        bun2dPixel(screenWidth - x, screenHeight - y, c);
                         break;
                     }
                 }
                 // Debug
-                bun2dLine(pos.x, pos.y, pos.x + headingX.y * 10, pos.y + headingY.x * 10, BLUE);
+                // bun2dLine(screenWidth / 2, screenHeight / 2, pos.x + headingX.y * 10, pos.y + headingY.x * 10, BLUE);
                 radX += radStep;
             }
             radY += radStep;
