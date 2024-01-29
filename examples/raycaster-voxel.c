@@ -10,7 +10,7 @@ typedef struct
 } Vec3;
 
 #define PI 3.14159265358979323846
-#define WORLD_DIM 50
+#define WORLD_DIM 10
 #define WORLD_SIZE WORLD_DIM *WORLD_DIM *WORLD_DIM
 
 int main()
@@ -20,7 +20,7 @@ int main()
     bool world[WORLD_SIZE];
     for (int i = 0; i < WORLD_SIZE; i++)
     {
-        if (rand() % 10000 > 9900)
+        if (rand() % 1000 > 900)
         {
             world[i] = true;
         }
@@ -30,9 +30,9 @@ int main()
         }
     }
 
-    Vec3 pos = {0, 0, 5};
+    Vec3 pos = {1, 1, 5};
     bun2dInit(1, screenWidth, screenHeight, 800, 800);
-    int maxRays = 30;
+    int maxRays = 20;
     while (bun2dTick())
     {
         float fov = toRad(120);
@@ -73,6 +73,8 @@ int main()
                         break;
                     }
                 }
+                // Debug
+                bun2dLine(pos.x, pos.y, pos.x + headingX.y * 10, pos.y + headingY.x * 10, BLUE);
                 radX += radStep;
             }
             radY += radStep;
