@@ -22,7 +22,7 @@ int main()
     bool world[WORLD_SIZE];
     for (int i = 0; i < WORLD_SIZE; i++)
     {
-        if (rand() % 1000 > 950)
+        if (rand() % 1000 > 990)
         {
             world[i] = true;
         }
@@ -74,7 +74,7 @@ int main()
                 Vec3 headingBar;
                 headingBar.x = uv.x;
                 headingBar.y = uv.y;
-                headingBar.z = 0.4;
+                headingBar.z = 1;
 
                 float mag = getMag(headingBar);
 
