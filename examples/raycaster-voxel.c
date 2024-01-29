@@ -60,16 +60,15 @@ int main()
 
                 for (int r = 0; r < maxRays; r++)
                 {
-                    Vec3 heading3 = {headingX.x * (r + 1), headingY.y * (r + 1), headingX.x * (r + 1)};
+                    Vec3 heading3 = {headingX.y * (r + 1), headingY.y * (r + 1), headingX.x * (r + 1)};
                     Vec3 newWorldPos = {pos.x + heading3.x, pos.y + heading3.y, pos.z + heading3.y};
                     int worldDim = toWorldArray(newWorldPos.x, newWorldPos.y, newWorldPos.z);
-                    if (worldDim >= WORLD_SIZE -1){
+                    if (newWorldPos.x > WORLD_DIM || newWorldPos.y > WORLD_DIM || newWorldPos.z > WORLD_DIM ){
                         break;
                     }
                     if (world[worldDim])
                     {
                         Pixel c = RED;
-                        c.r = c.r / r;
                         bun2dPixel(x, y, c);
                         break;
                     }
