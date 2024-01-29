@@ -51,3 +51,6 @@ camera:
 raycaster:
 	gcc $(FLAGS) $(INCLUDE) raycaster.c glad.c -O1 -o run $(LIB) 
 	./run
+raycaster-voxel:
+	gcc $(FLAGS) $(INCLUDE) raycaster-voxel.c glad.c -O1 -o run $(LIB) 
+	./run
