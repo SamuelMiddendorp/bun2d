@@ -9,7 +9,7 @@ typedef struct
 int toWorldArray(int x, int y, int z);
 float toRad(float degrees);
 float getMag(Vec3 vec);
-
+float getDist3(Vec3 v1, Vec3 v2);
 
 #define PI 3.14159265358979323846
 #define WORLD_DIM 10
@@ -17,44 +17,56 @@ float getMag(Vec3 vec);
 
 int main()
 {
-    const int screenWidth = 50;
-    const int screenHeight = 50;
+    Vec3 positionsOcc[10] = {
+        {0, 0, 1},
+        {0, 0, 2},
+        {0, 1, 2.2}
+    };
+    const int screenWidth = 200;
+    const int screenHeight = 200;
     bool world[WORLD_SIZE];
     for (int i = 0; i < WORLD_SIZE; i++)
     {
-        if (rand() % 1000 > 990)
-        {
-            world[i] = true;
-        }
-        else
-        {
-            world[i] = false;
-        }
+        // if (rand() % 1000 > 990)
+        // {
+        world[i] = true;
+        // }
+        // else
+        // {
+        //     world[i] = false;
+        // }
     }
 
     Vec3 pos = {0, 0, 0};
+    float speed = 0.04;
     bun2dInit(1, screenWidth, screenHeight, 800, 800);
     int maxRays = 100;
     while (bun2dTick())
     {
         bun2dClear();
-        if(bun2dKey(KEY_W) > 0){
-            pos.z-=0.01;
+        if (bun2dKey(KEY_W) > 0)
+        {
+            pos.z += speed;
         }
-        if(bun2dKey(KEY_S) > 0){
-            pos.z+=0.01;
+        if (bun2dKey(KEY_S) > 0)
+        {
+            pos.z -= speed;
         }
-        if(bun2dKey(KEY_A) > 0){
-            pos.x+=0.01;
+        if (bun2dKey(KEY_A) > 0)
+        {
+            pos.x -= speed;
         }
-        if(bun2dKey(KEY_D) > 0){
-            pos.x-=0.01;
+        if (bun2dKey(KEY_D) > 0)
+        {
+            pos.x += speed;
         }
-        if(bun2dKey(KEY_Q) > 0){
-            pos.y+=0.01;
+        if (bun2dKey(KEY_Q) > 0)
+        {
+            pos.y += speed;
         }
-        if(bun2dKey(KEY_E) > 0){
-            pos.y-=0.01;
+        if (bun2dKey(KEY_E) > 0)
+        {
+            pos.y -= speed;
         }
 
         for (int y = 0; y < screenHeight; y++)
@@ -62,9 +74,9 @@ int main()
             for (int x = 0; x < screenWidth; x++)
             {
                 Vec2 uv;
-                uv.x = (x * 0.5 - screenWidth) / screenWidth;
-                uv.y = (y * 0.5 - screenHeight) / screenHeight;
-
+                uv.x = ((float)x - 0.5*screenWidth) / screenHeight;
+                uv.y = ((float)y - 0.5*screenHeight) / screenHeight;
+                //printf("%f, %f\n", uv.x, uv.y);
 
                 // Cast ray
                 // _ and y
@@ -74,42 +86,66 @@ int main()
                 Vec3 headingBar;
                 headingBar.x = uv.x;
                 headingBar.y = uv.y;
-                headingBar.z = 1;
+                headingBar.z = 0.9;
 
                 float mag = getMag(headingBar);
-
+                //printf("%f", mag);
                 headingBar.x /= mag;
                 headingBar.y /= mag;
                 headingBar.z /= mag;
                 // Calculate heading vector;
 
-                Vec3 newHeading;
-                newHeading.x = headingBar.x - pos.x;
-                newHeading.y = headingBar.y - pos.y;
-                newHeading.z = headingBar.z - pos.z;
+                // Vec3 newHeading;
+                // newHeading.x = headingBar.x - pos.x;
+                // newHeading.y = headingBar.y - pos.y;
+                // newHeading.z = headingBar.z - pos.z;
 
-                float mag2 = getMag(newHeading);
+                // float mag2 = getMag(newHeading);
 
-                newHeading.x /= mag2;
-                newHeading.y /= mag2;
-                newHeading.z /= mag2;
-
-
+                // newHeading.x /= mag2;
+                // newHeading.y /= mag2;
+                // newHeading.z /= mag2;
+                // printf("%f, %f, %f \n", newHeading.x, newHeading.y, newHeading.z);
                 for (int r = 0; r < maxRays; r++)
                 {
-                    Vec3 heading3 = {newHeading.x * (r + 1), newHeading.y * (r + 1), newHeading.z * (r + 1)};
+                    bool found = false;
+                    Vec3 heading3 = {headingBar.x * (r + 1), headingBar.y * (r + 1), headingBar.z * (r + 1)};
                     Vec3 newWorldPos = {pos.x + heading3.x, pos.y + heading3.y, pos.z + heading3.z};
-                    int worldDim = toWorldArray(newWorldPos.x, newWorldPos.y, newWorldPos.z);
-                    if (newWorldPos.x > WORLD_DIM || newWorldPos.y > WORLD_DIM || newWorldPos.z > WORLD_DIM ){
-                        break;
-                    }
-                    if (world[worldDim])
+                    for (int v = 0; v < 10; v++)
                     {
-                        Pixel c = RED;
-                        c.r = c.r / (r + 1);
-                        bun2dPixel(x, y, c);
+                        Vec3 point = positionsOcc[v];
+                        // if ((int)newWorldPos.x == (int)point.x && (int)newWorldPos.y == (int)point.y && (int)newWorldPos.z == (int)point.z)
+                        // {
+                            //printf("RAY HIT! ray x:%f ray y:%f", uv.x, uv.y);
+                            float dist = getDist3(point, newWorldPos);
+                            if(dist < 0){
+                                break;
+                            }
+                            if(dist < 0.1){
+                            found = true;
+                            Pixel c = RED;
+                            bun2dPixel(x, y, c);
+                            break;
+                            }
+                        // }
+                    }
+                    if(found){
                         break;
                     }
+                    // if(newWorldPos.x < 0 || newWorldPos.y < 0 || newWorldPos.z < 0){
+                    //     break;
+                    // }
+                    // int worldDim = toWorldArray(newWorldPos.x, newWorldPos.y, newWorldPos.z);
+                    // if (newWorldPos.x > WORLD_DIM || newWorldPos.y > WORLD_DIM || newWorldPos.z > WORLD_DIM ){
+                    //     break;
+                    // }
+                    // if (world[worldDim])
+                    // {
+                    //     Pixel c = RED;
+                    //     c.r = c.r / (r + 1);
+                    //     bun2dPixel(x, y, c);
+                    //     break;
+                    // }
                     // printf("[%f,%f,%f]\n", newWorldPos.x, newWorldPos.y, newWorldPos.z);
                     // break;
                 }
@@ -117,6 +153,7 @@ int main()
                 // bun2dLine(screenWidth / 2, screenHeight / 2, pos.x + headingX.y * 10, pos.y + headingY.x * 10, BLUE);
             }
         }
+        //sleep(1);
         // break;
     }
 }
@@ -130,6 +167,12 @@ float toRad(float degrees)
     return PI * degrees / 180;
 }
 
-float getMag(Vec3 vec){
+float getMag(Vec3 vec)
+{
     return sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+}
+
+float getDist3(Vec3 v1, Vec3 v2)
+{
+    return  sqrt( ((v2.x - v1.x) * (v2.x - v1.x)) + ((v2.y - v1.y) * (v2.y - v1.y)) + ((v2.z - v1.z) * (v2.z - v1.z)));
 }
