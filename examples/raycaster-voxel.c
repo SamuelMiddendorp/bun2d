@@ -20,10 +20,10 @@ int main()
     Vec3 positionsOcc[10] = {
         {0, 0, 1},
         {0, 0, 2},
-        {0, 1, 2.2}
+        {0, 1, 4}
     };
-    const int screenWidth = 200;
-    const int screenHeight = 200;
+    const int screenWidth = 500;
+    const int screenHeight = 500;
     bool world[WORLD_SIZE];
     for (int i = 0; i < WORLD_SIZE; i++)
     {
@@ -40,7 +40,8 @@ int main()
     Vec3 pos = {0, 0, 0};
     float speed = 0.04;
     bun2dInit(1, screenWidth, screenHeight, 800, 800);
-    int maxRays = 100;
+    int maxRays = 5;
+    float fov = 1;
     while (bun2dTick())
     {
         bun2dClear();
@@ -69,6 +70,17 @@ int main()
             pos.y -= speed;
         }
 
+        if (bun2dKey(KEY_UP) > 0)
+        {
+            fov+=0.01;
+        }
+        if (bun2dKey(KEY_DOWN) > 0)
+        {
+            fov-=0.01;
+        }
+
+
+
         for (int y = 0; y < screenHeight; y++)
         {
             for (int x = 0; x < screenWidth; x++)
@@ -86,7 +98,7 @@ int main()
                 Vec3 headingBar;
                 headingBar.x = uv.x;
                 headingBar.y = uv.y;
-                headingBar.z = 0.9;
+                headingBar.z = fov;
 
                 float mag = getMag(headingBar);
                 //printf("%f", mag);
@@ -111,6 +123,7 @@ int main()
                     bool found = false;
                     Vec3 heading3 = {headingBar.x * (r + 1), headingBar.y * (r + 1), headingBar.z * (r + 1)};
                     Vec3 newWorldPos = {pos.x + heading3.x, pos.y + heading3.y, pos.z + heading3.z};
+                    //printf("ray pos new: %f, %f, %f", newWorldPos.x, newWorldPos.y, newWorldPos.z);
                     for (int v = 0; v < 10; v++)
                     {
                         Vec3 point = positionsOcc[v];
@@ -121,9 +134,10 @@ int main()
                             if(dist < 0){
                                 break;
                             }
-                            if(dist < 0.1){
+                            if(dist < 0.5){
                             found = true;
                             Pixel c = RED;
+                            c.r = c.r * (1 - dist);
                             bun2dPixel(x, y, c);
                             break;
                             }
