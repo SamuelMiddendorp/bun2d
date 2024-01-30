@@ -27,12 +27,18 @@ int main()
     bool world[WORLD_SIZE];
     for (int i = 0; i < WORLD_SIZE; i++)
     {
-        if (rand() % 1000 > 990)
-        {
-        world[i] = true;
+        // if (rand() % 1000 > 990)
+        // {
+        // world[i] = true;
+        // }
+        // else
+        // {
+        //     world[i] = false;
+        // }
+        if(i % 10 == 0){
+            world[i] = true;
         }
-        else
-        {
+        else{
             world[i] = false;
         }
     }
