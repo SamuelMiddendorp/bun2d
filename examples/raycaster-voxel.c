@@ -22,8 +22,8 @@ int main()
         {0, 0, 2},
         {0, 1, 4}
     };
-    const int screenWidth = 100;
-    const int screenHeight = 100;
+    const int screenWidth = 200;
+    const int screenHeight = 200;
     bool world[WORLD_SIZE];
     for (int i = 0; i < WORLD_SIZE; i++)
     {
@@ -35,7 +35,7 @@ int main()
         // {
         //     world[i] = false;
         // }
-        if(i % 10 == 0){
+        if(i % 50 == 0){
             world[i] = true;
         }
         else{
@@ -130,42 +130,42 @@ int main()
                     Vec3 heading3 = {headingBar.x * (r / 5 + 1), headingBar.y * (r / 5 + 1), headingBar.z * (r / 5 + 1)};
                     Vec3 newWorldPos = {pos.x + heading3.x, pos.y + heading3.y, pos.z + heading3.z};
                     //printf("ray pos new: %f, %f, %f", newWorldPos.x, newWorldPos.y, newWorldPos.z);
-                    // for (int v = 0; v < 10; v++)
-                    // {
-                    //     Vec3 point = positionsOcc[v];
-                    //     // if ((int)newWorldPos.x == (int)point.x && (int)newWorldPos.y == (int)point.y && (int)newWorldPos.z == (int)point.z)
-                    //     // {
-                    //         //printf("RAY HIT! ray x:%f ray y:%f", uv.x, uv.y);
-                    //         float dist = getDist3(point, newWorldPos);
-                    //         if(dist < 0){
-                    //             break;
-                    //         }
-                    //         if(dist < 0.5){
-                    //         found = true;
-                    //         Pixel c = RED;
-                    //         c.r = c.r * (1 - dist);
-                    //         bun2dPixel(x, y, c);
-                    //         break;
-                    //         }
-                    //     // }
-                    // }
-                    if(newWorldPos.x < 0 || newWorldPos.y < 0 || newWorldPos.z < 0){
-                        break;
-                    }
-                    int worldDim = toWorldArray(newWorldPos.x, newWorldPos.y, newWorldPos.z);
-                    if (newWorldPos.x > WORLD_DIM || newWorldPos.y > WORLD_DIM || newWorldPos.z > WORLD_DIM ){
-                        break;
-                    }
-                    if (world[worldDim])
+                    for (int v = 0; v < 10; v++)
                     {
-                        found = true;
-                        Pixel c = RED;
-                        c.r = c.r / (r + 1);
-                        bun2dPixel(x, y, c);
-                        break;
+                        Vec3 point = positionsOcc[v];
+                        // if ((int)newWorldPos.x == (int)point.x && (int)newWorldPos.y == (int)point.y && (int)newWorldPos.z == (int)point.z)
+                        // {
+                            //printf("RAY HIT! ray x:%f ray y:%f", uv.x, uv.y);
+                            float dist = getDist3(point, newWorldPos);
+                            if(dist < 0){
+                                break;
+                            }
+                            if(dist < 0.1){
+                            found = true;
+                            Pixel c = RED;
+                            c.r = c.r * (1 - dist);
+                            bun2dPixel(x, y, c);
+                            break;
+                            }
+                        // }
                     }
-                    // printf("[%f,%f,%f]\n", newWorldPos.x, newWorldPos.y, newWorldPos.z);
-                    // break;
+                    // if(newWorldPos.x < 0 || newWorldPos.y < 0 || newWorldPos.z < 0){
+                    //     break;
+                    // }
+                    // int worldDim = toWorldArray(newWorldPos.x, newWorldPos.y, newWorldPos.z);
+                    // if (newWorldPos.x > WORLD_DIM || newWorldPos.y > WORLD_DIM || newWorldPos.z > WORLD_DIM ){
+                    //     break;
+                    // }
+                    // if (world[worldDim])
+                    // {
+                    //     found = true;
+                    //     Pixel c = RED;
+                    //     c.r = c.r / (r + 1);
+                    //     bun2dPixel(x, y, c);
+                    //     break;
+                    // }
+                    // // printf("[%f,%f,%f]\n", newWorldPos.x, newWorldPos.y, newWorldPos.z);
+                    // // break;
                     if(found){
                         break;
                     }
