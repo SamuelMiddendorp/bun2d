@@ -125,6 +125,7 @@ int main()
                 // newHeading.y /= mag2;
                 // newHeading.z /= mag2;
                 // printf("%f, %f, %f \n", newHeading.x, newHeading.y, newHeading.z);
+                Vec3 lastRay;
                 for (int r = 0; r < maxRays; r++)
                 {
                     bool found = false;
@@ -152,20 +153,27 @@ int main()
                     //     // }
                     // }
                     if(newWorldPos.x <= 0 || newWorldPos.y <= 0 || newWorldPos.z <= 0){
+                        lastRay = newWorldPos;
                         continue;
                     }
                     int worldDim = toWorldArray(newWorldPos.x, newWorldPos.y, newWorldPos.z);
                     if (newWorldPos.x >= WORLD_DIM || newWorldPos.y >= WORLD_DIM || newWorldPos.z >= WORLD_DIM ){
+                        lastRay = newWorldPos;
                         continue;
                     }
                     if (world[worldDim])
                     {
                         found = true;
                         Pixel c = RED;
-                        c.r = c.r / (r / 10 + 1);
+                        if((int)lastRay.x > (int)newWorldPos.x)
+                        {
+                            c.r = c.r / 2;
+                        }
                         bun2dPixel(x, y, c);
+                        lastRay = newWorldPos;
                         break;
                     }
+                        lastRay = newWorldPos;
                     // // printf("[%f,%f,%f]\n", newWorldPos.x, newWorldPos.y, newWorldPos.z);
                     // // break;
                     // if(found){
