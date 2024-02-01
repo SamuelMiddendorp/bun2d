@@ -1,5 +1,6 @@
 #define BUN2D_IMPLEMENTATION
 #include <bun2d.h>
+#include <unistd.h>
 
 typedef struct
 {
@@ -27,7 +28,7 @@ int main()
     bool world[WORLD_SIZE];
     for (int i = 0; i < WORLD_SIZE; i++)
     {
-        if (rand() % 1000 > 990)
+        if (rand() % 1000 > 995)
         {
         world[i] = true;
         }
@@ -91,6 +92,7 @@ int main()
         {
             for (int x = 0; x < screenWidth; x++)
             {
+                //sleep(0.1);
                 Vec2 uv;
                 uv.x = ((float)x - 0.5*screenWidth) / screenHeight;
                 uv.y = ((float)y - 0.5*screenHeight) / screenHeight;
@@ -110,7 +112,6 @@ int main()
                 //printf("%f", mag);
                 headingBar.x /= mag;
                 headingBar.y /= mag;
-                headingBar.z /= mag;
                 // Calculate heading vector;
 
                 // Vec3 newHeading;
@@ -150,11 +151,11 @@ int main()
                     //         }
                     //     // }
                     // }
-                    if(newWorldPos.x < 0 || newWorldPos.y < 0 || newWorldPos.z < 0){
+                    if(newWorldPos.x <= 0 || newWorldPos.y <= 0 || newWorldPos.z <= 0){
                         break;
                     }
                     int worldDim = toWorldArray(newWorldPos.x, newWorldPos.y, newWorldPos.z);
-                    if (newWorldPos.x > WORLD_DIM || newWorldPos.y > WORLD_DIM || newWorldPos.z > WORLD_DIM ){
+                    if (newWorldPos.x >= WORLD_DIM || newWorldPos.y >= WORLD_DIM || newWorldPos.z >= WORLD_DIM ){
                         break;
                     }
                     if (world[worldDim])
