@@ -133,17 +133,18 @@ int main()
                     for (int v = 0; v < 10; v++)
                     {
                         Vec3 point = positionsOcc[v];
-                        // if ((int)newWorldPos.x == (int)point.x && (int)newWorldPos.y == (int)point.y && (int)newWorldPos.z == (int)point.z)
-                        // {
+                        if ((int)newWorldPos.x == (int)point.x && (int)newWorldPos.y == (int)point.y && (int)newWorldPos.z == (int)point.z)
+                        {
                             //printf("RAY HIT! ray x:%f ray y:%f", uv.x, uv.y);
-                            float dist = getDist3(point, newWorldPos);
-                            if(dist < 0){
-                                break;
-                            }
-                            if(dist < 0.1){
+                            // float dist = getDist3(point, newWorldPos);
+                            // if(dist < 0){
+                            //     break;
+                            // }
+                            // if(dist < 0.1){
                             found = true;
                             Pixel c = RED;
-                            c.r = c.r * (1 - dist);
+                            // c.r = c.r * (1 - dist);
+                            c.r = c.r / ((r/50) + 1);
                             bun2dPixel(x, y, c);
                             break;
                             }
