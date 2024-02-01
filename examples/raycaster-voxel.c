@@ -12,7 +12,7 @@ float getMag(Vec3 vec);
 float getDist3(Vec3 v1, Vec3 v2);
 
 #define PI 3.14159265358979323846
-#define WORLD_DIM 50
+#define WORLD_DIM 100 
 #define WORLD_SIZE WORLD_DIM *WORLD_DIM *WORLD_DIM
 
 int main()
@@ -22,25 +22,25 @@ int main()
         {0, 0, 2},
         {0, 1, 4}
     };
-    const int screenWidth = 200;
-    const int screenHeight = 200;
+    const int screenWidth = 500;
+    const int screenHeight = 500;
     bool world[WORLD_SIZE];
     for (int i = 0; i < WORLD_SIZE; i++)
     {
-        // if (rand() % 1000 > 990)
-        // {
-        // world[i] = true;
-        // }
-        // else
-        // {
-        //     world[i] = false;
-        // }
-        if(i % 50 == 0){
-            world[i] = true;
+        if (rand() % 1000 > 990)
+        {
+        world[i] = true;
         }
-        else{
+        else
+        {
             world[i] = false;
         }
+        // if(i % 50 == 0){
+        //     world[i] = true;
+        // }
+        // else{
+        //     world[i] = false;
+        // }
     }
 
     Vec3 pos = {0, 0, 0};
@@ -127,49 +127,49 @@ int main()
                 for (int r = 0; r < maxRays; r++)
                 {
                     bool found = false;
-                    Vec3 heading3 = {headingBar.x * (r / 5 + 1), headingBar.y * (r / 5 + 1), headingBar.z * (r / 5 + 1)};
+                    Vec3 heading3 = {headingBar.x * (r + 1), headingBar.y * (r + 1), headingBar.z * (r + 1)};
                     Vec3 newWorldPos = {pos.x + heading3.x, pos.y + heading3.y, pos.z + heading3.z};
                     //printf("ray pos new: %f, %f, %f", newWorldPos.x, newWorldPos.y, newWorldPos.z);
-                    for (int v = 0; v < 10; v++)
-                    {
-                        Vec3 point = positionsOcc[v];
-                        if ((int)newWorldPos.x == (int)point.x && (int)newWorldPos.y == (int)point.y && (int)newWorldPos.z == (int)point.z)
-                        {
-                            //printf("RAY HIT! ray x:%f ray y:%f", uv.x, uv.y);
-                            // float dist = getDist3(point, newWorldPos);
-                            // if(dist < 0){
-                            //     break;
-                            // }
-                            // if(dist < 0.1){
-                            found = true;
-                            Pixel c = RED;
-                            // c.r = c.r * (1 - dist);
-                            c.r = c.r / ((r/50) + 1);
-                            bun2dPixel(x, y, c);
-                            break;
-                            }
-                        // }
-                    }
-                    // if(newWorldPos.x < 0 || newWorldPos.y < 0 || newWorldPos.z < 0){
-                    //     break;
-                    // }
-                    // int worldDim = toWorldArray(newWorldPos.x, newWorldPos.y, newWorldPos.z);
-                    // if (newWorldPos.x > WORLD_DIM || newWorldPos.y > WORLD_DIM || newWorldPos.z > WORLD_DIM ){
-                    //     break;
-                    // }
-                    // if (world[worldDim])
+                    // for (int v = 0; v < 10; v++)
                     // {
-                    //     found = true;
-                    //     Pixel c = RED;
-                    //     c.r = c.r / (r + 1);
-                    //     bun2dPixel(x, y, c);
-                    //     break;
+                    //     Vec3 point = positionsOcc[v];
+                    //     if ((int)newWorldPos.x == (int)point.x && (int)newWorldPos.y == (int)point.y && (int)newWorldPos.z == (int)point.z)
+                    //     {
+                    //         //printf("RAY HIT! ray x:%f ray y:%f", uv.x, uv.y);
+                    //         // float dist = getDist3(point, newWorldPos);
+                    //         // if(dist < 0){
+                    //         //     break;
+                    //         // }
+                    //         // if(dist < 0.1){
+                    //         found = true;
+                    //         Pixel c = RED;
+                    //         // c.r = c.r * (1 - dist);
+                    //         c.r = c.r / ((r/50) + 1);
+                    //         bun2dPixel(x, y, c);
+                    //         break;
+                    //         }
+                    //     // }
                     // }
-                    // // printf("[%f,%f,%f]\n", newWorldPos.x, newWorldPos.y, newWorldPos.z);
-                    // // break;
-                    if(found){
+                    if(newWorldPos.x < 0 || newWorldPos.y < 0 || newWorldPos.z < 0){
                         break;
                     }
+                    int worldDim = toWorldArray(newWorldPos.x, newWorldPos.y, newWorldPos.z);
+                    if (newWorldPos.x > WORLD_DIM || newWorldPos.y > WORLD_DIM || newWorldPos.z > WORLD_DIM ){
+                        break;
+                    }
+                    if (world[worldDim])
+                    {
+                        found = true;
+                        Pixel c = RED;
+                        c.r = c.r / (r / 10 + 1);
+                        bun2dPixel(x, y, c);
+                        break;
+                    }
+                    // // printf("[%f,%f,%f]\n", newWorldPos.x, newWorldPos.y, newWorldPos.z);
+                    // // break;
+                    // if(found){
+                    //     break;
+                    // }
                 }
                 // Debug
                 // bun2dLine(screenWidth / 2, screenHeight / 2, pos.x + headingX.y * 10, pos.y + headingY.x * 10, BLUE);
