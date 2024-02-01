@@ -25,16 +25,16 @@ int main()
     };
     const int screenWidth = 500;
     const int screenHeight = 500;
-    bool world[WORLD_SIZE];
+    unsigned char world[WORLD_SIZE];
     for (int i = 0; i < WORLD_SIZE; i++)
     {
         if (rand() % 1000 > 995)
         {
-        world[i] = true;
+        world[i] = rand() % 255;
         }
         else
         {
-            world[i] = false;
+            world[i] = 0;
         }
         // if(i % 50 == 0){
         //     world[i] = true;
@@ -161,14 +161,17 @@ int main()
                         lastRay = newWorldPos;
                         continue;
                     }
-                    if (world[worldDim])
+                    if (world[worldDim] > 0)
                     {
                         found = true;
                         Pixel c = RED;
+                        c.r = 150;
                         if((int)lastRay.x > (int)newWorldPos.x)
                         {
-                            c.r = c.r / 2;
+                            c.r = c.r / 1.3;
                         }
+                        c.b = world[worldDim];
+                        c.g = world[worldDim];
                         bun2dPixel(x, y, c);
                         lastRay = newWorldPos;
                         break;
