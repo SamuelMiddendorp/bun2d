@@ -45,7 +45,7 @@ int main()
     }
 
     Vec3 pos = {0, 0, 0};
-    float speed = 0.04;
+    float speed = 1;
     bun2dInit(1, screenWidth, screenHeight, 800, 800);
     int maxRays = 100;
     float fov = 1;
@@ -152,11 +152,11 @@ int main()
                     //     // }
                     // }
                     if(newWorldPos.x <= 0 || newWorldPos.y <= 0 || newWorldPos.z <= 0){
-                        break;
+                        continue;
                     }
                     int worldDim = toWorldArray(newWorldPos.x, newWorldPos.y, newWorldPos.z);
                     if (newWorldPos.x >= WORLD_DIM || newWorldPos.y >= WORLD_DIM || newWorldPos.z >= WORLD_DIM ){
-                        break;
+                        continue;
                     }
                     if (world[worldDim])
                     {
