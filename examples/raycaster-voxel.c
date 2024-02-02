@@ -29,7 +29,7 @@ int main()
     world = malloc(sizeof(unsigned char) * WORLD_SIZE);
     for (int i = 0; i < WORLD_SIZE; i++)
     {
-        if (rand() % 1000 > 900)
+        if (rand() % 1000 > 997)
         {
         world[i] = rand() % 255;
         }
@@ -167,12 +167,15 @@ int main()
                         found = true;
                         Pixel c = RED;
                         c.r = 50;
-                        if((int)lastRay.x > (int)newWorldPos.x)
-                        {
-                            c.r = c.r / 1.3;
-                        }
                         c.b = world[worldDim];
                         c.g = 255 - world[worldDim];
+                        if((int)lastRay.x > (int)newWorldPos.x
+                            || (int)lastRay.x < (int)newWorldPos.x)
+                        {
+                            c.r = c.r / 1.3;
+                            c.g = c.g / 1.3;
+                            c.b = c.b / 1.3;
+                        }
                         bun2dPixel(x, y, c);
                         lastRay = newWorldPos;
                         break;
