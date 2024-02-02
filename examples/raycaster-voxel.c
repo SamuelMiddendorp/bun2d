@@ -13,7 +13,7 @@ float getMag(Vec3 vec);
 float getDist3(Vec3 v1, Vec3 v2);
 
 #define PI 3.14159265358979323846
-#define WORLD_DIM 100 
+#define WORLD_DIM 200 
 #define WORLD_SIZE WORLD_DIM *WORLD_DIM *WORLD_DIM
 
 int main()
@@ -25,10 +25,11 @@ int main()
     };
     const int screenWidth = 500;
     const int screenHeight = 500;
-    unsigned char world[WORLD_SIZE];
+    unsigned char* world;
+    world = malloc(sizeof(unsigned char) * WORLD_SIZE);
     for (int i = 0; i < WORLD_SIZE; i++)
     {
-        if (rand() % 1000 > 995)
+        if (rand() % 1000 > 900)
         {
         world[i] = rand() % 255;
         }
@@ -165,13 +166,13 @@ int main()
                     {
                         found = true;
                         Pixel c = RED;
-                        c.r = 150;
+                        c.r = 50;
                         if((int)lastRay.x > (int)newWorldPos.x)
                         {
                             c.r = c.r / 1.3;
                         }
                         c.b = world[worldDim];
-                        c.g = world[worldDim];
+                        c.g = 255 - world[worldDim];
                         bun2dPixel(x, y, c);
                         lastRay = newWorldPos;
                         break;
