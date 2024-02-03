@@ -18,38 +18,38 @@ float getDist3(Vec3 v1, Vec3 v2);
 
 int main()
 {
-    Vec3 positionsOcc[10] = {
-        {0, 0, 1},
-        {0, 0, 2},
-        {0, 1, 4}
-    };
+
+    // Define a resolution
+    // Currently not able to run natively with 100 rays;
     const int screenWidth = 500;
     const int screenHeight = 500;
     unsigned char* world;
     world = malloc(sizeof(unsigned char) * WORLD_SIZE);
     for (int i = 0; i < WORLD_SIZE; i++)
     {
+        // Some random positions filled with random colors
+        // Can be used later on to actually render the pixel's color
         if (rand() % 1000 > 997)
         {
         world[i] = rand() % 255;
         }
         else
         {
+            // We dont do a calloc but it might be faster to generate with a calloc?
             world[i] = 0;
         }
-        // if(i % 50 == 0){
-        //     world[i] = true;
-        // }
-        // else{
-        //     world[i] = false;
-        // }
     }
 
+    // Camera position
     Vec3 pos = {0, 0, 0};
+
     float speed = 1;
     bun2dInit(1, screenWidth, screenHeight, 800, 800);
+    // The max steps for the rays, putting a higher value costs a lot as of now
     int maxRays = 100;
+    // Some arbitrairy fov value, I am not smart enough to translate this into a fov in radians or degrees
     float fov = 1;
+
     while (bun2dTick())
     {
         bun2dClear();
@@ -87,72 +87,29 @@ int main()
             fov-=0.01;
         }
 
-
-
         for (int y = 0; y < screenHeight; y++)
         {
             for (int x = 0; x < screenWidth; x++)
             {
-                //sleep(0.1);
                 Vec2 uv;
-                uv.x = ((float)x - 0.5*screenWidth) / screenHeight;
-                uv.y = ((float)y - 0.5*screenHeight) / screenHeight;
-                //printf("%f, %f\n", uv.x, uv.y);
+                uv.x = (x - 0.5*screenWidth) / screenHeight;
+                uv.y = (y - 0.5*screenHeight) / screenHeight;
 
-                // Cast ray
-                // _ and y
-                // Vec2 headingY = {cos(radY), sin(radY)};
-                // // x and z
-                // Vec2 headingX = {cos(radX), sin(radX)};
                 Vec3 headingBar;
                 headingBar.x = uv.x;
                 headingBar.y = uv.y;
                 headingBar.z = fov;
 
                 float mag = getMag(headingBar);
-                //printf("%f", mag);
                 headingBar.x /= mag;
                 headingBar.y /= mag;
-                // Calculate heading vector;
 
-                // Vec3 newHeading;
-                // newHeading.x = headingBar.x - pos.x;
-                // newHeading.y = headingBar.y - pos.y;
-                // newHeading.z = headingBar.z - pos.z;
-
-                // float mag2 = getMag(newHeading);
-
-                // newHeading.x /= mag2;
-                // newHeading.y /= mag2;
-                // newHeading.z /= mag2;
-                // printf("%f, %f, %f \n", newHeading.x, newHeading.y, newHeading.z);
                 Vec3 lastRay;
                 for (int r = 0; r < maxRays; r++)
                 {
                     bool found = false;
                     Vec3 heading3 = {headingBar.x * (r + 1), headingBar.y * (r + 1), headingBar.z * (r + 1)};
                     Vec3 newWorldPos = {pos.x + heading3.x, pos.y + heading3.y, pos.z + heading3.z};
-                    //printf("ray pos new: %f, %f, %f", newWorldPos.x, newWorldPos.y, newWorldPos.z);
-                    // for (int v = 0; v < 10; v++)
-                    // {
-                    //     Vec3 point = positionsOcc[v];
-                    //     if ((int)newWorldPos.x == (int)point.x && (int)newWorldPos.y == (int)point.y && (int)newWorldPos.z == (int)point.z)
-                    //     {
-                    //         //printf("RAY HIT! ray x:%f ray y:%f", uv.x, uv.y);
-                    //         // float dist = getDist3(point, newWorldPos);
-                    //         // if(dist < 0){
-                    //         //     break;
-                    //         // }
-                    //         // if(dist < 0.1){
-                    //         found = true;
-                    //         Pixel c = RED;
-                    //         // c.r = c.r * (1 - dist);
-                    //         c.r = c.r / ((r/50) + 1);
-                    //         bun2dPixel(x, y, c);
-                    //         break;
-                    //         }
-                    //     // }
-                    // }
                     if(newWorldPos.x <= 0 || newWorldPos.y <= 0 || newWorldPos.z <= 0){
                         lastRay = newWorldPos;
                         continue;
@@ -181,18 +138,9 @@ int main()
                         break;
                     }
                         lastRay = newWorldPos;
-                    // // printf("[%f,%f,%f]\n", newWorldPos.x, newWorldPos.y, newWorldPos.z);
-                    // // break;
-                    // if(found){
-                    //     break;
-                    // }
                 }
-                // Debug
-                // bun2dLine(screenWidth / 2, screenHeight / 2, pos.x + headingX.y * 10, pos.y + headingY.x * 10, BLUE);
             }
         }
-        //sleep(1);
-        // break;
     }
 }
 int toWorldArray(int x, int y, int z)
