@@ -766,7 +766,7 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-    bun2d.window = glfwCreateWindow(bun2d.win_width, bun2d.win_height, "bun2d", NULL, NULL);
+    bun2d.window = glfwCreateWindow(bun2d.win_width, bun2d.win_height, "bun2d", glfwGetPrimaryMonitor(), NULL);
     if (bun2d.window == NULL)
     {
         printf("Failed to create glfwwindow");
