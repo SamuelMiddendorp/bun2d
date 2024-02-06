@@ -148,7 +148,7 @@ void* doRayCast(void *begin)
                     c.b = world[worldDim];
                     c.g = 255 - world[worldDim];
                     if ((int)lastRay.x > (int)newWorldPos.x || (int)lastRay.x < (int)newWorldPos.x
-                    || (int)lastRay.y > (int)newWorldPos.y)
+                    || (int)lastRay.y > (int)newWorldPos.y || (int)lastRay.y > (int)newWorldPos.y)
                     {
                         c.r = c.r / 1.3;
                         c.g = c.g / 1.3;
