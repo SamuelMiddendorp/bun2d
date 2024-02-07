@@ -143,16 +143,16 @@ void* doRayCast(void *begin)
                 if (world[worldDim] > 0)
                 {
                     found = true;
-                    Pixel c = RED;
-                    c.r = 50;
+                    Pixel c;
+                    c.r = world[worldDim];
                     c.b = world[worldDim];
                     c.g = 255 - world[worldDim];
                     if ((int)lastRay.x > (int)newWorldPos.x || (int)lastRay.x < (int)newWorldPos.x
                     || (int)lastRay.y > (int)newWorldPos.y || (int)lastRay.y > (int)newWorldPos.y)
                     {
-                        c.r = c.r / 1.3;
-                        c.g = c.g / 1.3;
-                        c.b = c.b / 1.3;
+                        c.r = c.r / 1.1;
+                        c.g = c.g / 1.1;
+                        c.b = c.b / 1.1;
                     }
                     bun2dPixel(x, y, c);
                     lastRay = newWorldPos;
