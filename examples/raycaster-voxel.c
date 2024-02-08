@@ -51,7 +51,7 @@ int main()
     }
 
     float speed = 1;
-    bun2dInit(1, screenWidth, screenHeight, 2560, 1440);
+    bun2dInit(1, screenWidth, screenHeight, 2560, 1440, "raycaster-voxel");
 
     while (bun2dTick())
     {
