@@ -14,3 +14,7 @@ Small game engine to render some 2d games
 - Physics []
 - ECS []
 
+
+currently the rendering api supports both transparent and opaque textures but has different optimized ways to render them
+
+
