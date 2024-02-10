@@ -233,7 +233,7 @@ static struct bun2dGlobal
     Light light;
 } bun2d = {NULL, 400, 400, 50, 50, 1.0f, 1.0f, {0}, NULL, 0, 0, NULL, NULL, {255, 255, 255, 255}, {0, 0, 0}};
 
-const char *vertexShaderSource = "#version 330 core\n"
+static const char *vertexShaderSource = "#version 330 core\n"
                                  "layout (location = 0) in vec4 vert;\n"
                                  "out vec2 TexCoord;\n"
                                  "void main()\n"
@@ -242,7 +242,7 @@ const char *vertexShaderSource = "#version 330 core\n"
                                  "TexCoord = vert.zw;\n"
                                  "}\0";
 
-const char *fragmentShaderSource = "#version 330 core\n"
+static const char *fragmentShaderSource = "#version 330 core\n"
                                    "out vec4 FragColor;\n"
                                    "in vec2 TexCoord;\n"
                                    "uniform sampler2D texture1;\n"
@@ -341,7 +341,7 @@ void putPixel(int x, int y, Pixel color)
     bun2d.buff[bun2d.src_width * y + x] = color;
 }
 
-int writeChar(char *l, int x, int y, Pixel color)
+static int writeChar(char *l, int x, int y, Pixel color)
 {
     int index = *l;
     int maxXOffset = 0;
@@ -370,6 +370,7 @@ void bun2dClear()
     memset(bun2d.buff, 0, bun2d.src_width * bun2d.src_height * sizeof(Pixel));
 }
 
+/// @brief Clears a specific pixel on the screen essentially making it black with 0 transparancy
 void bun2dClearPixel(int x, int y)
 {
     if (x > bun2d.src_width || x < 0 || y > bun2d.src_height || y < 0)
@@ -411,6 +412,12 @@ void bun2dLine(int x0, int y0, int x1, int y1, Pixel color)
     }
 }
 
+/// @brief Renders a rectangle to the screen 
+/// @param x The x coordinate of the rect 
+/// @param y The y coordinate of the rect 
+/// @param width The width of the rect 
+/// @param height The height of the rect 
+/// @param color The color to draw the rect with 
 void bun2dRect(int x, int y, int width, int height, Pixel color)
 {
     for (int i = 0; i < height; i++)
@@ -430,6 +437,12 @@ void bun2dRect(int x, int y, int width, int height, Pixel color)
     }
 }
 
+/// @brief Renders a filled rectangle to the screen 
+/// @param x The x coordinate of the rect 
+/// @param y The y coordinate of the rect 
+/// @param width The width of the rect 
+/// @param height The height of the rect 
+/// @param color The color to draw the rect with 
 void bun2dFillRect(int x, int y, int width, int height, Pixel color)
 {
     for (int i = 0; i < height; i++)
@@ -444,8 +457,7 @@ void bun2dFillRect(int x, int y, int width, int height, Pixel color)
 void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
 {
 
-    // Does not check bounds, this might cause trouble
-    // Arbitrairy value that keeps width in check
+    // Since this directly inputs a whole line into the buffer we need to make sure we dont go out of bounds
     int widthCorrected = width + x > bun2d.src_width ? bun2d.src_width - x : width;
     unsigned int size = sizeof(Pixel) * widthCorrected;
     for (int i = 0; i < widthCorrected * 4; i += 4)
