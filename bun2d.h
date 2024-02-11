@@ -474,6 +474,10 @@ void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
     }
 }
 
+/// @brief Queries the pixel buffer to check if a pixel is there
+/// @param x The x coordinate of the pixel 
+/// @param y The y coordinate of the pixe
+/// @return The pixel at given position, will return an empty pixel if out of bounds 
 Pixel bun2dGetPixel(int x, int y)
 {
 
@@ -485,12 +489,14 @@ Pixel bun2dGetPixel(int x, int y)
     return bun2d.buff[bun2d.src_width * y + x];
 }
 
+/// @brief Returns the last frametime in ms
+/// @return the last frametime in ms
 double bun2dGetFrameTime()
 {
     return bun2d.frameTime * 1000;
 }
 
-void drawCircle(int xc, int yc, int x, int y, Pixel color)
+static void drawCircle(int xc, int yc, int x, int y, Pixel color)
 {
     putPixel(xc + x, yc + y, color);
     putPixel(xc - x, yc + y, color);
@@ -685,6 +691,9 @@ void bun2dText(char *text, int x, int y, Pixel color)
     }
 }
 
+/// @brief Gets the current keystate for a given key
+/// @param key the Keycode for the key, these are predefined
+/// @return The state of the key 0 for none, 1 for pressed, 2 for hold
 int bun2dKey(unsigned int key)
 {
     if (key > 399)
