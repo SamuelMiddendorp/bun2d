@@ -703,6 +703,8 @@ int bun2dKey(unsigned int key)
     return bun2d.keys[key];
 }
 
+/// @brief Gets the current position of the mouse
+/// @return A point where the mouse is, this is the point in the pixel buffer so this might differ from the actual screen pos 
 Point bun2dGetMouse()
 {
     double xpos, ypos;
