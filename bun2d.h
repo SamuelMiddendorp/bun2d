@@ -650,6 +650,10 @@ void bun2dDrawModelBulkFast(FastModel *model, int count, int *coords)
     }
 }
 
+/// @brief Renders a fill circle to the screen
+/// @param x The x coordinate on the screen where the text should be written
+/// @param y The y coordinate on the screen where the text should be written
+/// @param r The radius of the circle
 void bun2dFillCircle(int x, int y, int r, Pixel color)
 {
     for (int _y = -r; _y <= r; _y++)
@@ -717,7 +721,7 @@ Point bun2dGetMouse()
     return p;
 }
 
-void fillPixelFont()
+static void fillPixelFont()
 {
 
     bun2d.chars = calloc(150, sizeof(Char));
