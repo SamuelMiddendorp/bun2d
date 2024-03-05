@@ -194,7 +194,6 @@ void bun2dRect(int x, int y, int width, int height, Pixel color);
 void bun2dFillRect(int x, int y, int width, int height, Pixel color);
 void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color);
 void bun2dText(char *text, int x, int y, Pixel color);
-void bun2dSetLight(int x, int y, unsigned int strength);
 Model *bun2dMakeModel(Voxel *data, unsigned int length);
 Model *bun2dLoadModel(char *adress);
 void bun2dDrawModel(Model *model, int x, int y, unsigned int scale);
@@ -299,6 +298,8 @@ const Char l_6 = {{0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 1, 0, 1, 2, 1, 4, 2, 0, 2, 2, 2
 const Char l_7 = {{0, 0, 0, 4, 1, 1, 1, 4, 2, 2, 2, 4, 3, 3, 3, 4, -1}};
 const Char l_8 = {{0, 0, 0, 1, 0, 3, 0, 4, 1, 0, 1, 2, 1, 4, 2, 0, 2, 2, 2, 4, 3, 0, 3, 1, 3, 3, 3, 4, -1}};
 const Char l_9 = {{0, 0, 0, 2, 0, 3, 0, 4, 1, 0, 1, 2, 1, 4, 2, 0, 2, 2, 2, 4, 3, 0, 3, 1, 3, 2, 3, 3, 3, 4, -1}};
+
+
 Point rotatePoint(Point point, Point origin, int rot)
 {
 
@@ -310,7 +311,10 @@ Point rotatePoint(Point point, Point origin, int rot)
 
     return p;
 }
-
+/// @brief Puts a given pixel at point x y
+/// @param x The x coordinate of the pixel 
+/// @param y The y coordinate of the pixel 
+/// @param color 
 void bun2dPixel(int x, int y, Pixel color)
 {
     if (x >= bun2d.src_width || x < 0 || y >= bun2d.src_height || y < 0)
@@ -321,7 +325,7 @@ void bun2dPixel(int x, int y, Pixel color)
     bun2d.buff[bun2d.src_width * y + x] = color;
 }
 
-void putPixel(int x, int y, Pixel color)
+static void putPixel(int x, int y, Pixel color)
 {
     if (x >= bun2d.src_width || x < 0 || y >= bun2d.src_height || y < 0)
     {
@@ -454,6 +458,12 @@ void bun2dFillRect(int x, int y, int width, int height, Pixel color)
     }
 }
 
+/// @brief Renders a filled rectangle to the screen, more performant when writing big rects
+/// @param x The x coordinate of the rect 
+/// @param y The y coordinate of the rect 
+/// @param width The width of the rect 
+/// @param height The height of the rect 
+/// @param color The color to draw the rect with 
 void bun2dFillRectEXP(int x, int y, int width, int height, Pixel color)
 {
 
@@ -536,12 +546,10 @@ void bun2dCircle(int x, int y, int r, Pixel color)
     }
 }
 
-void bun2dSetLight(int x, int y, unsigned int strength)
-{
-    Light l = {x, y, strength};
-    bun2d.light = l;
-}
-
+/// @brief Creates a Model based on some voxel data to use in model renderer
+/// @param data The voxel data to be loaded into the model 
+/// @param length The amount of voxels 
+/// @return a pointer to the piece of memory where the model is 
 Model *bun2dMakeModel(Voxel *data, unsigned int length)
 {
 
@@ -552,6 +560,9 @@ Model *bun2dMakeModel(Voxel *data, unsigned int length)
     return m;
 }
 
+/// @brief Loads a image from an adress
+/// @param adress the path to the image 
+/// @return a pointer to the piece of memory where the model is 
 Model *bun2dLoadModel(char *adress)
 {
     FILE *file;
@@ -581,6 +592,10 @@ Model *bun2dLoadModel(char *adress)
     return m;
 }
 
+/// @brief Draw a model 
+/// @param model The model to render
+/// @param x The x coordinate of the model 
+/// @param y The y coordinate of the model 
 void bun2dDrawModel(Model *model, int x, int y, unsigned int scale)
 {
     for (int i = 0; i < model->length; i++)
@@ -601,6 +616,10 @@ void bun2dDrawModel(Model *model, int x, int y, unsigned int scale)
     }
 }
 
+/// @brief Draw a model fast, this only works on fast Models 
+/// @param model The model to render
+/// @param x The x coordinate of the model 
+/// @param y The y coordinate of the model 
 void bun2dDrawModelFast(FastModel *model, int x, int y)
 {
 
@@ -617,6 +636,10 @@ void bun2dDrawModelFast(FastModel *model, int x, int y)
     }
 }
 
+/// @brief Draw a model (similar to gpu instancing) 
+/// @param model The model to draw
+/// @param count The amount of instances to draw 
+/// @param coords The coords in order x,y  
 void bun2dDrawModelBulk(Model *model, int count, int *coords)
 {
     for (int i = 0; i < model->length; i++)
@@ -631,7 +654,10 @@ void bun2dDrawModelBulk(Model *model, int count, int *coords)
         }
     }
 }
-
+/// @brief Fast version of drawModelBulk
+/// @param model The fast model to draw
+/// @param count The amount of instances to draw 
+/// @param coords The coords in order x,y  
 void bun2dDrawModelBulkFast(FastModel *model, int count, int *coords)
 {
     for (int i = 0; i < model->height; i++)
@@ -741,6 +767,7 @@ static void fillPixelFont()
     bun2d.chars[56] = l_8;
     bun2d.chars[57] = l_9;
 }
+
 static void bun2dResizeDrawingArea()
 {
     float vertices[16] = {
@@ -903,12 +930,10 @@ int bun2dInit(bool vsync, int src_width, int src_height, int win_width, int win_
     bun2dResizeDrawingArea();
     return 0;
 }
-
+/// @brief Ticks the rendering 
+/// @return Wether or not the loop should be terminated
 int bun2dTick()
 {
-#ifdef BUN2D_HOTRELOAD
-
-#endif
     double currentTime = glfwGetTime();
     bun2d.frameTime = currentTime - bun2d.lastTime;
     bun2d.lastTime = currentTime;
@@ -921,7 +946,7 @@ int bun2dTick()
     return !glfwWindowShouldClose(bun2d.window);
 }
 
-void bun2dInput(GLFWwindow *win, int key, int code, int action, int mod)
+static void bun2dInput(GLFWwindow *win, int key, int code, int action, int mod)
 {
     (void)win;
     (void)code;
@@ -929,7 +954,7 @@ void bun2dInput(GLFWwindow *win, int key, int code, int action, int mod)
     bun2d.keys[key] = action;
 }
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height)
+static void framebuffer_size_callback(GLFWwindow *window, int width, int height)
 {
     (void)window;
     bun2d.win_width = width;
