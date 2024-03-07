@@ -5,6 +5,9 @@
 Model *bun2dLoadPngModel(char *adress);
 FastModel *bun2dLoadPngModelFast(char *adress);
 
+/// @brief Loads a png image into a model
+/// @param adress 
+/// @return a pointer to the piece of memory where the model is 
 Model *bun2dLoadPngModel(char *adress)
 {
     printf("Loading png %s", adress);
@@ -17,16 +20,11 @@ Model *bun2dLoadPngModel(char *adress)
     m->data = malloc(sizeof(Voxel) * entries);
     m->length = entries;
     int currentEntry = 0;
-    int threshHold = 220;
     for (int i = 0; i < x * n; i += n)
     {
         for (int j = 0; j < y * n; j += n)
         {
             int index = x * j + i;
-            if (data[index] >= threshHold && data[index + 1] >= threshHold && data[index + 2] >= threshHold)
-            {
-                continue;
-            }
             m->data[currentEntry].r = data[index];
             m->data[currentEntry].g = data[index + 1];
             m->data[currentEntry].b = data[index + 2];
@@ -40,6 +38,7 @@ Model *bun2dLoadPngModel(char *adress)
     stbi_image_free(data);
     return m;
 }
+
 /// @brief Only for opaque models without empty pixels pixels
 /// @param adress
 /// @return The model reference that can be passed to render
