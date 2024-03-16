@@ -3,7 +3,7 @@
 
 int main()
 {
-    bun2dInit(1, 100, 100, 400, 400);
+    bun2dInit(1, 100, 100, 400, 400, "animation");
 
     int animFrameTime = 500;
     unsigned int currentAnimFrame = 0;

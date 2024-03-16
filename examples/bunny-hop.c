@@ -8,7 +8,7 @@ typedef struct{
 
 int main()
 {
-    bun2dInit(1, 1280, 720, 1920, 1080);
+    bun2dInit(1, 1280, 720, 1920, 1080, "bunny-hop");
 
     Model* bun = bun2dLoadModel("bun.csv");
     Model* bunPng = bun2dLoadPngModel("kells_rip.png");

@@ -6,7 +6,7 @@
 
 int main()
 {
-    bun2dInit(1, 200, 200, 800, 800);
+    bun2dInit(1, 200, 200, 800, 800, "bun2d-models");
     char* filePath = "bun.png";
     
     struct stat sb;

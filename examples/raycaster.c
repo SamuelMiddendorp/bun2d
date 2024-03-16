@@ -37,7 +37,7 @@ int main()
     Pixel color = {255, 50, 50, 50};
 
     int maxRayMarch = 20;
-    bun2dInit(1, WORLD_SIZE, WORLD_SIZE, 1440, 1440);
+    bun2dInit(1, WORLD_SIZE, WORLD_SIZE, 1440, 1440, "raycaster");
     while (bun2dTick())
     {
         bun2dClear();

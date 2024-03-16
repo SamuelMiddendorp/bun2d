@@ -3,7 +3,7 @@
 
 int main()
 {
-    bun2dInit(1, 100, 100, 400, 400);
+    bun2dInit(1, 100, 100, 400, 400, "camera");
     Pixel textColor = { 255,
                         255,
                         255,

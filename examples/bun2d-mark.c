@@ -13,7 +13,7 @@ typedef struct
 int main()
 {
     int bound = 1000; 
-    bun2dInit(1, bound, bound, 2560, 1440);
+    bun2dInit(1, bound, bound, 2560, 1440, "bun2d-mark");
 
     Model *bunModel = bun2dLoadPngModel("res/kells_rip_small.png");
     FastModel *fastModel = bun2dLoadPngModelFast("res/kells_rip_small.png");

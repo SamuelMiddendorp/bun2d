@@ -3,7 +3,7 @@
 
 int main()
 {
-    bun2dInit(1, 100,100,1000,1000);
+    bun2dInit(1, 100,100,1000,1000, "rectangle");
 
 
     

@@ -3,7 +3,7 @@
 
 int main()
 {
-    bun2dInit(0, 5,5,400,400);
+    bun2dInit(0, 5,5,400,400, "bun2d-font-creator");
     Pixel color = {255,0,0,255};
     while (bun2dTick())
     {

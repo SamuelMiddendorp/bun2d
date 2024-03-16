@@ -46,7 +46,7 @@ int main()
     int money = 0;
     float speed = 0.8;
     float lightStrength = 1;
-    bun2dInit(0, 1920, 1080, 2560, 1440);
+    bun2dInit(0, 1920, 1080, 2560, 1440, "farm-poc");
     Player p = {{0, 0}, {0, 0}, 3, 3};
     Farm f = {{5, 5}, 9, NULL, 16,0};
     Farm f2 = {{80, 80}, 4000, NULL, 16,0};

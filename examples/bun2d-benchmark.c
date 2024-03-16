@@ -6,7 +6,7 @@ int main()
 {
     int boundX = 1000;
     int boundY = 1000;
-    bun2dInit(0, boundX, boundY, 1000, 1000);
+    bun2dInit(0, boundX, boundY, 1000, 1000, "benchmark");
     Model *bun = bun2dLoadModel("bun.csv");
     int *buns = malloc(sizeof(int) * 2 * MAX_BUNS);
     int breakTimer = 0;

@@ -39,7 +39,7 @@ int main()
     Player p2 = {0, paddleWidth, 100, 0};
 
     printf("Pong!");
-    bun2dInit(1, buffX, buffY, 800, 800);
+    bun2dInit(1, buffX, buffY, 800, 800, "pong");
     while (bun2dTick())
     {
         if(bun2dKey(KEY_SPACE) == BUN2D_PRESS){

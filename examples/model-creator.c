@@ -4,7 +4,7 @@
 int main()
 {
     int width = 20;
-    bun2dInit(1,width,width,400,400);
+    bun2dInit(1,width,width,400,400, "model-creator");
     int i = 0;
     Pixel color = {255,i,0,255};
     int saveTimer = 0;
